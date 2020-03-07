@@ -1,25 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { Header } from './components/Header/index';
+import axios from 'axios';
+import { Spinner } from '@blueprintjs/core';
+import { NewWords } from './components/NewWords';
+import { TodayWords } from './components/TodayWords';
+import { Router, Route } from 'react-router-dom';
+import { history } from './helpers/history';
 import './App.css';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  axios.interceptors.request.use(
+    function resolveRequest(request) {
+      setIsLoading(true);
+      return request;
+    },
+    function rejectRequest(err) {
+      setIsLoading(true);
+      return Promise.reject(err);
+    }
+  );
+
+  axios.interceptors.response.use(
+    function resolveResponse(response) {
+      setIsLoading(false);
+      return response;
+    },
+    function rejectResponse(err) {
+      setIsLoading(false);
+      return Promise.reject(err);
+    }
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router history={history}>
+      <div>
+        <Header />
+        <Route path={'/new-words'} component={NewWords} />
+        <Route path={'/today-words'} component={TodayWords} />
+        <div>
+          {isLoading && (
+            <Spinner className={'spinner'} size={Spinner.SIZE_LARGE} />
+          )}
+        </div>
+      </div>
+    </Router>
   );
 }
 
