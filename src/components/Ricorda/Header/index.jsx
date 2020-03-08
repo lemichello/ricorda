@@ -10,18 +10,32 @@ import {
   NavbarGroup,
   NavbarHeading,
   Popover,
-  Position
+  Position,
+  Switch
 } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
+import '../styles.css';
+import './styles.css';
+import { darkThemeService } from '../../../services/darkThemeService';
 
-export const Header = function({ logout, user }) {
+export const Header = function({ logout, toggleDarkTheme, history, user }) {
   const [isAlertOpen, setAlertOpen] = useState(false);
+  const [darkTheme, setDarkTheme] = useState(darkThemeService.getThemeState());
+
+  useEffect(() => {
+    darkThemeService.setThemeState(darkTheme);
+  }, [darkTheme]);
 
   const handleAlertConfirm = () => {
     setAlertOpen(false);
     logout();
+  };
+
+  const handleDarkThemeChange = () => {
+    setDarkTheme(!darkTheme);
+    toggleDarkTheme();
   };
 
   const userMenu = (
@@ -35,21 +49,37 @@ export const Header = function({ logout, user }) {
           }}
         />
       )}
-      {!user && <MenuItem icon={'log-in'} text={'Log in or Sign up'} href={'/login'} />}
+      {!user && (
+        <MenuItem
+          icon={'log-in'}
+          text={'Log in or Sign up'}
+          onClick={() => history.push('/login')}
+        />
+      )}
     </Menu>
+  );
+  const settings = (
+    <div className={'settings-content'}>
+      <Switch
+        checked={darkTheme}
+        large={true}
+        onChange={handleDarkThemeChange}
+        label={'Dark Mode'}
+      />
+    </div>
   );
 
   return (
     <div>
       <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
-          <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to={'/'} className={'navigation-link'}>
             <NavbarHeading>Ricorda</NavbarHeading>
           </Link>
           <NavbarDivider />
         </NavbarGroup>
         <NavbarGroup>
-          <Link to={'/today-words'} style={{ textDecoration: 'none' }}>
+          <Link to={'/today-words'} className={'navigation-link'}>
             <Button
               className={Classes.MINIMAL}
               icon="star"
@@ -62,9 +92,13 @@ export const Header = function({ logout, user }) {
           <Popover content={userMenu} position={Position.BOTTOM}>
             <Button className={Classes.MINIMAL} icon={'user'} />
           </Popover>
+          <Popover content={settings} position={Position.BOTTOM}>
+            <Button className={Classes.MINIMAL} icon={'cog'} />
+          </Popover>
         </NavbarGroup>
       </Navbar>
       <Alert
+        className={`${darkTheme ? 'bp3-dark' : ''}`}
         canEscapeKeyCancel={true}
         isOpen={isAlertOpen}
         onCancel={() => {

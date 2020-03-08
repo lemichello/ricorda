@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import axios from 'axios';
 import { Spinner } from '@blueprintjs/core';
 import './App.css';
-import { Ricorda } from './components/Ricorda';
+import { Ricorda } from './Ricorda';
+import { darkThemeService } from '../services/darkThemeService';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDarkTheme, setDarkTheme] = useState(
+    darkThemeService.getThemeState()
+  );
+
+  const toggleDarkTheme = useCallback(() => {
+    setDarkTheme(!isDarkTheme);
+  }, [isDarkTheme]);
 
   axios.interceptors.request.use(
     function resolveRequest(request) {
@@ -30,8 +38,8 @@ function App() {
   );
 
   return (
-    <div>
-      <Ricorda />
+    <div className={`app-root ${isDarkTheme ? 'bp3-dark' : ''}`}>
+      <Ricorda toggleDarkTheme={toggleDarkTheme} />
       <div>
         {isLoading && (
           <Spinner className={'spinner'} size={Spinner.SIZE_LARGE} />

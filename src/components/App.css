@@ -1,0 +1,17 @@
+* {
+  box-sizing: border-box;
+}
+
+body > #root > div {
+  min-height: 100vh;
+}
+
+.app-root.bp3-dark {
+  background-color: #30404d;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}

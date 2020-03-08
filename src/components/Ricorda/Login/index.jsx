@@ -103,7 +103,11 @@ export const Login = function(props) {
         </div>
         <span className={'page-divider'} />
         <h5 className={'bp3-heading'}>Don't have an account?</h5>
-        <Link to={'/signup'} style={{ textDecoration: 'none', width: '100%' }}>
+        <Link
+          to={'/signup'}
+          style={{ width: '100%' }}
+          className={'navigation-link'}
+        >
           <Button
             className={'page-btn login-page-sign-up-btn bp3-heading'}
             outlined="true"

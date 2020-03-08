@@ -3,14 +3,14 @@ import { history } from '../../helpers/history';
 import { Header } from './Header';
 import { NewWords } from './NewWords';
 import { PrivateRoute } from '../PrivateRoute';
-import { TodayWords } from '../TodayWords';
+import { TodayWords } from './TodayWords';
 import { Login } from './Login';
 import { UserContext } from './contexts/userContext';
 import React, { useCallback, useState } from 'react';
 import { authService } from '../../services/authService';
 import { SignUp } from './SignUp';
 
-export const Ricorda = function() {
+export const Ricorda = function({toggleDarkTheme}) {
   const [user, setUser] = useState(authService.getUserToken());
 
   let logout = useCallback(() => {
@@ -25,7 +25,7 @@ export const Ricorda = function() {
     <UserContext.Provider value={[user, setUser]}>
       <Router history={history}>
         <div>
-          <Header logout={logout} user={user} />
+          <Header history={history} logout={logout} user={user} toggleDarkTheme={toggleDarkTheme} />
           <Route exact path={'/'} component={NewWords} />
           <PrivateRoute exact path={'/today-words'} component={TodayWords} />
           <Route exact path={'/login'} component={Login} />
