@@ -1,0 +1,101 @@
+import React, { useContext, useState } from 'react';
+import {
+  Button,
+  Checkbox,
+  InputGroup,
+  Intent,
+  Tooltip
+} from '@blueprintjs/core';
+import { UserContext } from '../contexts/userContext';
+import { authService } from '../../../services/authService';
+import './styles.css';
+
+export const Login = function(props) {
+  const [, setUser] = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const emailRegex = RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
+
+  const logIn = async () => {
+    try {
+      let token = await authService.login(email, password, rememberMe);
+
+      setUser(token);
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+
+    const { from } = props.location.state || { from: { pathname: '/' } };
+
+    props.history.push(from);
+  };
+
+  const lockButton = (
+    <Tooltip content={`${showPassword ? 'Hide' : 'Show'} Password`}>
+      <Button
+        icon={showPassword ? 'unlock' : 'lock'}
+        intent={Intent.WARNING}
+        minimal={true}
+        onClick={() => {
+          setShowPassword(!showPassword);
+        }}
+      />
+    </Tooltip>
+  );
+
+  return (
+    <div className={'login-page'}>
+      <div className={'login-page-content'}>
+        <h5 className={'bp3-heading'}>To continue, log in to Ricorda.</h5>
+        <span className={'login-page-divider'} />
+        <InputGroup
+          className={'login-page-input'}
+          large={true}
+          fill={true}
+          type={'email'}
+          placeholder={'Email address'}
+          value={email}
+          onChange={event => setEmail(event.target.value)}
+        />
+        <InputGroup
+          className={'login-page-input'}
+          name={'password'}
+          large={true}
+          fill={true}
+          placeholder={'Password'}
+          rightElement={lockButton}
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={event => setPassword(event.target.value)}
+        />
+        <div className={'login-page-actions'}>
+          <Checkbox
+            label={'Remember me'}
+            checked={rememberMe}
+            onChange={() => {
+              setRememberMe(!rememberMe);
+            }}
+          />
+          <Button
+            className={'login-page-btn'}
+            intent={'success'}
+            text={'Log In'}
+            onClick={logIn}
+            disabled={!emailRegex.test(email) || !password}
+          />
+        </div>
+        <span className={'login-page-divider'} />
+        <h5 className={'bp3-heading'}>Don't have an account?</h5>
+        <Button
+          className={'login-page-btn login-page-sign-up-btn bp3-heading'}
+          outlined="true"
+          text={'Sign Up For Ricorda'}
+        />
+      </div>
+    </div>
+  );
+};

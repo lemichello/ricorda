@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import { Header } from './components/Header/index';
 import axios from 'axios';
 import { Spinner } from '@blueprintjs/core';
-import { NewWords } from './components/NewWords';
-import { TodayWords } from './components/TodayWords';
-import { Router, Route } from 'react-router-dom';
-import { history } from './helpers/history';
 import './App.css';
+import { Ricorda } from './components/Ricorda';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,18 +30,14 @@ function App() {
   );
 
   return (
-    <Router history={history}>
+    <div>
+      <Ricorda />
       <div>
-        <Header />
-        <Route path={'/new-words'} component={NewWords} />
-        <Route path={'/today-words'} component={TodayWords} />
-        <div>
-          {isLoading && (
-            <Spinner className={'spinner'} size={Spinner.SIZE_LARGE} />
-          )}
-        </div>
+        {isLoading && (
+          <Spinner className={'spinner'} size={Spinner.SIZE_LARGE} />
+        )}
       </div>
-    </Router>
+    </div>
   );
 }
 
