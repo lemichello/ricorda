@@ -3,11 +3,14 @@ import {
   Alignment,
   Button,
   Classes,
+  Menu,
+  MenuItem,
   Navbar,
   NavbarDivider,
   NavbarGroup,
   NavbarHeading,
-  Tooltip
+  Popover,
+  Position
 } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -20,6 +23,21 @@ export const Header = function({ logout, user }) {
     setAlertOpen(false);
     logout();
   };
+
+  const userMenu = (
+    <Menu>
+      {user && (
+        <MenuItem
+          icon={'log-out'}
+          text={'Sign out'}
+          onClick={() => {
+            setAlertOpen(true);
+          }}
+        />
+      )}
+      {!user && <MenuItem icon={'log-in'} text={'Log in or Sign up'} href={'/login'} />}
+    </Menu>
+  );
 
   return (
     <div>
@@ -41,28 +59,9 @@ export const Header = function({ logout, user }) {
         </NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>
           <NavbarDivider />
-          {user && (
-            <Tooltip content={'Logout'}>
-              <Button
-                className={Classes.MINIMAL}
-                icon={'log-out'}
-                onClick={() => {
-                  setAlertOpen(true);
-                }}
-              />
-            </Tooltip>
-          )}
-          {!user && (
-            <Link to={'/login'} style={{ textDecoration: 'none' }}>
-              <Tooltip content={'Login'}>
-                <Button
-                  className={Classes.MINIMAL}
-                  icon={'log-in'}
-                  onClick={logout}
-                />
-              </Tooltip>
-            </Link>
-          )}
+          <Popover content={userMenu} position={Position.BOTTOM}>
+            <Button className={Classes.MINIMAL} icon={'user'} />
+          </Popover>
         </NavbarGroup>
       </Navbar>
       <Alert
