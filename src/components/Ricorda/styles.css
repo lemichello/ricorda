@@ -1,0 +1,43 @@
+.page-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 70px;
+  margin-bottom: 50px;
+  justify-content: center;
+  max-height: 90vh;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 75vw;
+}
+
+.page-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.page-btn {
+  border-radius: 15px;
+  height: 35px;
+  width: 120px;
+  text-transform: uppercase;
+}
+
+.page-divider {
+  display: block;
+  border-top: 1px solid rgba(16, 22, 26, 0.15);
+  width: 80%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.page-input {
+  margin-bottom: 20px;
+}

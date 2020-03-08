@@ -34,15 +34,29 @@ function handleBadResponse(resp) {
 
 function logout() {
   localStorage.removeItem('userToken');
-  sessionStorage.removeItem('userToken')
+  sessionStorage.removeItem('userToken');
+}
+
+async function signUp(email, password) {
+  let resp = await axios.post(`${config.apiUrl}/auth/signup`, {
+    email,
+    password
+  });
+
+  if (resp.status !== 201) {
+    return handleBadResponse();
+  }
 }
 
 function getUserToken() {
-  return localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+  return (
+    localStorage.getItem('userToken') || sessionStorage.getItem('userToken')
+  );
 }
 
 export const authService = {
   login,
   logout,
+  signUp,
   getUserToken
 };

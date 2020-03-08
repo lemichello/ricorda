@@ -8,26 +8,28 @@ import { Login } from './Login';
 import { UserContext } from './contexts/userContext';
 import React, { useCallback, useState } from 'react';
 import { authService } from '../../services/authService';
+import { SignUp } from './SignUp';
 
 export const Ricorda = function() {
-  const user = useState(authService.getUserToken());
+  const [user, setUser] = useState(authService.getUserToken());
 
   let logout = useCallback(() => {
     authService.logout();
 
-    user[1](null);
+    setUser(null);
 
     history.push('/login');
-  }, [user]);
+  }, []);
 
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={[user, setUser]}>
       <Router history={history}>
         <div>
-          <Header logout={logout} user={user[0]} />
+          <Header logout={logout} user={user} />
           <Route exact path={'/'} component={NewWords} />
           <PrivateRoute exact path={'/today-words'} component={TodayWords} />
           <Route exact path={'/login'} component={Login} />
+          <Route exact path={'/signup'} component={SignUp} />
         </div>
       </Router>
     </UserContext.Provider>

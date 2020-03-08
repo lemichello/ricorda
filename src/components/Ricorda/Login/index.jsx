@@ -8,7 +8,10 @@ import {
 } from '@blueprintjs/core';
 import { UserContext } from '../contexts/userContext';
 import { authService } from '../../../services/authService';
+import '../styles.css';
 import './styles.css';
+import { Link } from 'react-router-dom';
+import { DefaultToaster } from '../models/DefaultToster';
 
 export const Login = function(props) {
   const [, setUser] = useContext(UserContext);
@@ -25,9 +28,19 @@ export const Login = function(props) {
 
       setUser(token);
     } catch (e) {
-      console.log(e);
+      DefaultToaster.show({
+        message: 'You entered incorrect email or password. Try again',
+        intent: 'danger',
+        icon: 'cross'
+      });
       return;
     }
+
+    DefaultToaster.show({
+      message: 'Successfully logged in',
+      intent: 'success',
+      icon: 'tick'
+    });
 
     const { from } = props.location.state || { from: { pathname: '/' } };
 
@@ -48,12 +61,12 @@ export const Login = function(props) {
   );
 
   return (
-    <div className={'login-page'}>
-      <div className={'login-page-content'}>
+    <div className={'page-root'}>
+      <div className={'page-content'}>
         <h5 className={'bp3-heading'}>To continue, log in to Ricorda.</h5>
-        <span className={'login-page-divider'} />
+        <span className={'page-divider'} />
         <InputGroup
-          className={'login-page-input'}
+          className={'page-input'}
           large={true}
           fill={true}
           type={'email'}
@@ -62,7 +75,7 @@ export const Login = function(props) {
           onChange={event => setEmail(event.target.value)}
         />
         <InputGroup
-          className={'login-page-input'}
+          className={'page-input'}
           name={'password'}
           large={true}
           fill={true}
@@ -72,7 +85,7 @@ export const Login = function(props) {
           value={password}
           onChange={event => setPassword(event.target.value)}
         />
-        <div className={'login-page-actions'}>
+        <div className={'page-actions'}>
           <Checkbox
             label={'Remember me'}
             checked={rememberMe}
@@ -81,20 +94,22 @@ export const Login = function(props) {
             }}
           />
           <Button
-            className={'login-page-btn'}
+            className={'page-btn'}
             intent={'success'}
             text={'Log In'}
             onClick={logIn}
             disabled={!emailRegex.test(email) || !password}
           />
         </div>
-        <span className={'login-page-divider'} />
+        <span className={'page-divider'} />
         <h5 className={'bp3-heading'}>Don't have an account?</h5>
-        <Button
-          className={'login-page-btn login-page-sign-up-btn bp3-heading'}
-          outlined="true"
-          text={'Sign Up For Ricorda'}
-        />
+        <Link to={'/signup'} style={{ textDecoration: 'none', width: '100%' }}>
+          <Button
+            className={'page-btn login-page-sign-up-btn bp3-heading'}
+            outlined="true"
+            text={'Sign Up For Ricorda'}
+          />
+        </Link>
       </div>
     </div>
   );
