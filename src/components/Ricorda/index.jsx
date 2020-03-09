@@ -4,7 +4,7 @@ import { Header } from './Header';
 import { NewWords } from './NewWords';
 import { PrivateRoute } from '../PrivateRoute';
 import { TodayWords } from './TodayWords';
-import { Login } from './Login';
+import { Login } from './LogIn';
 import { UserContext } from './contexts/userContext';
 import React, { useCallback, useState } from 'react';
 import { authService } from '../../services/authService';
