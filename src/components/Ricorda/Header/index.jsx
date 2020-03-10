@@ -82,7 +82,7 @@ export const Header = function({ logout, toggleDarkTheme, history, user }) {
           <Link to={'/today-words'} className={'navigation-link'}>
             <Button
               className={Classes.MINIMAL}
-              icon="star"
+              icon="bookmark"
               text="Today's words"
             />
           </Link>

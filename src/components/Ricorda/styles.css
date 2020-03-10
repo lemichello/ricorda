@@ -43,9 +43,15 @@
 }
 
 .bp3-dark .page-divider {
-  border-top: 1px solid hsla(0,0%,100%,.15);
+  border-top: 1px solid hsla(0, 0%, 100%, 0.15);
 }
 
 .page-input {
   margin-bottom: 20px;
+}
+
+@media (max-width: 576px) {
+  .page-root {
+    padding-top: 80px;
+  }
 }

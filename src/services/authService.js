@@ -23,8 +23,6 @@ async function login(email, password, rememberMe) {
 function handleBadResponse(resp) {
   if (resp.status === 401) {
     logout();
-    // eslint-disable-next-line no-restricted-globals
-    location.reload(true);
   }
 
   const error = resp.statusText;
@@ -58,5 +56,6 @@ export const authService = {
   login,
   logout,
   signUp,
-  getUserToken
+  getUserToken,
+  handleBadResponse
 };

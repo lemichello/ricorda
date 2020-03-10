@@ -10,7 +10,7 @@ import React, { useCallback, useState } from 'react';
 import { authService } from '../../services/authService';
 import { SignUp } from './SignUp';
 
-export const Ricorda = function({toggleDarkTheme}) {
+export const Ricorda = function({ toggleDarkTheme }) {
   const [user, setUser] = useState(authService.getUserToken());
 
   let logout = useCallback(() => {
@@ -25,7 +25,12 @@ export const Ricorda = function({toggleDarkTheme}) {
     <UserContext.Provider value={[user, setUser]}>
       <Router history={history}>
         <div>
-          <Header history={history} logout={logout} user={user} toggleDarkTheme={toggleDarkTheme} />
+          <Header
+            history={history}
+            logout={logout}
+            user={user}
+            toggleDarkTheme={toggleDarkTheme}
+          />
           <Route exact path={'/'} component={NewWords} />
           <PrivateRoute exact path={'/today-words'} component={TodayWords} />
           <Route exact path={'/login'} component={Login} />
