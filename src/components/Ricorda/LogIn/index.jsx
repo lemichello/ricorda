@@ -19,15 +19,19 @@ export const Login = function(props) {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const emailRegex = RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
 
   const logIn = async () => {
     try {
+      setLoading(true);
       let token = await authService.login(email, password, rememberMe);
+      setLoading(false);
 
       setUser(token);
     } catch (e) {
+      setLoading(false);
       DefaultToaster.show({
         message: 'You entered incorrect email or password. Try again',
         intent: 'danger',
@@ -96,6 +100,7 @@ export const Login = function(props) {
           <Button
             className={'page-btn'}
             intent={'success'}
+            loading={loading}
             text={'Log In'}
             onClick={logIn}
             disabled={!emailRegex.test(email) || !password}

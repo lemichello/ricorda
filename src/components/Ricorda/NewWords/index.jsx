@@ -8,6 +8,7 @@ import { DefaultToaster } from '../models/DefaultToster';
 export const NewWords = function({ history }) {
   const [sourceWord, setSourceWord] = useState('');
   const [translation, setTranslation] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const createWordsPair = async () => {
     if (!authService.getUserToken()) {
@@ -16,14 +17,17 @@ export const NewWords = function({ history }) {
     }
 
     try {
+      setLoading(true);
       await wordsService.createWordsPair(sourceWord, translation);
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       DefaultToaster.show({
         message: "Can't add new pair of words. Try again",
         intent: 'danger',
         icon: 'cross'
       });
-      console.log(e);
+
       return;
     }
 
@@ -62,6 +66,7 @@ export const NewWords = function({ history }) {
           <Button
             icon={'add'}
             className={'new-words-page-add-btn'}
+            loading={loading}
             intent={'success'}
             disabled={sourceWord.trim() === '' || translation.trim() === ''}
             onClick={createWordsPair}
