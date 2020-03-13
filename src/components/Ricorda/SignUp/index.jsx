@@ -34,7 +34,7 @@ export const SignUp = function(props) {
   const lockButton = (
     <Tooltip content={`${showPassword ? 'Hide' : 'Show'} Password`}>
       <Button
-        icon={showPassword ? 'unlock' : 'lock'}
+        icon={showPassword ? 'eye-off' : 'eye-open'}
         intent={Intent.WARNING}
         minimal={true}
         onClick={() => {
