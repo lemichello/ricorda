@@ -3,7 +3,7 @@ import config from '../config';
 import { authService } from './authService';
 
 async function createWordsPair(sourceWord, translation) {
-  let token = authService.getUserToken();
+  const token = authService.getUserToken();
 
   let resp = await axios.post(
     `${config.apiUrl}/api/words`,
@@ -12,10 +12,25 @@ async function createWordsPair(sourceWord, translation) {
   );
 
   if (resp.status !== 201) {
-    return authService.handleBadResponse();
+    return authService.handleBadResponse(resp);
   }
 }
 
+async function getWordsForToday() {
+  const token = authService.getUserToken();
+
+  let resp = await axios.get(`${config.apiUrl}/api/words`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  if (resp.status !== 200) {
+    return authService.handleBadResponse(resp);
+  }
+
+  return resp.data.data;
+}
+
 export const wordsService = {
-  createWordsPair
+  createWordsPair,
+  getWordsForToday
 };

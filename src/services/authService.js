@@ -2,13 +2,15 @@ import axios from 'axios';
 import config from '../config';
 
 async function login(email, password, rememberMe) {
-  let resp = await axios.post(`${config.apiUrl}/auth/login`, {
-    email,
-    password
-  });
+  let resp;
 
-  if (resp.status !== 200) {
-    return handleBadResponse(resp);
+  try {
+    resp = await axios.post(`${config.apiUrl}/auth/login`, {
+      email,
+      password
+    });
+  } catch (e) {
+    return Promise.reject(e.data);
   }
 
   if (rememberMe) {
@@ -20,12 +22,23 @@ async function login(email, password, rememberMe) {
   return resp.data.token;
 }
 
+async function signUp(email, password) {
+  try {
+    await axios.post(`${config.apiUrl}/auth/signup`, {
+      email,
+      password
+    });
+  } catch (e) {
+    return Promise.reject(e.data);
+  }
+}
+
 function handleBadResponse(resp) {
   if (resp.status === 401) {
     logout();
   }
 
-  const error = resp.statusText;
+  const error = resp.data;
 
   return Promise.reject(error);
 }
@@ -33,17 +46,6 @@ function handleBadResponse(resp) {
 function logout() {
   localStorage.removeItem('userToken');
   sessionStorage.removeItem('userToken');
-}
-
-async function signUp(email, password) {
-  let resp = await axios.post(`${config.apiUrl}/auth/signup`, {
-    email,
-    password
-  });
-
-  if (resp.status !== 201) {
-    return handleBadResponse(resp);
-  }
 }
 
 function getUserToken() {

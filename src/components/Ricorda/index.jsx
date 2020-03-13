@@ -9,6 +9,7 @@ import { UserContext } from './contexts/userContext';
 import React, { useCallback, useState } from 'react';
 import { authService } from '../../services/authService';
 import { SignUp } from './SignUp';
+import axios from 'axios';
 
 export const Ricorda = function({ toggleDarkTheme }) {
   const [user, setUser] = useState(authService.getUserToken());
@@ -20,6 +21,19 @@ export const Ricorda = function({ toggleDarkTheme }) {
 
     history.push('/login');
   }, []);
+
+  axios.interceptors.response.use(
+    resp => {
+      return resp;
+    },
+    error => {
+      if (error.response.status === 401) {
+        logout();
+      }
+
+      return Promise.reject(error.response);
+    }
+  );
 
   return (
     <UserContext.Provider value={[user, setUser]}>

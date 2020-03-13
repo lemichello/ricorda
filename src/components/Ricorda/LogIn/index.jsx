@@ -33,7 +33,7 @@ export const Login = function(props) {
     } catch (e) {
       setLoading(false);
       DefaultToaster.show({
-        message: 'You entered incorrect email or password. Try again',
+        message: e,
         intent: 'danger',
         icon: 'cross'
       });

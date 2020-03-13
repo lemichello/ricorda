@@ -7,15 +7,19 @@ export const SignUp = function(props) {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const emailRegex = RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
 
   const signUp = async () => {
     try {
+      setLoading(true);
       await authService.signUp(email, password);
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       DefaultToaster.show({
-        message: "This email is already taken. Try another one",
+        message: e,
         intent: 'danger',
         icon: 'error'
       });
@@ -74,6 +78,7 @@ export const SignUp = function(props) {
           text={'Sign Up'}
           intent={'success'}
           onClick={signUp}
+          loading={loading}
           disabled={!emailRegex.test(email) || !password}
         />
       </div>
