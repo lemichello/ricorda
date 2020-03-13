@@ -10,6 +10,7 @@
 .navigation-link {
   text-decoration: none !important;
   color: inherit !important;
+  width: 100%;
 }
 
 .page-content {

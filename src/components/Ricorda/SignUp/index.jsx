@@ -15,7 +15,7 @@ export const SignUp = function(props) {
       await authService.signUp(email, password);
     } catch (e) {
       DefaultToaster.show({
-        message: "Can't sign up",
+        message: "This email is already taken. Try another one",
         intent: 'danger',
         icon: 'error'
       });

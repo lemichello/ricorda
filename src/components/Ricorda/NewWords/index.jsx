@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Card, EditableText, H3, H5, Icon } from '@blueprintjs/core';
+import '../styles.css';
 import './styles.css';
 import { authService } from '../../../services/authService';
 import { wordsService } from '../../../services/wordsService';

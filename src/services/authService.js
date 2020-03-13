@@ -8,7 +8,7 @@ async function login(email, password, rememberMe) {
   });
 
   if (resp.status !== 200) {
-    return handleBadResponse();
+    return handleBadResponse(resp);
   }
 
   if (rememberMe) {
@@ -42,7 +42,7 @@ async function signUp(email, password) {
   });
 
   if (resp.status !== 201) {
-    return handleBadResponse();
+    return handleBadResponse(resp);
   }
 }
 
