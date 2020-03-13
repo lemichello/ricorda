@@ -1,5 +1,5 @@
 import { Button, InputGroup, Intent, Tooltip } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { authService } from '../../../services/authService';
 import { DefaultToaster } from '../models/DefaultToster';
 
@@ -10,6 +10,14 @@ export const SignUp = function(props) {
   const [loading, setLoading] = useState(false);
 
   const emailRegex = RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
+
+  useEffect(() => {
+    let token = authService.getUserToken();
+
+    if (token) {
+      props.history.push('/');
+    }
+  }, [props.history]);
 
   const signUp = async () => {
     try {

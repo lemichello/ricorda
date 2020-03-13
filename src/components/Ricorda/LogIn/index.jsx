@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -22,6 +22,14 @@ export const Login = function(props) {
   const [loading, setLoading] = useState(false);
 
   const emailRegex = RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
+
+  useEffect(() => {
+    let token = authService.getUserToken();
+
+    if (token) {
+      props.history.push('/');
+    }
+  }, [props.history]);
 
   const logIn = async () => {
     try {
