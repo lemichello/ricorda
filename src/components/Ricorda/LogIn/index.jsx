@@ -110,7 +110,7 @@ export const Login = function(props) {
         <span className={'page-divider'} />
         <h5 className={'bp3-heading'}>Don't have an account?</h5>
         <Link
-          to={'/signup'}
+          to={'/ricorda/signup'}
           style={{ width: '100%' }}
           className={'navigation-link'}
         >
