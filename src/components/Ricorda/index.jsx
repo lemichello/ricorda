@@ -37,7 +37,7 @@ export const Ricorda = function({ toggleDarkTheme }) {
     setUser(null);
     setWordsCount(null);
 
-    history.push('/login');
+    history.push('/ricorda/login');
   }, []);
 
   axios.interceptors.response.use(
@@ -65,9 +65,9 @@ export const Ricorda = function({ toggleDarkTheme }) {
               toggleDarkTheme={toggleDarkTheme}
             />
             <Route exact path={'/ricorda'} component={NewWords} />
-            <PrivateRoute exact path={'/today-words'} component={TodayWords} />
-            <Route exact path={'/login'} component={Login} />
-            <Route exact path={'/signup'} component={SignUp} />
+            <PrivateRoute exact path={'/ricorda/today-words'} component={TodayWords} />
+            <Route exact path={'/ricorda/login'} component={Login} />
+            <Route exact path={'/ricorda/signup'} component={SignUp} />
           </div>
         </Router>
       </WordsCountContext.Provider>

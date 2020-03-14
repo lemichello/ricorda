@@ -40,7 +40,7 @@ export const SignUp = function(props) {
       icon: 'tick'
     });
 
-    props.history.push('/login');
+    props.history.push('/ricorda/login');
   };
 
   const lockButton = (

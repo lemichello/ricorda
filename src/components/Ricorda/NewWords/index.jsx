@@ -13,7 +13,7 @@ export const NewWords = function({ history }) {
 
   const createWordsPair = async () => {
     if (!authService.getUserToken()) {
-      history.push('/login');
+      history.push('/ricorda/login');
       return;
     }
 

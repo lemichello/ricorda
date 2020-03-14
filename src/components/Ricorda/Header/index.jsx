@@ -57,7 +57,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
         <MenuItem
           icon={'log-in'}
           text={'Log in or Sign up'}
-          onClick={() => history.push('/login')}
+          onClick={() => history.push('/ricorda/login')}
         />
       )}
     </Menu>
@@ -84,7 +84,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
           <NavbarDivider />
         </NavbarGroup>
         <NavbarGroup>
-          <Link to={'/today-words'} className={'navigation-link'}>
+          <Link to={'/ricorda/today-words'} className={'navigation-link'}>
             <WordsCountContext.Consumer>
               {([wordsCount]) => (
                 <Button
