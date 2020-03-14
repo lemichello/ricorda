@@ -27,7 +27,7 @@ export const SignUp = function(props) {
     } catch (e) {
       setLoading(false);
       DefaultToaster.show({
-        message: e,
+        message: e.data,
         intent: 'danger',
         icon: 'error'
       });

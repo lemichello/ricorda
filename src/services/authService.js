@@ -10,7 +10,7 @@ async function login(email, password, rememberMe) {
       password
     });
   } catch (e) {
-    return Promise.reject(e.data);
+    return Promise.reject(e);
   }
 
   if (rememberMe) {
@@ -29,7 +29,7 @@ async function signUp(email, password) {
       password
     });
   } catch (e) {
-    return Promise.reject(e.data);
+    return Promise.reject(e);
   }
 }
 

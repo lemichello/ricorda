@@ -40,9 +40,9 @@ export const Login = function(props) {
     } catch (e) {
       setLoading(false);
       DefaultToaster.show({
-        message: e,
+        message: e.data,
         intent: 'danger',
-        icon: 'cross'
+        icon: 'error'
       });
       return;
     }
