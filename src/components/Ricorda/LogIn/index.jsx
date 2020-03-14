@@ -21,7 +21,7 @@ export const Login = function(props) {
     let token = authService.getUserToken();
 
     if (token) {
-      props.history.push('/');
+      props.history.push('/ricorda');
     }
   }, [props.history]);
 
@@ -48,7 +48,7 @@ export const Login = function(props) {
       icon: 'tick'
     });
 
-    const { from } = props.location.state || { from: { pathname: '/' } };
+    const { from } = props.location.state || { from: { pathname: '/ricorda' } };
 
     props.history.push(from);
   };

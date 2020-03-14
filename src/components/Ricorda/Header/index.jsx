@@ -78,7 +78,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
     <div>
       <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
-          <Link to={'/'} className={'navigation-link'}>
+          <Link to={'/ricorda'} className={'navigation-link'}>
             <NavbarHeading>Ricorda</NavbarHeading>
           </Link>
           <NavbarDivider />

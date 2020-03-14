@@ -64,7 +64,7 @@ export const Ricorda = function({ toggleDarkTheme }) {
               user={user}
               toggleDarkTheme={toggleDarkTheme}
             />
-            <Route exact path={'/'} component={NewWords} />
+            <Route exact path={'/ricorda'} component={NewWords} />
             <PrivateRoute exact path={'/today-words'} component={TodayWords} />
             <Route exact path={'/login'} component={Login} />
             <Route exact path={'/signup'} component={SignUp} />

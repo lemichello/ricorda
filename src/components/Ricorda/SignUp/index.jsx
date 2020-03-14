@@ -15,7 +15,7 @@ export const SignUp = function(props) {
     let token = authService.getUserToken();
 
     if (token) {
-      props.history.push('/');
+      props.history.push('/ricorda');
     }
   }, [props.history]);
 
