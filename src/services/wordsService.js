@@ -18,19 +18,38 @@ async function createWordsPair(sourceWord, translation) {
 
 async function getWordsForToday() {
   const token = authService.getUserToken();
+  let resp;
 
-  let resp = await axios.get(`${config.apiUrl}/api/words`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-
-  if (resp.status !== 200) {
-    return authService.handleBadResponse(resp);
+  try {
+    resp = await axios.get(`${config.apiUrl}/api/words`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  } catch (e) {
+    return Promise.reject(e);
   }
 
   return resp.data.data;
 }
 
+async function updateWordsPair(word) {
+  const token = authService.getUserToken();
+  let todayDate = new Date();
+
+  todayDate.setDate(todayDate.getDate() + 2);
+  word.nextRepetitionDate = todayDate;
+  word.repetitions++;
+
+  try {
+    await axios.put(`${config.apiUrl}/api/words/${word._id}`, word, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}
+
 export const wordsService = {
   createWordsPair,
-  getWordsForToday
+  getWordsForToday,
+  updateWordsPair
 };

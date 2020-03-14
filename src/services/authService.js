@@ -33,16 +33,6 @@ async function signUp(email, password) {
   }
 }
 
-function handleBadResponse(resp) {
-  if (resp.status === 401) {
-    logout();
-  }
-
-  const error = resp.data;
-
-  return Promise.reject(error);
-}
-
 function logout() {
   localStorage.removeItem('userToken');
   sessionStorage.removeItem('userToken');
@@ -58,6 +48,5 @@ export const authService = {
   login,
   logout,
   signUp,
-  getUserToken,
-  handleBadResponse
+  getUserToken
 };
