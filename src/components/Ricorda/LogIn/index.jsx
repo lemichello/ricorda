@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   InputGroup,
-  Intent,
   Tooltip
 } from '@blueprintjs/core';
 import { UserContext } from '../contexts/userContext';
@@ -63,7 +62,6 @@ export const Login = function(props) {
     <Tooltip content={`${showPassword ? 'Hide' : 'Show'} Password`}>
       <Button
         icon={showPassword ? 'eye-off' : 'eye-open'}
-        intent={Intent.WARNING}
         minimal={true}
         onClick={() => {
           setShowPassword(!showPassword);

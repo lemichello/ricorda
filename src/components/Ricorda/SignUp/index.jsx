@@ -1,4 +1,4 @@
-import { Button, InputGroup, Intent, Tooltip } from '@blueprintjs/core';
+import { Button, InputGroup, Tooltip } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { authService } from '../../../services/authService';
 import { DefaultToaster } from '../models/DefaultToster';
@@ -47,7 +47,6 @@ export const SignUp = function(props) {
     <Tooltip content={`${showPassword ? 'Hide' : 'Show'} Password`}>
       <Button
         icon={showPassword ? 'eye-off' : 'eye-open'}
-        intent={Intent.WARNING}
         minimal={true}
         onClick={() => {
           setShowPassword(!showPassword);
