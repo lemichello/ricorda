@@ -11,16 +11,20 @@ import {
   NavbarHeading,
   Popover,
   Position,
-  Switch
+  Switch,
+  Tag
 } from '@blueprintjs/core';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import '../styles.css';
 import './styles.css';
 import { darkThemeService } from '../../../services/darkThemeService';
+import { UserContext } from '../contexts/userContext';
+import { WordsCountContext } from '../contexts/wordsCountContext';
 
-export const Header = function({ logout, toggleDarkTheme, history, user }) {
+export const Header = function({ logout, toggleDarkTheme, history }) {
+  const [user] = useContext(UserContext);
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [darkTheme, setDarkTheme] = useState(darkThemeService.getThemeState());
 
@@ -58,6 +62,7 @@ export const Header = function({ logout, toggleDarkTheme, history, user }) {
       )}
     </Menu>
   );
+
   const settings = (
     <div className={'settings-content'}>
       <Switch
@@ -80,11 +85,20 @@ export const Header = function({ logout, toggleDarkTheme, history, user }) {
         </NavbarGroup>
         <NavbarGroup>
           <Link to={'/today-words'} className={'navigation-link'}>
-            <Button
-              className={Classes.MINIMAL}
-              icon="bookmark"
-              text="Today's words"
-            />
+            <WordsCountContext.Consumer>
+              {([wordsCount]) => (
+                <Button
+                  className={Classes.MINIMAL}
+                  icon="bookmark"
+                  text="Today's words"
+                  rightIcon={
+                    wordsCount !== null && (
+                      <Tag intent={'success'}>{wordsCount}</Tag>
+                    )
+                  }
+                />
+              )}
+            </WordsCountContext.Consumer>
           </Link>
         </NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>

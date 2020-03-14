@@ -48,8 +48,17 @@ async function updateWordsPair(word) {
   }
 }
 
+async function getWordsCount(token) {
+  let resp = await axios.get(`${config.apiUrl}/api/words/count`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  return resp.data.data;
+}
+
 export const wordsService = {
   createWordsPair,
   getWordsForToday,
-  updateWordsPair
+  updateWordsPair,
+  getWordsCount
 };

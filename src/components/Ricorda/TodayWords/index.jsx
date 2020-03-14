@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { wordsService } from '../../../services/wordsService';
 import '../styles.css';
 import './styles.css';
@@ -6,15 +6,30 @@ import { NoWords } from './components/NoWords';
 import { RepeatWord } from './components/RepeatWord';
 import { H3 } from '@blueprintjs/core';
 import { DefaultToaster } from '../models/DefaultToster';
+import { WordsCountContext } from '../contexts/wordsCountContext';
+import { LoadingWords } from './components/LoadingWords';
 
 export const TodayWords = function() {
   const [words, setWords] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [, setWordsCount] = useContext(WordsCountContext);
+
+  useEffect(() => {
+    async function getWordsForToday() {
+      let res = await wordsService.getWordsForToday();
+      setLoading(false);
+
+      setWords(res);
+    }
+
+    getWordsForToday();
+  }, []);
 
   const updateWordsPair = useCallback(
     async wordsPair => {
       try {
         await wordsService.updateWordsPair(wordsPair);
+        setWordsCount(words.length - 1);
         setWords(words.filter(x => x._id !== wordsPair._id));
       } catch (e) {
         DefaultToaster.show({
@@ -24,20 +39,8 @@ export const TodayWords = function() {
         });
       }
     },
-    [words]
+    [setWordsCount, words]
   );
-
-  useEffect(() => {
-    async function getWordsForToday() {
-      setLoading(true);
-      let res = await wordsService.getWordsForToday();
-      setLoading(false);
-
-      setWords(res);
-    }
-
-    getWordsForToday();
-  }, []);
 
   return (
     <div className={'page-root'}>
@@ -48,7 +51,7 @@ export const TodayWords = function() {
           </H3>
         )}
         {words.length === 0 && !loading && <NoWords />}
-        {loading && <RepeatWord loading={loading} />}
+        {loading && <LoadingWords />}
         {words.length !== 0 &&
           words.map(wordsPair => (
             <RepeatWord

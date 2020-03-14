@@ -13,6 +13,12 @@ export const RepeatWord = function({ wordsPair, loading, updateWordsPair }) {
   const [translationOpen, setTranslationOpen] = useState(false);
   const [checkBtnLoading, setCheckBtnLoading] = useState(false);
 
+  const handleUpdateClick = async () => {
+    setCheckBtnLoading(true);
+    await updateWordsPair(wordsPair);
+    setCheckBtnLoading(false);
+  };
+
   return (
     <Card className={'repeat-word-card'} elevation={2}>
       <div className={`source-word-block ${loading ? 'bp3-skeleton' : ''}`}>
@@ -28,11 +34,7 @@ export const RepeatWord = function({ wordsPair, loading, updateWordsPair }) {
           icon={'tick'}
           minimal={true}
           intent={'success'}
-          onClick={async () => {
-            setCheckBtnLoading(true);
-            await updateWordsPair(wordsPair);
-            setCheckBtnLoading(false);
-          }}
+          onClick={handleUpdateClick}
         />
       </div>
       <Collapse

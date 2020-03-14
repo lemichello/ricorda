@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  Button,
-  Checkbox,
-  InputGroup,
-  Tooltip
-} from '@blueprintjs/core';
+import { Button, Checkbox, InputGroup, Tooltip } from '@blueprintjs/core';
 import { UserContext } from '../contexts/userContext';
 import { authService } from '../../../services/authService';
 import '../styles.css';
