@@ -1,7 +1,7 @@
 import { Button, NonIdealState } from '@blueprintjs/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './styles.css';
+import './NoWords.css';
 
 export const NoWords = function() {
   const newWordsPageBtn = (

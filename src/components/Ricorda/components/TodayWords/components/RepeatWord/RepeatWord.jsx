@@ -7,7 +7,7 @@ import {
   Pre
 } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import './styles.css';
+import './RepeatWord.css';
 
 export const RepeatWord = function({ wordsPair, loading, updateWordsPair }) {
   const [translationOpen, setTranslationOpen] = useState(false);
