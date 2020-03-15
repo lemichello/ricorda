@@ -1,7 +1,7 @@
 import { Button, InputGroup, Tooltip } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
-import { authService } from '../../../services/authService';
-import { DefaultToaster } from '../models/DefaultToster';
+import { authService } from '../../../../services/authService';
+import { DefaultToaster } from '../../models/DefaultToster';
 
 export const SignUp = function(props) {
   const [showPassword, setShowPassword] = useState(false);

@@ -1,12 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { wordsService } from '../../../services/wordsService';
-import '../styles.css';
+import { wordsService } from '../../../../services/wordsService';
+import '../../styles.css';
 import './styles.css';
 import { NoWords } from './components/NoWords';
 import { RepeatWord } from './components/RepeatWord';
 import { H3 } from '@blueprintjs/core';
-import { DefaultToaster } from '../models/DefaultToster';
-import { WordsCountContext } from '../contexts/wordsCountContext';
+import { DefaultToaster } from '../../models/DefaultToster';
+import { WordsCountContext } from '../../contexts/wordsCountContext';
 import { LoadingWords } from './components/LoadingWords';
 
 export const TodayWords = function() {

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Checkbox, InputGroup, Tooltip } from '@blueprintjs/core';
-import { UserContext } from '../contexts/userContext';
-import { authService } from '../../../services/authService';
-import '../styles.css';
+import { UserContext } from '../../contexts/userContext';
+import { authService } from '../../../../services/authService';
+import '../../styles.css';
 import './styles.css';
 import { Link } from 'react-router-dom';
-import { DefaultToaster } from '../models/DefaultToster';
+import { DefaultToaster } from '../../models/DefaultToster';
 
 export const Login = function(props) {
   const [, setUser] = useContext(UserContext);
