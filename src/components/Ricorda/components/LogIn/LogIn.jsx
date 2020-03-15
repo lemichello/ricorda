@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, Checkbox, InputGroup, Tooltip } from '@blueprintjs/core';
 import { UserContext } from '../../contexts/userContext';
 import { authService } from '../../../../services/authService';
-import '../../styles.css';
-import './styles.css';
+import '../../Ricorda.css';
+import './LogIn.css';
 import { Link } from 'react-router-dom';
 import { DefaultToaster } from '../../models/DefaultToster';
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, EditableText, H3, H5, Icon } from '@blueprintjs/core';
-import '../../styles.css';
-import './styles.css';
+import '../../Ricorda.css';
+import './NewWords.css';
 import { authService } from '../../../../services/authService';
 import { wordsService } from '../../../../services/wordsService';
 import { DefaultToaster } from '../../models/DefaultToster';

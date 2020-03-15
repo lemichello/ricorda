@@ -1,13 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { wordsService } from '../../../../services/wordsService';
-import '../../styles.css';
-import './styles.css';
-import { NoWords } from './components/NoWords';
-import { RepeatWord } from './components/RepeatWord';
+import '../../Ricorda.css';
+import './TodayWords.css';
+import { NoWords } from './components/NoWords/NoWords';
+import { RepeatWord } from './components/RepeatWord/RepeatWord';
 import { H3 } from '@blueprintjs/core';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { WordsCountContext } from '../../contexts/wordsCountContext';
-import { LoadingWords } from './components/LoadingWords';
+import { WordsSkeleton } from './components/WordsSkeleton/WordsSkeleton';
 
 export const TodayWords = function() {
   const [words, setWords] = useState([]);
@@ -51,7 +51,7 @@ export const TodayWords = function() {
           </H3>
         )}
         {words.length === 0 && !loading && <NoWords />}
-        {loading && <LoadingWords />}
+        {loading && <WordsSkeleton />}
         {words.length !== 0 &&
           words.map(wordsPair => (
             <RepeatWord

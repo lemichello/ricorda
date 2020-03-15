@@ -17,8 +17,8 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
-import '../../styles.css';
-import './styles.css';
+import '../../Ricorda.css';
+import './Header.css';
 import { darkThemeService } from '../../../../services/darkThemeService';
 import { UserContext } from '../../contexts/userContext';
 import { WordsCountContext } from '../../contexts/wordsCountContext';

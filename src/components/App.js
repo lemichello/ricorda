@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import './App.css';
-import { Ricorda } from './Ricorda';
+import { Ricorda } from './Ricorda/Ricorda';
 import { darkThemeService } from '../services/darkThemeService';
 
 function App() {

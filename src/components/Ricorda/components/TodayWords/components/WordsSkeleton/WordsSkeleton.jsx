@@ -1,7 +1,7 @@
-import { RepeatWord } from '../RepeatWord';
+import { RepeatWord } from '../RepeatWord/RepeatWord';
 import React from 'react';
 
-export const LoadingWords = function() {
+export const WordsSkeleton = function() {
   return (
     <div>
       <RepeatWord loading={true} />
