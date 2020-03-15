@@ -12,6 +12,7 @@ import { SignUp } from './components/SignUp';
 import axios from 'axios';
 import { WordsCountContext } from './contexts/wordsCountContext';
 import { wordsService } from '../../services/wordsService';
+import { DefaultToaster } from './models/DefaultToster';
 
 export const Ricorda = function({ toggleDarkTheme }) {
   const [user, setUser] = useState(authService.getUserToken());
@@ -23,9 +24,16 @@ export const Ricorda = function({ toggleDarkTheme }) {
         return;
       }
 
-      let count = await wordsService.getWordsCount(user);
-
-      setWordsCount(count);
+      try {
+        let count = await wordsService.getWordsCount(user);
+        setWordsCount(count);
+      } catch (e) {
+        DefaultToaster.show({
+          message: e.data,
+          intent: 'danger',
+          icon: 'error'
+        });
+      }
     }
 
     initRicorda();
@@ -47,6 +55,7 @@ export const Ricorda = function({ toggleDarkTheme }) {
     error => {
       if (error.response.status === 401) {
         logout();
+        window.location.reload();
       }
 
       return Promise.reject(error.response);
@@ -65,7 +74,11 @@ export const Ricorda = function({ toggleDarkTheme }) {
               toggleDarkTheme={toggleDarkTheme}
             />
             <Route exact path={'/ricorda'} component={NewWords} />
-            <PrivateRoute exact path={'/ricorda/today-words'} component={TodayWords} />
+            <PrivateRoute
+              exact
+              path={'/ricorda/today-words'}
+              component={TodayWords}
+            />
             <Route exact path={'/ricorda/login'} component={Login} />
             <Route exact path={'/ricorda/signup'} component={SignUp} />
           </div>
