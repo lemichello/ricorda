@@ -92,12 +92,12 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
                   icon="bookmark"
                   text="Today's words"
                   rightIcon={
-                    wordsCount !== null && (
+                    (wordsCount.count !== null || wordsCount.loading) && (
                       <Tag
-                        className={wordsCount === undefined ? 'bp3-skeleton' : ''}
+                        className={wordsCount.loading ? 'bp3-skeleton' : ''}
                         intent={'success'}
                       >
-                        {wordsCount && wordsCount}
+                        {wordsCount.count && wordsCount.count}
                       </Tag>
                     )
                   }

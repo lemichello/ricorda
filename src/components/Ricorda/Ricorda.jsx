@@ -16,7 +16,7 @@ import { DefaultToaster } from './models/DefaultToster';
 
 export const Ricorda = function({ toggleDarkTheme }) {
   const [user, setUser] = useState(authService.getUserToken());
-  const [wordsCount, setWordsCount] = useState(null);
+  const [wordsCount, setWordsCount] = useState({ count: null, loading: false });
 
   useEffect(() => {
     async function initRicorda() {
@@ -25,12 +25,11 @@ export const Ricorda = function({ toggleDarkTheme }) {
       }
 
       try {
-        // Undefined value indicates, that words count is loading.
-        setWordsCount(undefined);
+        setWordsCount({ count: null, loading: true });
         let count = await wordsService.getWordsCount(user);
-        setWordsCount(count);
+        setWordsCount({ count: count, loading: false });
       } catch (e) {
-        setWordsCount(null);
+        setWordsCount({ count: null, loading: false });
         DefaultToaster.show({
           message: e.data,
           intent: 'danger',
@@ -46,7 +45,7 @@ export const Ricorda = function({ toggleDarkTheme }) {
     authService.logout();
 
     setUser(null);
-    setWordsCount(null);
+    setWordsCount({ count: null, loading: false });
 
     history.push('/ricorda/login');
   }, []);

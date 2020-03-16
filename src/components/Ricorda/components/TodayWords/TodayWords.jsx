@@ -29,7 +29,7 @@ export const TodayWords = function() {
     async wordsPair => {
       try {
         await wordsService.updateWordsPair(wordsPair);
-        setWordsCount(words.length - 1);
+        setWordsCount({ count: words.length - 1, loading: false });
         setWords(words.filter(x => x._id !== wordsPair._id));
       } catch (e) {
         DefaultToaster.show({
