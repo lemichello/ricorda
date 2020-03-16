@@ -25,9 +25,12 @@ export const Ricorda = function({ toggleDarkTheme }) {
       }
 
       try {
+        // Undefined value indicates, that words count is loading.
+        setWordsCount(undefined);
         let count = await wordsService.getWordsCount(user);
         setWordsCount(count);
       } catch (e) {
+        setWordsCount(null);
         DefaultToaster.show({
           message: e.data,
           intent: 'danger',

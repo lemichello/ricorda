@@ -93,7 +93,12 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
                   text="Today's words"
                   rightIcon={
                     wordsCount !== null && (
-                      <Tag intent={'success'}>{wordsCount}</Tag>
+                      <Tag
+                        className={wordsCount === undefined ? 'bp3-skeleton' : ''}
+                        intent={'success'}
+                      >
+                        {wordsCount && wordsCount}
+                      </Tag>
                     )
                   }
                 />
