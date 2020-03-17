@@ -10,26 +10,32 @@ import { WordsCountContext } from '../../contexts/wordsCountContext';
 import { WordsSkeleton } from './components/WordsSkeleton/WordsSkeleton';
 
 export const TodayWords = function() {
+  const [, setWordsCount] = useContext(WordsCountContext);
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [, setWordsCount] = useContext(WordsCountContext);
+  const [wordsDisabled, setWordsDisabled] = useState(false);
 
   useEffect(() => {
     async function getWordsForToday() {
       let res = await wordsService.getWordsForToday();
-      setLoading(false);
 
+      setLoading(false);
       setWords(res);
     }
 
     getWordsForToday();
   }, []);
 
+  useEffect(() => {
+    setWordsCount({ count: words.length, loading: false });
+    setWordsDisabled(false);
+  }, [setWordsCount, words]);
+
   const updateWordsPair = useCallback(
     async wordsPair => {
       try {
+        setWordsDisabled(true);
         await wordsService.updateWordsPair(wordsPair);
-        setWordsCount({ count: words.length - 1, loading: false });
         setWords(words.filter(x => x._id !== wordsPair._id));
       } catch (e) {
         DefaultToaster.show({
@@ -39,7 +45,7 @@ export const TodayWords = function() {
         });
       }
     },
-    [setWordsCount, words]
+    [words]
   );
 
   return (
@@ -55,6 +61,7 @@ export const TodayWords = function() {
         {words.length !== 0 &&
           words.map(wordsPair => (
             <RepeatWord
+              disabled={wordsDisabled}
               key={wordsPair._id}
               wordsPair={wordsPair}
               updateWordsPair={updateWordsPair}
