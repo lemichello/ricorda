@@ -1,4 +1,4 @@
-import { Route, Router } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import { history } from '../../helpers/history';
 import { Header } from './components/Header/Header';
 import { NewWords } from './components/NewWords/NewWords';
@@ -16,7 +16,7 @@ import { DefaultToaster } from './models/DefaultToster';
 
 export const Ricorda = function({ toggleDarkTheme }) {
   const [user, setUser] = useState(authService.getUserToken());
-  const [wordsCount, setWordsCount] = useState(null);
+  const [wordsCount, setWordsCount] = useState({ count: null, loading: false });
 
   useEffect(() => {
     async function initRicorda() {
@@ -25,9 +25,11 @@ export const Ricorda = function({ toggleDarkTheme }) {
       }
 
       try {
+        setWordsCount({ count: null, loading: true });
         let count = await wordsService.getWordsCount(user);
-        setWordsCount(count);
+        setWordsCount({ count: count, loading: false });
       } catch (e) {
+        setWordsCount({ count: null, loading: false });
         DefaultToaster.show({
           message: e.data,
           intent: 'danger',
@@ -43,9 +45,9 @@ export const Ricorda = function({ toggleDarkTheme }) {
     authService.logout();
 
     setUser(null);
-    setWordsCount(null);
+    setWordsCount({ count: null, loading: false });
 
-    history.push('/ricorda/login');
+    history.push('/login');
   }, []);
 
   axios.interceptors.response.use(
@@ -73,14 +75,10 @@ export const Ricorda = function({ toggleDarkTheme }) {
               user={user}
               toggleDarkTheme={toggleDarkTheme}
             />
-            <Route exact path={'/ricorda'} component={NewWords} />
-            <PrivateRoute
-              exact
-              path={'/ricorda/today-words'}
-              component={TodayWords}
-            />
-            <Route exact path={'/ricorda/login'} component={Login} />
-            <Route exact path={'/ricorda/signup'} component={SignUp} />
+            <Route exact path={'/'} component={NewWords} />
+            <PrivateRoute exact path={'/today-words'} component={TodayWords} />
+            <Route exact path={'/login'} component={Login} />
+            <Route exact path={'/signup'} component={SignUp} />
           </div>
         </Router>
       </WordsCountContext.Provider>

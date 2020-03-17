@@ -21,7 +21,7 @@ export const Login = function(props) {
     let token = authService.getUserToken();
 
     if (token) {
-      props.history.push('/ricorda');
+      props.history.push('/');
     }
   }, [props.history]);
 
@@ -48,7 +48,7 @@ export const Login = function(props) {
       icon: 'tick'
     });
 
-    const { from } = props.location.state || { from: { pathname: '/ricorda' } };
+    const { from } = props.location.state || { from: { pathname: '/' } };
 
     props.history.push(from);
   };
@@ -110,7 +110,7 @@ export const Login = function(props) {
         <span className={'page-divider'} />
         <h5 className={'bp3-heading'}>Don't have an account?</h5>
         <Link
-          to={'/ricorda/signup'}
+          to={'/signup'}
           style={{ width: '100%' }}
           className={'navigation-link'}
         >

@@ -15,7 +15,7 @@ export const SignUp = function(props) {
     let token = authService.getUserToken();
 
     if (token) {
-      props.history.push('/ricorda');
+      props.history.push('/');
     }
   }, [props.history]);
 
@@ -40,7 +40,7 @@ export const SignUp = function(props) {
       icon: 'tick'
     });
 
-    props.history.push('/ricorda/login');
+    props.history.push('/login');
   };
 
   const lockButton = (

@@ -9,14 +9,18 @@ import {
 import React, { useState } from 'react';
 import './RepeatWord.css';
 
-export const RepeatWord = function({ wordsPair, loading, updateWordsPair }) {
+export const RepeatWord = function({
+  wordsPair,
+  loading,
+  updateWordsPair,
+  disabled
+}) {
   const [translationOpen, setTranslationOpen] = useState(false);
   const [checkBtnLoading, setCheckBtnLoading] = useState(false);
 
   const handleUpdateClick = async () => {
     setCheckBtnLoading(true);
-    await updateWordsPair(wordsPair);
-    setCheckBtnLoading(false);
+    updateWordsPair(wordsPair);
   };
 
   return (
@@ -24,12 +28,14 @@ export const RepeatWord = function({ wordsPair, loading, updateWordsPair }) {
       <div className={`source-word-block ${loading ? 'bp3-skeleton' : ''}`}>
         <H3 className={'source-word'}>{wordsPair?.sourceWord}</H3>
         <Button
+          disabled={disabled}
           minimal={true}
           icon={'translate'}
           onClick={() => setTranslationOpen(!translationOpen)}
         />
         <NavbarDivider />
         <Button
+          disabled={disabled}
           loading={checkBtnLoading}
           icon={'tick'}
           minimal={true}

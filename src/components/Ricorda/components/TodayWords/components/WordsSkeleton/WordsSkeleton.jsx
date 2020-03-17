@@ -8,7 +8,6 @@ export const WordsSkeleton = function() {
       <RepeatWord loading={true} />
       <RepeatWord loading={true} />
       <RepeatWord loading={true} />
-      <RepeatWord loading={true} />
     </div>
   );
 };
