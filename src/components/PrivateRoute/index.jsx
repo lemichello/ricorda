@@ -12,7 +12,7 @@ export const PrivateRoute = function({ component: Component, ...rest }) {
             if (!user) {
               return (
                 <Redirect
-                  to={{ pathname: '/ricorda/login', state: { from: props.location } }}
+                  to={{ pathname: '/login', state: { from: props.location } }}
                 />
               );
             }
