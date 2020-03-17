@@ -27,7 +27,10 @@ export const TodayWords = function() {
   }, []);
 
   useEffect(() => {
-    setWordsCount({ count: words.length, loading: false });
+    if (words.length) {
+      setWordsCount({ count: words.length, loading: false });
+    }
+
     setWordsDisabled(false);
   }, [setWordsCount, words]);
 
