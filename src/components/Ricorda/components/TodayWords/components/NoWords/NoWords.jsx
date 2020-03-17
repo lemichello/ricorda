@@ -5,7 +5,7 @@ import './NoWords.css';
 
 export const NoWords = function() {
   const newWordsPageBtn = (
-    <Link to={'/ricorda'} className={'navigation-link'}>
+    <Link to={'/'} className={'navigation-link'}>
       <Button
         className={'page-btn add-new-words-btn'}
         outlined={'true'}

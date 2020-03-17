@@ -57,7 +57,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
         <MenuItem
           icon={'log-in'}
           text={'Log in or Sign up'}
-          onClick={() => history.push('/ricorda/login')}
+          onClick={() => history.push('/login')}
         />
       )}
     </Menu>
@@ -78,13 +78,13 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
     <div>
       <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
-          <Link to={'/ricorda'} className={'navigation-link'}>
+          <Link to={'/'} className={'navigation-link'}>
             <NavbarHeading>Ricorda</NavbarHeading>
           </Link>
           <NavbarDivider />
         </NavbarGroup>
         <NavbarGroup>
-          <Link to={'/ricorda/today-words'} className={'navigation-link'}>
+          <Link to={'/today-words'} className={'navigation-link'}>
             <WordsCountContext.Consumer>
               {([wordsCount]) => (
                 <Button
