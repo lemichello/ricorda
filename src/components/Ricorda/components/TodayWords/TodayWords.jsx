@@ -5,12 +5,13 @@ import './TodayWords.css';
 import { NoWords } from './components/NoWords/NoWords';
 import { RepeatWord } from './components/RepeatWord/RepeatWord';
 import { H3 } from '@blueprintjs/core';
+import { DefaultToaster } from '../../models/DefaultToster';
 import { WordsCountContext } from '../../contexts/wordsCountContext';
 import { WordsSkeleton } from './components/WordsSkeleton/WordsSkeleton';
 
 export const TodayWords = function() {
   const [, setWordsCount] = useContext(WordsCountContext);
-  const [words, setWords] = useState([]);
+  const [words, setWords] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [wordsDisabled, setWordsDisabled] = useState(false);
 
@@ -26,7 +27,7 @@ export const TodayWords = function() {
   }, []);
 
   useEffect(() => {
-    if (words.length) {
+    if (words) {
       setWordsCount({ count: words.length, loading: false });
     }
 
@@ -39,7 +40,13 @@ export const TodayWords = function() {
         setWordsDisabled(true);
         await wordsService.updateWordsPair(wordsPair);
         setWords(words.filter(x => x._id !== wordsPair._id));
-      } catch (e) {}
+      } catch (e) {
+        DefaultToaster.show({
+          message: e.data,
+          icon: 'error',
+          intent: 'danger'
+        });
+      }
     },
     [words]
   );
@@ -47,22 +54,22 @@ export const TodayWords = function() {
   return (
     <div className={'page-root'}>
       <div className={'page-content'}>
-        {(words.length !== 0 || loading) && (
+        {(words?.length !== 0 || loading) && (
           <H3 className={loading ? 'bp3-skeleton' : ''}>
             Words to repeat for today
           </H3>
         )}
-        {words.length === 0 && !loading && <NoWords />}
+        {words?.length === 0 && !loading && <NoWords />}
         {loading && <WordsSkeleton />}
-        {words.length !== 0 &&
-          words.map(wordsPair => (
-            <RepeatWord
-              disabled={wordsDisabled}
-              key={wordsPair._id}
-              wordsPair={wordsPair}
-              updateWordsPair={updateWordsPair}
-            />
-          ))}
+        {words?.length !== 0 &&
+        words?.map(wordsPair => (
+          <RepeatWord
+            disabled={wordsDisabled}
+            key={wordsPair._id}
+            wordsPair={wordsPair}
+            updateWordsPair={updateWordsPair}
+          />
+        ))}
       </div>
     </div>
   );
