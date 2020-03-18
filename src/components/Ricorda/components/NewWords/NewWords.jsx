@@ -44,6 +44,7 @@ export const NewWords = function({ history }) {
           <div className={'new-words-page-inputs'}>
             <H5 className={'new-words-page-source-input'}>
               <EditableText
+                className={'new-words-editable-text'}
                 placeholder={'Source word...'}
                 value={sourceWord}
                 onChange={event => setSourceWord(event)}
@@ -52,6 +53,7 @@ export const NewWords = function({ history }) {
             <Icon icon={'chevron-right'} iconSize={Icon.SIZE_LARGE} />
             <H5 className={'new-words-page-source-input'}>
               <EditableText
+                className={'new-words-editable-text'}
                 placeholder={'Translation...'}
                 value={translation}
                 onChange={event => setTranslation(event)}
