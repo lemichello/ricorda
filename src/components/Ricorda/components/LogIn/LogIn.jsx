@@ -34,11 +34,6 @@ export const Login = function(props) {
       setUser(token);
     } catch (e) {
       setLoading(false);
-      DefaultToaster.show({
-        message: e.data,
-        intent: 'danger',
-        icon: 'error'
-      });
       return;
     }
 
