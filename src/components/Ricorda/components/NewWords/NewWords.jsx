@@ -23,12 +23,6 @@ export const NewWords = function({ history }) {
       setLoading(false);
     } catch (e) {
       setLoading(false);
-      DefaultToaster.show({
-        message: "Can't add new pair of words. Try again",
-        intent: 'danger',
-        icon: 'cross'
-      });
-
       return;
     }
 

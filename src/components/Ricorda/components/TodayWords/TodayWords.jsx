@@ -5,7 +5,6 @@ import './TodayWords.css';
 import { NoWords } from './components/NoWords/NoWords';
 import { RepeatWord } from './components/RepeatWord/RepeatWord';
 import { H3 } from '@blueprintjs/core';
-import { DefaultToaster } from '../../models/DefaultToster';
 import { WordsCountContext } from '../../contexts/wordsCountContext';
 import { WordsSkeleton } from './components/WordsSkeleton/WordsSkeleton';
 
@@ -40,13 +39,7 @@ export const TodayWords = function() {
         setWordsDisabled(true);
         await wordsService.updateWordsPair(wordsPair);
         setWords(words.filter(x => x._id !== wordsPair._id));
-      } catch (e) {
-        DefaultToaster.show({
-          message: e.data,
-          icon: 'error',
-          intent: 'danger'
-        });
-      }
+      } catch (e) {}
     },
     [words]
   );
