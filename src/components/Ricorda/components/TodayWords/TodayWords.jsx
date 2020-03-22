@@ -8,6 +8,8 @@ import { H3 } from '@blueprintjs/core';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { WordsCountContext } from '../../contexts/wordsCountContext';
 import { WordsSkeleton } from './components/WordsSkeleton/WordsSkeleton';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import Fade from 'react-reveal/Fade';
 
 export const TodayWords = function() {
   const [, setWordsCount] = useContext(WordsCountContext);
@@ -35,10 +37,11 @@ export const TodayWords = function() {
   }, [setWordsCount, words]);
 
   const updateWordsPair = useCallback(
-    async wordsPair => {
+    async (wordsPair, callback) => {
       try {
         setWordsDisabled(true);
         await wordsService.updateWordsPair(wordsPair);
+        callback();
         setWords(words.filter(x => x._id !== wordsPair._id));
       } catch (e) {
         DefaultToaster.show({
@@ -60,16 +63,28 @@ export const TodayWords = function() {
           </H3>
         )}
         {words?.length === 0 && !loading && <NoWords />}
-        {loading && <WordsSkeleton />}
-        {words?.length !== 0 &&
-        words?.map(wordsPair => (
-          <RepeatWord
-            disabled={wordsDisabled}
-            key={wordsPair._id}
-            wordsPair={wordsPair}
-            updateWordsPair={updateWordsPair}
-          />
-        ))}
+        {loading && (
+          <Fade timeout={500} top distance={'100px'}>
+            <WordsSkeleton />
+          </Fade>
+        )}
+        {words?.length !== 0 && (
+          <TransitionGroup>
+            {words?.map(wordsPair => (
+              <CSSTransition
+                timeout={700}
+                key={wordsPair._id}
+                classNames={'repeat-word-component'}
+              >
+                <RepeatWord
+                  disabled={wordsDisabled}
+                  wordsPair={wordsPair}
+                  updateWordsPair={updateWordsPair}
+                />
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
+        )}
       </div>
     </div>
   );

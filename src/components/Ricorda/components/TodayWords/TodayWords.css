@@ -1,0 +1,14 @@
+.repeat-word-component-enter {
+  opacity: 0;
+}
+.repeat-word-component-enter-active {
+  opacity: 1;
+  transition: opacity 700ms;
+}
+.repeat-word-component-exit {
+  opacity: 1;
+}
+.repeat-word-component-exit-active {
+  opacity: 0;
+  transition: opacity 700ms;
+}
