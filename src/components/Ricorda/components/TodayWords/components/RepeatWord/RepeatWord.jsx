@@ -4,7 +4,8 @@ import {
   Collapse,
   H3,
   NavbarDivider,
-  Pre
+  Pre,
+  Tooltip
 } from '@blueprintjs/core';
 import React, { useCallback, useState } from 'react';
 import './RepeatWord.css';
@@ -41,7 +42,15 @@ export const RepeatWord = function({
               loading ? 'bp3-skeleton' : ''
             }`}
           >
-            <H3 className={'source-word'}>{wordsPair?.sourceWord}</H3>
+            <Tooltip
+              hoverOpenDelay={400}
+              className={'source-word-tooltip'}
+              content={
+                wordsPair?.sourceWord.length > 13 ? wordsPair?.sourceWord : ''
+              }
+            >
+              <H3 className={'source-word'}>{wordsPair?.sourceWord}</H3>
+            </Tooltip>
             <Button
               disabled={disabled}
               minimal={true}
