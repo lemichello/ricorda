@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from '../config';
 import { authService } from './authService';
 
-async function createWordsPair(sourceWord, translation) {
+async function createWordPair(sourceWord, translation) {
   const token = authService.getUserToken();
 
   let resp = await axios.post(
@@ -31,7 +31,7 @@ async function getWordsForToday() {
   return resp.data.data;
 }
 
-async function updateWordsPair(word) {
+async function updateWordPair(word) {
   const token = authService.getUserToken();
   let todayDate = new Date();
 
@@ -61,8 +61,8 @@ async function getWordsCount(token) {
 }
 
 export const wordsService = {
-  createWordsPair,
+  createWordPair,
   getWordsForToday,
-  updateWordsPair,
+  updateWordPair,
   getWordsCount
 };

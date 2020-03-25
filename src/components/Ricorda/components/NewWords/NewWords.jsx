@@ -20,7 +20,7 @@ export const NewWords = function({ history }) {
 
     try {
       setLoading(true);
-      await wordsService.createWordsPair(sourceWord, translation);
+      await wordsService.createWordPair(sourceWord, translation);
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -40,7 +40,7 @@ export const NewWords = function({ history }) {
   return (
     <div className={'page-root'}>
       <div className={'page-content'}>
-        <H3>New Words Pair</H3>
+        <H3>New Word Pair</H3>
         <Fade top timeout={500} distance={'100px'}>
           <Card className={'new-words-page-card'} elevation={2}>
             <div className={'new-words-page-inputs'}>

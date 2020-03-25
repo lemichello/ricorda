@@ -32,8 +32,8 @@
   border-radius: 15px;
   text-transform: uppercase;
   height: 30px;
-  width: 30%;
-  max-width: 20vw;
+  width: 100px;
+  max-width: 25vw;
 }
 
 @media (min-width: 576px) {
