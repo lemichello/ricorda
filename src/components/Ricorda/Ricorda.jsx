@@ -50,16 +50,6 @@ export const Ricorda = function({ toggleDarkTheme }) {
       return resp;
     },
     error => {
-      if (typeof error.response === 'undefined') {
-        DefaultToaster.show({
-          message: 'Network error occurred',
-          icon: 'error',
-          intent: 'danger'
-        });
-
-        return Promise.reject(error);
-      }
-
       if (error.response.status === 401) {
         logout();
         window.location.reload();
