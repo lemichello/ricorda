@@ -12,6 +12,16 @@ export const NewWords = function({ history }) {
   const [translation, setTranslation] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const isValidWordPair = () => {
+    return sourceWord.trim() !== '' && translation.trim() !== '';
+  };
+
+  const keyDown = event => {
+    if (event.key === 'Enter' && isValidWordPair()) {
+      createWordsPair();
+    }
+  };
+
   const createWordsPair = async () => {
     if (!authService.getUserToken()) {
       history.push('/login');
@@ -39,7 +49,7 @@ export const NewWords = function({ history }) {
 
   return (
     <div className={'page-root'}>
-      <div className={'page-content'}>
+      <div className={'page-content'} onKeyDown={keyDown}>
         <H3>New Word Pair</H3>
         <Fade top timeout={500} distance={'100px'}>
           <Card className={'new-words-page-card'} elevation={2}>
@@ -64,10 +74,11 @@ export const NewWords = function({ history }) {
             </div>
             <Button
               icon={'add'}
+              type={'submit'}
               className={'new-words-page-add-btn'}
               loading={loading}
               intent={'success'}
-              disabled={sourceWord.trim() === '' || translation.trim() === ''}
+              disabled={!isValidWordPair()}
               onClick={createWordsPair}
             />
           </Card>

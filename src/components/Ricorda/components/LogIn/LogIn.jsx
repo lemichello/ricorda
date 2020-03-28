@@ -25,6 +25,16 @@ export const Login = function(props) {
     }
   }, [props.history]);
 
+  const isValidCredentials = () => {
+    return emailRegex.test(email) && password;
+  };
+
+  const keyDown = event => {
+    if (event.key === 'Enter' && isValidCredentials()) {
+      logIn();
+    }
+  };
+
   const logIn = async () => {
     try {
       setLoading(true);
@@ -62,7 +72,7 @@ export const Login = function(props) {
 
   return (
     <div className={'page-root'}>
-      <div className={'page-content'}>
+      <div className={'page-content'} onKeyDown={keyDown}>
         <h5 className={'bp3-heading'}>To continue, log in to Ricorda.</h5>
         <span className={'page-divider'} />
         <InputGroup
@@ -99,7 +109,7 @@ export const Login = function(props) {
             loading={loading}
             text={'Log In'}
             onClick={logIn}
-            disabled={!emailRegex.test(email) || !password}
+            disabled={!isValidCredentials()}
           />
         </div>
         <span className={'page-divider'} />
