@@ -89,7 +89,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
               {([wordsCount]) => (
                 <Button
                   className={Classes.MINIMAL}
-                  icon="timeline-events"
+                  icon="calendar"
                   text="Today's words"
                   rightIcon={
                     (wordsCount.count !== null || wordsCount.loading) && (
