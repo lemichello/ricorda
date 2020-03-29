@@ -57,7 +57,7 @@ export const NewWords = function({ history }) {
               <H5 className={'new-words-page-source-input'}>
                 <EditableText
                   className={'new-words-editable-text'}
-                  placeholder={'Source word...'}
+                  placeholder={'Foreign word...'}
                   value={sourceWord}
                   onChange={event => setSourceWord(event)}
                 />
