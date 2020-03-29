@@ -48,7 +48,9 @@ async function updateWordPair(word) {
   }
 }
 
-async function getWordsCount(token) {
+async function getWordsCount() {
+  const token = authService.getUserToken();
+
   try {
     let resp = await axios.get(`${config.apiUrl}/api/words/count`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -60,9 +62,28 @@ async function getWordsCount(token) {
   }
 }
 
+async function wordPairExists(sourceWord) {
+  const token = authService.getUserToken();
+
+  try {
+    let resp = await axios.post(
+      `${config.apiUrl}/api/words/exists`,
+      { sourceWord },
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+
+    return resp.data.data;
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}
+
 export const wordsService = {
   createWordPair,
   getWordsForToday,
   updateWordPair,
-  getWordsCount
+  getWordsCount,
+  wordPairExists
 };

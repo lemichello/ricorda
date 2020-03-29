@@ -26,7 +26,7 @@ export const Ricorda = function({ toggleDarkTheme }) {
 
       try {
         setWordsCount({ count: null, loading: true });
-        let count = await wordsService.getWordsCount(user);
+        let count = await wordsService.getWordsCount();
         setWordsCount({ count: count, loading: false });
       } catch (e) {
         setWordsCount({ count: null, loading: false });
