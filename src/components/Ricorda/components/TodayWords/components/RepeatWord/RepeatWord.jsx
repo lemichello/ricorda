@@ -3,6 +3,7 @@ import {
   Card,
   Collapse,
   H3,
+  Icon,
   NavbarDivider,
   Pre,
   Tooltip
@@ -11,7 +12,7 @@ import React, { useCallback, useState } from 'react';
 import './RepeatWord.css';
 
 export const RepeatWord = function({
-  wordsPair,
+  wordPair,
   loading,
   updateWordsPair,
   disabled
@@ -22,7 +23,15 @@ export const RepeatWord = function({
 
   const handleUpdateClick = async () => {
     setCheckBtnLoading(true);
-    updateWordsPair(wordsPair, checkWordPair);
+    updateWordsPair(wordPair, checkWordPair);
+  };
+
+  const getTooltipContent = () => {
+    if (wordPair?.repetitions === 4) {
+      return wordPair?.translation.length > 13 ? wordPair?.translation : '';
+    }
+
+    return wordPair?.sourceWord.length > 13 ? wordPair?.sourceWord : '';
   };
 
   const checkWordPair = useCallback(() => {
@@ -42,36 +51,54 @@ export const RepeatWord = function({
               loading ? 'bp3-skeleton' : ''
             }`}
           >
+            <div>
+              {wordPair?.repetitions === 4 && (
+                <Tooltip
+                  content={'Last repetition'}
+                  intent={'primary'}
+                  position={'left'}
+                >
+                  <Icon icon={'endorsed'} intent={'primary'} iconSize={20} />
+                </Tooltip>
+              )}
+            </div>
             <Tooltip
-              hoverOpenDelay={400}
               className={'source-word-tooltip'}
-              content={
-                wordsPair?.sourceWord.length > 13 ? wordsPair?.sourceWord : ''
-              }
+              content={getTooltipContent()}
             >
-              <H3 className={'source-word'}>{wordsPair?.sourceWord}</H3>
+              <H3 className={'source-word'}>
+                {wordPair?.repetitions === 4
+                  ? wordPair?.translation
+                  : wordPair?.sourceWord}
+              </H3>
             </Tooltip>
-            <Button
-              disabled={disabled}
-              minimal={true}
-              icon={'translate'}
-              onClick={() => setTranslationOpen(!translationOpen)}
-            />
-            <NavbarDivider />
-            <Button
-              disabled={disabled}
-              loading={checkBtnLoading}
-              icon={'tick'}
-              minimal={true}
-              intent={'success'}
-              onClick={handleUpdateClick}
-            />
+            <div className={'repeat-word-actions-block'}>
+              <Button
+                disabled={disabled}
+                minimal={true}
+                icon={'translate'}
+                onClick={() => setTranslationOpen(!translationOpen)}
+              />
+              <NavbarDivider />
+              <Button
+                disabled={disabled}
+                loading={checkBtnLoading}
+                icon={'tick'}
+                minimal={true}
+                intent={'success'}
+                onClick={handleUpdateClick}
+              />
+            </div>
           </div>
           <Collapse
             isOpen={translationOpen}
             className={`translation-collapse-block`}
           >
-            <Pre className={'translation-word'}>{wordsPair?.translation}</Pre>
+            <Pre className={'translation-word'}>
+              {wordPair?.repetitions === 4
+                ? wordPair?.sourceWord
+                : wordPair?.translation}
+            </Pre>
           </Collapse>
         </div>
       )}

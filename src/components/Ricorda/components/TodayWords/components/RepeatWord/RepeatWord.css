@@ -32,14 +32,19 @@
 .repeat-word-source-word-block {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
 }
 
 .source-word-tooltip {
   padding-top: 5px;
   margin-right: 5px;
-  margin-left: auto;
+  margin-left: 15px;
+  max-width: 50%;
+}
+
+.source-word-tooltip > .bp3-popover-target {
+  width: 100%;
 }
 
 .source-word {
@@ -60,6 +65,11 @@
   text-align: center;
 }
 
+.repeat-word-actions-block {
+  display: flex;
+  align-items: center;
+}
+
 @keyframes check-success {
   from {
     width: 0;
@@ -71,7 +81,7 @@
 
 @media (min-width: 576px) {
   .repeat-word-card {
-    width: 45vw;
+    width: 50vw;
   }
 }
 

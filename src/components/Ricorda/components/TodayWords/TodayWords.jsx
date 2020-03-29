@@ -70,15 +70,15 @@ export const TodayWords = function() {
         )}
         {words?.length !== 0 && (
           <TransitionGroup>
-            {words?.map(wordsPair => (
+            {words?.map(wordPair => (
               <CSSTransition
                 timeout={700}
-                key={wordsPair._id}
+                key={wordPair._id}
                 classNames={'repeat-word-component'}
               >
                 <RepeatWord
                   disabled={wordsDisabled}
-                  wordsPair={wordsPair}
+                  wordPair={wordPair}
                   updateWordsPair={updateWordsPair}
                 />
               </CSSTransition>
