@@ -129,7 +129,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
         confirmButtonText={'Yes'}
         icon={'log-out'}
       >
-        <p>Are you sure you want to log out?</p>
+        <p>Are you sure you want to sign out?</p>
       </Alert>
     </div>
   );
