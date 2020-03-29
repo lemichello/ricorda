@@ -1,12 +1,11 @@
 import axios from 'axios';
-import config from '../config';
 import { authService } from './authService';
 
 async function createWordPair(sourceWord, translation) {
   const token = authService.getUserToken();
 
   let resp = await axios.post(
-    `${config.apiUrl}/api/words`,
+    '/api/words',
     { sourceWord, translation },
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -21,7 +20,7 @@ async function getWordsForToday() {
   let resp;
 
   try {
-    resp = await axios.get(`${config.apiUrl}/api/words`, {
+    resp = await axios.get('/api/words', {
       headers: { Authorization: `Bearer ${token}` }
     });
   } catch (e) {
@@ -40,7 +39,7 @@ async function updateWordPair(word) {
   word.repetitions++;
 
   try {
-    await axios.put(`${config.apiUrl}/api/words/${word._id}`, word, {
+    await axios.put(`/api/words/${word._id}`, word, {
       headers: { Authorization: `Bearer ${token}` }
     });
   } catch (e) {
@@ -52,7 +51,7 @@ async function getWordsCount() {
   const token = authService.getUserToken();
 
   try {
-    let resp = await axios.get(`${config.apiUrl}/api/words/count`, {
+    let resp = await axios.get('/api/words/count', {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -67,7 +66,7 @@ async function wordPairExists(sourceWord) {
 
   try {
     let resp = await axios.post(
-      `${config.apiUrl}/api/words/exists`,
+      '/api/words/exists',
       { sourceWord },
       {
         headers: { Authorization: `Bearer ${token}` }
