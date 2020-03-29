@@ -13,6 +13,7 @@ import axios from 'axios';
 import { WordsCountContext } from './contexts/wordsCountContext';
 import { wordsService } from '../../services/wordsService';
 import { DefaultToaster } from './models/DefaultToster';
+import config from '../../config';
 
 export const Ricorda = function({ toggleDarkTheme }) {
   const [user, setUser] = useState(authService.getUserToken());
@@ -26,7 +27,7 @@ export const Ricorda = function({ toggleDarkTheme }) {
 
       try {
         setWordsCount({ count: null, loading: true });
-        let count = await wordsService.getWordsCount(user);
+        let count = await wordsService.getWordsCount();
         setWordsCount({ count: count, loading: false });
       } catch (e) {
         setWordsCount({ count: null, loading: false });
@@ -44,6 +45,8 @@ export const Ricorda = function({ toggleDarkTheme }) {
 
     history.push('/login');
   }, []);
+
+  axios.defaults.baseURL = config.apiUrl;
 
   axios.interceptors.response.use(
     resp => {
