@@ -53,11 +53,7 @@ export const RepeatWord = function({
           >
             <div>
               {wordPair?.repetitions === 4 && (
-                <Tooltip
-                  content={'Last repetition'}
-                  intent={'primary'}
-                  position={'left'}
-                >
+                <Tooltip content={'Last repetition'} intent={'primary'}>
                   <Icon icon={'endorsed'} intent={'primary'} iconSize={20} />
                 </Tooltip>
               )}
