@@ -11,26 +11,33 @@ import {
   NavbarHeading,
   Popover,
   Position,
-  Switch,
-  Tag
+  Switch
 } from '@blueprintjs/core';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import '../../Ricorda.css';
 import './Header.css';
 import { darkThemeService } from '../../../../services/darkThemeService';
 import { UserContext } from '../../contexts/userContext';
-import { WordsCountContext } from '../../contexts/wordsCountContext';
+import { useMediaQuery } from 'react-responsive';
+import { MobileMenu } from './components/MobileMenu/MobileMenu';
+import { TabletMenu } from './components/TabletMenu/TabletMenu';
 
 export const Header = function({ logout, toggleDarkTheme, history }) {
+  const isTablet = useMediaQuery({ query: '(min-width: 576px)' });
   const [user] = useContext(UserContext);
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [darkTheme, setDarkTheme] = useState(darkThemeService.getThemeState());
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     darkThemeService.setThemeState(darkTheme);
   }, [darkTheme]);
+
+  const toggleMobileMenuVisibility = useCallback(visibility => {
+    setMenuOpen(visibility);
+  }, []);
 
   const handleAlertConfirm = () => {
     setAlertOpen(false);
@@ -83,29 +90,17 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
           </Link>
           <NavbarDivider />
         </NavbarGroup>
-        <NavbarGroup>
-          <Link to={'/today-words'} className={'navigation-link'}>
-            <WordsCountContext.Consumer>
-              {([wordsCount]) => (
-                <Button
-                  className={Classes.MINIMAL}
-                  icon="calendar"
-                  text="Today's words"
-                  rightIcon={
-                    (wordsCount.count !== null || wordsCount.loading) && (
-                      <Tag
-                        className={wordsCount.loading ? 'bp3-skeleton' : ''}
-                        intent={'success'}
-                      >
-                        {wordsCount.count && wordsCount.count}
-                      </Tag>
-                    )
-                  }
-                />
-              )}
-            </WordsCountContext.Consumer>
-          </Link>
-        </NavbarGroup>
+        {!isTablet && (
+          <NavbarGroup>
+            <Button
+              className={Classes.MINIMAL}
+              icon={'menu'}
+              onClick={() => setMenuOpen(true)}
+              text={'Menu'}
+            />
+          </NavbarGroup>
+        )}
+        {isTablet && <TabletMenu />}
         <NavbarGroup align={Alignment.RIGHT}>
           <NavbarDivider />
           <Popover content={userMenu} position={Position.BOTTOM}>
@@ -131,6 +126,10 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
       >
         <p>Are you sure you want to sign out?</p>
       </Alert>
+      <MobileMenu
+        isVisible={isMenuOpen}
+        toggleMenuVisibility={toggleMobileMenuVisibility}
+      />
     </div>
   );
 };
