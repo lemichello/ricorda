@@ -1,21 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { Ricorda } from './Ricorda/Ricorda';
+import { ThemeContext } from './Ricorda/contexts/themeContext';
 import { darkThemeService } from '../services/darkThemeService';
 
 function App() {
-  const [isDarkTheme, setDarkTheme] = useState(
-    darkThemeService.getThemeState()
-  );
-
-  const toggleDarkTheme = useCallback(() => {
-    setDarkTheme(!isDarkTheme);
-  }, [isDarkTheme]);
+  const [theme, setTheme] = useState({
+    isDarkTheme: darkThemeService.getThemeState()
+  });
 
   return (
-    <div className={`app-root ${isDarkTheme ? 'bp3-dark' : ''}`}>
-      <Ricorda toggleDarkTheme={toggleDarkTheme} />
-    </div>
+    <ThemeContext.Provider value={[theme, setTheme]}>
+      <div className={`app-root ${theme.isDarkTheme ? 'bp3-dark' : ''}`}>
+        <Ricorda />
+      </div>
+    </ThemeContext.Provider>
   );
 }
 

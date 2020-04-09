@@ -14,8 +14,9 @@ import { WordsCountContext } from './contexts/wordsCountContext';
 import { wordsService } from '../../services/wordsService';
 import { DefaultToaster } from './models/DefaultToster';
 import config from '../../config';
+import { SavedWords } from './components/SavedWords/SavedWords';
 
-export const Ricorda = function({ toggleDarkTheme }) {
+export const Ricorda = function() {
   const [user, setUser] = useState(authService.getUserToken());
   const [wordsCount, setWordsCount] = useState({ count: null, loading: false });
 
@@ -73,14 +74,10 @@ export const Ricorda = function({ toggleDarkTheme }) {
       <WordsCountContext.Provider value={[wordsCount, setWordsCount]}>
         <Router history={history}>
           <div>
-            <Header
-              history={history}
-              logout={logout}
-              user={user}
-              toggleDarkTheme={toggleDarkTheme}
-            />
+            <Header history={history} logout={logout} user={user} />
             <Route exact path={'/'} component={NewWords} />
             <PrivateRoute exact path={'/today-words'} component={TodayWords} />
+            <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
             <Route exact path={'/login'} component={Login} />
             <Route exact path={'/signup'} component={SignUp} />
           </div>
