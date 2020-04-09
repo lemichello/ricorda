@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Alert,
   Button,
@@ -15,10 +15,10 @@ import { wordsService } from '../../../../services/wordsService';
 import { DefaultToaster } from '../../models/DefaultToster';
 import Fade from 'react-reveal/Fade';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
-import { darkThemeService } from '../../../../services/darkThemeService';
+import { ThemeContext } from '../../contexts/themeContext';
 
 export const NewWords = function({ history }) {
-  const [darkTheme] = useState(darkThemeService.getThemeState());
+  const [theme] = useContext(ThemeContext);
 
   const [sourceWord, setSourceWord] = useState('');
   const [translation, setTranslation] = useState('');
@@ -70,7 +70,7 @@ export const NewWords = function({ history }) {
     }
 
     DefaultToaster.show({
-      message: 'Successfully created new words pair',
+      message: 'Successfully created new word pair',
       intent: 'success',
       icon: 'tick'
     });
@@ -117,7 +117,7 @@ export const NewWords = function({ history }) {
         </Fade>
       </div>
       <Alert
-        className={`${darkTheme ? 'bp3-dark' : ''}`}
+        className={`${theme.isDarkTheme ? 'bp3-dark' : ''}`}
         canEscapeKeyCancel={true}
         isOpen={isAlertOpen}
         onCancel={() => {

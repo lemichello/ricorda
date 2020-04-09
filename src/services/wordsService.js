@@ -30,6 +30,21 @@ async function getWordsForToday() {
   return resp.data.data;
 }
 
+async function getSavedWords() {
+  const token = authService.getUserToken();
+  let resp;
+
+  try {
+    resp = await axios.get('api/words/saved', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  } catch (e) {
+    return Promise.reject(e);
+  }
+
+  return resp.data.data;
+}
+
 async function updateWordPair(word) {
   const token = authService.getUserToken();
   let todayDate = new Date();
@@ -82,6 +97,7 @@ async function wordPairExists(sourceWord) {
 export const wordsService = {
   createWordPair,
   getWordsForToday,
+  getSavedWords,
   updateWordPair,
   getWordsCount,
   wordPairExists

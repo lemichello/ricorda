@@ -50,6 +50,7 @@
 .source-word {
   font-style: italic;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .repeat-word-source-word-block > button:nth-child(2) {

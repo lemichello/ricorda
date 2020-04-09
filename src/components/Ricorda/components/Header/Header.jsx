@@ -23,17 +23,18 @@ import { UserContext } from '../../contexts/userContext';
 import { useMediaQuery } from 'react-responsive';
 import { MobileMenu } from './components/MobileMenu/MobileMenu';
 import { TabletMenu } from './components/TabletMenu/TabletMenu';
+import { ThemeContext } from '../../contexts/themeContext';
 
-export const Header = function({ logout, toggleDarkTheme, history }) {
-  const isTablet = useMediaQuery({ query: '(min-width: 576px)' });
+export const Header = function({ logout, history }) {
   const [user] = useContext(UserContext);
+  const [theme, setTheme] = useContext(ThemeContext);
+  const isTablet = useMediaQuery({ query: '(min-width: 576px)' });
   const [isAlertOpen, setAlertOpen] = useState(false);
-  const [darkTheme, setDarkTheme] = useState(darkThemeService.getThemeState());
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    darkThemeService.setThemeState(darkTheme);
-  }, [darkTheme]);
+    darkThemeService.setThemeState(theme.isDarkTheme);
+  }, [theme]);
 
   const toggleMobileMenuVisibility = useCallback(visibility => {
     setMenuOpen(visibility);
@@ -45,8 +46,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
   };
 
   const handleDarkThemeChange = () => {
-    setDarkTheme(!darkTheme);
-    toggleDarkTheme();
+    setTheme({ isDarkTheme: !theme.isDarkTheme });
   };
 
   const userMenu = (
@@ -73,7 +73,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
   const settings = (
     <div className={'settings-content'}>
       <Switch
-        checked={darkTheme}
+        checked={theme.isDarkTheme}
         large={true}
         onChange={handleDarkThemeChange}
         label={'Dark Mode'}
@@ -112,7 +112,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
         </NavbarGroup>
       </Navbar>
       <Alert
-        className={`${darkTheme ? 'bp3-dark' : ''}`}
+        className={`${theme.isDarkTheme ? 'bp3-dark' : ''}`}
         canEscapeKeyCancel={true}
         isOpen={isAlertOpen}
         onCancel={() => {

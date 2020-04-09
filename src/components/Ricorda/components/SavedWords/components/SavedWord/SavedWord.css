@@ -1,0 +1,53 @@
+.saved-word-card {
+  margin-bottom: 25px;
+  width: 75vw;
+}
+
+.saved-word-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.saved-word-source-word {
+  width: 40%;
+  max-width: 40%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.saved-word-source-word:hover {
+  overflow: visible;
+}
+
+.saved-word-progress-bar {
+  margin-left: 15px;
+  margin-right: 15px;
+  width: 35%;
+}
+
+.saved-word-actions {
+  display: flex;
+  align-items: center;
+}
+
+.translation-collapse-block {
+  width: 100%;
+}
+
+.translation-word {
+  width: 100%;
+  text-align: center;
+}
+
+@media (min-width: 576px) {
+  .saved-word-card {
+    width: 50vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .saved-word-card {
+    width: 30vw;
+  }
+}

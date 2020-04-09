@@ -1,0 +1,14 @@
+.saved-word-component-enter {
+  opacity: 0;
+}
+.saved-word-component-enter-active {
+  opacity: 1;
+  transition: opacity 700ms;
+}
+.saved-word-component-exit {
+  opacity: 1;
+}
+.saved-word-component-exit-active {
+  opacity: 0;
+  transition: opacity 700ms;
+}

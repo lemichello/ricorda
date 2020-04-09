@@ -8,15 +8,15 @@ import {
 } from '@blueprintjs/core';
 import { WordsCountContext } from '../../../../contexts/wordsCountContext';
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
-import { darkThemeService } from '../../../../../../services/darkThemeService';
+import React, { useContext } from 'react';
+import { ThemeContext } from '../../../../contexts/themeContext';
 
 export const MobileMenu = function({ isVisible, toggleMenuVisibility }) {
-  const [darkTheme] = useState(darkThemeService.getThemeState());
+  const [theme] = useContext(ThemeContext);
 
   return (
     <Drawer
-      className={`${darkTheme ? 'bp3-dark' : ''}`}
+      className={`${theme.isDarkTheme ? 'bp3-dark' : ''}`}
       isOpen={isVisible}
       position={Position.LEFT}
       size={200}
