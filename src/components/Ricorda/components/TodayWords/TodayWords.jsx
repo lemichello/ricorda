@@ -53,7 +53,7 @@ export const TodayWords = function() {
     async (wordsPair, callback) => {
       try {
         setWordsDisabled(true);
-        await wordsService.updateWordPair(wordsPair);
+        await wordsService.checkWordPair(wordsPair);
         callback();
         setWords(words.filter(x => x._id !== wordsPair._id));
       } catch (e) {

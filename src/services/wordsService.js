@@ -45,24 +45,29 @@ async function getSavedWords() {
   return resp.data.data;
 }
 
-async function updateWordPair(word) {
+async function updateWordPair(wordPair) {
   const token = authService.getUserToken();
-  let todayDate = new Date();
-
-  todayDate.setDate(todayDate.getDate() + 2);
-
-  let changedWordPair = Object.assign({}, word);
-
-  changedWordPair.nextRepetitionDate = todayDate;
-  changedWordPair.repetitions++;
 
   try {
-    await axios.put(`/api/words/${changedWordPair._id}`, changedWordPair, {
+    await axios.put(`/api/words/${wordPair._id}`, wordPair, {
       headers: { Authorization: `Bearer ${token}` }
     });
   } catch (e) {
     return Promise.reject(e);
   }
+}
+
+async function checkWordPair(wordPair) {
+  let todayDate = new Date();
+
+  todayDate.setDate(todayDate.getDate() + 2);
+
+  let changedWordPair = Object.assign({}, wordPair);
+
+  changedWordPair.nextRepetitionDate = todayDate;
+  changedWordPair.repetitions++;
+
+  await updateWordPair(changedWordPair);
 }
 
 async function getWordsCount() {
@@ -101,6 +106,7 @@ export const wordsService = {
   createWordPair,
   getWordsForToday,
   getSavedWords,
+  checkWordPair,
   updateWordPair,
   getWordsCount,
   wordPairExists

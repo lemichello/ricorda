@@ -25,10 +25,11 @@ export const EditWordModal = function({ isOpen, closeModal, wordPair }) {
   const handleEdit = async () => {
     try {
       setLoading(true);
+
       await wordsService.updateWordPair({
+        ...wordPair,
         sourceWord,
-        translation,
-        _id: wordPair._id
+        translation
       });
 
       wordPair.sourceWord = sourceWord;
