@@ -50,11 +50,14 @@ async function updateWordPair(word) {
   let todayDate = new Date();
 
   todayDate.setDate(todayDate.getDate() + 2);
-  word.nextRepetitionDate = todayDate;
-  word.repetitions++;
+
+  let changedWordPair = Object.assign({}, word);
+
+  changedWordPair.nextRepetitionDate = todayDate;
+  changedWordPair.repetitions++;
 
   try {
-    await axios.put(`/api/words/${word._id}`, word, {
+    await axios.put(`/api/words/${changedWordPair._id}`, changedWordPair, {
       headers: { Authorization: `Bearer ${token}` }
     });
   } catch (e) {
