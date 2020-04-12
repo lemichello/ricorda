@@ -13,8 +13,10 @@ import axios from 'axios';
 import { WordsCountContext } from './contexts/wordsCountContext';
 import { wordsService } from '../../services/wordsService';
 import { DefaultToaster } from './models/DefaultToster';
+import config from '../../config';
+import { SavedWords } from './components/SavedWords/SavedWords';
 
-export const Ricorda = function({ toggleDarkTheme }) {
+export const Ricorda = function() {
   const [user, setUser] = useState(authService.getUserToken());
   const [wordsCount, setWordsCount] = useState({ count: null, loading: false });
 
@@ -26,7 +28,7 @@ export const Ricorda = function({ toggleDarkTheme }) {
 
       try {
         setWordsCount({ count: null, loading: true });
-        let count = await wordsService.getWordsCount(user);
+        let count = await wordsService.getWordsCount();
         setWordsCount({ count: count, loading: false });
       } catch (e) {
         setWordsCount({ count: null, loading: false });
@@ -44,6 +46,8 @@ export const Ricorda = function({ toggleDarkTheme }) {
 
     history.push('/login');
   }, []);
+
+  axios.defaults.baseURL = config.apiUrl;
 
   axios.interceptors.response.use(
     resp => {
@@ -70,14 +74,10 @@ export const Ricorda = function({ toggleDarkTheme }) {
       <WordsCountContext.Provider value={[wordsCount, setWordsCount]}>
         <Router history={history}>
           <div>
-            <Header
-              history={history}
-              logout={logout}
-              user={user}
-              toggleDarkTheme={toggleDarkTheme}
-            />
+            <Header history={history} logout={logout} user={user} />
             <Route exact path={'/'} component={NewWords} />
             <PrivateRoute exact path={'/today-words'} component={TodayWords} />
+            <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
             <Route exact path={'/login'} component={Login} />
             <Route exact path={'/signup'} component={SignUp} />
           </div>

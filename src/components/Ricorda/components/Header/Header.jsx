@@ -11,26 +11,34 @@ import {
   NavbarHeading,
   Popover,
   Position,
-  Switch,
-  Tag
+  Switch
 } from '@blueprintjs/core';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import '../../Ricorda.css';
 import './Header.css';
 import { darkThemeService } from '../../../../services/darkThemeService';
 import { UserContext } from '../../contexts/userContext';
-import { WordsCountContext } from '../../contexts/wordsCountContext';
+import { useMediaQuery } from 'react-responsive';
+import { MobileMenu } from './components/MobileMenu/MobileMenu';
+import { TabletMenu } from './components/TabletMenu/TabletMenu';
+import { ThemeContext } from '../../contexts/themeContext';
 
-export const Header = function({ logout, toggleDarkTheme, history }) {
+export const Header = function({ logout, history }) {
   const [user] = useContext(UserContext);
+  const [theme, setTheme] = useContext(ThemeContext);
+  const isTablet = useMediaQuery({ query: '(min-width: 576px)' });
   const [isAlertOpen, setAlertOpen] = useState(false);
-  const [darkTheme, setDarkTheme] = useState(darkThemeService.getThemeState());
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    darkThemeService.setThemeState(darkTheme);
-  }, [darkTheme]);
+    darkThemeService.setThemeState(theme.isDarkTheme);
+  }, [theme]);
+
+  const toggleMobileMenuVisibility = useCallback(visibility => {
+    setMenuOpen(visibility);
+  }, []);
 
   const handleAlertConfirm = () => {
     setAlertOpen(false);
@@ -38,8 +46,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
   };
 
   const handleDarkThemeChange = () => {
-    setDarkTheme(!darkTheme);
-    toggleDarkTheme();
+    setTheme({ isDarkTheme: !theme.isDarkTheme });
   };
 
   const userMenu = (
@@ -66,7 +73,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
   const settings = (
     <div className={'settings-content'}>
       <Switch
-        checked={darkTheme}
+        checked={theme.isDarkTheme}
         large={true}
         onChange={handleDarkThemeChange}
         label={'Dark Mode'}
@@ -83,29 +90,17 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
           </Link>
           <NavbarDivider />
         </NavbarGroup>
-        <NavbarGroup>
-          <Link to={'/today-words'} className={'navigation-link'}>
-            <WordsCountContext.Consumer>
-              {([wordsCount]) => (
-                <Button
-                  className={Classes.MINIMAL}
-                  icon="timeline-events"
-                  text="Today's words"
-                  rightIcon={
-                    (wordsCount.count !== null || wordsCount.loading) && (
-                      <Tag
-                        className={wordsCount.loading ? 'bp3-skeleton' : ''}
-                        intent={'success'}
-                      >
-                        {wordsCount.count && wordsCount.count}
-                      </Tag>
-                    )
-                  }
-                />
-              )}
-            </WordsCountContext.Consumer>
-          </Link>
-        </NavbarGroup>
+        {!isTablet && (
+          <NavbarGroup>
+            <Button
+              className={Classes.MINIMAL}
+              icon={'menu'}
+              onClick={() => setMenuOpen(true)}
+              text={'Menu'}
+            />
+          </NavbarGroup>
+        )}
+        {isTablet && <TabletMenu />}
         <NavbarGroup align={Alignment.RIGHT}>
           <NavbarDivider />
           <Popover content={userMenu} position={Position.BOTTOM}>
@@ -117,7 +112,7 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
         </NavbarGroup>
       </Navbar>
       <Alert
-        className={`${darkTheme ? 'bp3-dark' : ''}`}
+        className={`${theme.isDarkTheme ? 'bp3-dark' : ''}`}
         canEscapeKeyCancel={true}
         isOpen={isAlertOpen}
         onCancel={() => {
@@ -129,8 +124,12 @@ export const Header = function({ logout, toggleDarkTheme, history }) {
         confirmButtonText={'Yes'}
         icon={'log-out'}
       >
-        <p>Are you sure you want to log out?</p>
+        <p>Are you sure you want to sign out?</p>
       </Alert>
+      <MobileMenu
+        isVisible={isMenuOpen}
+        toggleMenuVisibility={toggleMobileMenuVisibility}
+      />
     </div>
   );
 };

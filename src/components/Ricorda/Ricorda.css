@@ -11,6 +11,7 @@
   text-decoration: none !important;
   color: inherit !important;
   width: 100%;
+  white-space: nowrap;
 }
 
 .page-content {

@@ -1,11 +1,10 @@
 import axios from 'axios';
-import config from '../config';
 
 async function login(email, password, rememberMe) {
   let resp;
 
   try {
-    resp = await axios.post(`${config.apiUrl}/auth/login`, {
+    resp = await axios.post('/auth/login', {
       email,
       password
     });
@@ -24,7 +23,7 @@ async function login(email, password, rememberMe) {
 
 async function signUp(email, password) {
   try {
-    await axios.post(`${config.apiUrl}/auth/signup`, {
+    await axios.post('/auth/signup', {
       email,
       password
     });

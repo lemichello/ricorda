@@ -4,7 +4,7 @@ import '../../Ricorda.css';
 import './TodayWords.css';
 import { NoWords } from './components/NoWords/NoWords';
 import { RepeatWord } from './components/RepeatWord/RepeatWord';
-import { H3 } from '@blueprintjs/core';
+import { Button, H3, NavbarDivider } from '@blueprintjs/core';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { WordsCountContext } from '../../contexts/wordsCountContext';
 import { WordsSkeleton } from './components/WordsSkeleton/WordsSkeleton';
@@ -36,11 +36,24 @@ export const TodayWords = function() {
     setWordsDisabled(false);
   }, [setWordsCount, words]);
 
+  const refreshWords = async () => {
+    setWords(undefined);
+
+    setTimeout(async () => {
+      setLoading(true);
+
+      let res = await wordsService.getWordsForToday();
+
+      setLoading(false);
+      setWords(res);
+    }, 650);
+  };
+
   const updateWordsPair = useCallback(
     async (wordsPair, callback) => {
       try {
         setWordsDisabled(true);
-        await wordsService.updateWordPair(wordsPair);
+        await wordsService.checkWordPair(wordsPair);
         callback();
         setWords(words.filter(x => x._id !== wordsPair._id));
       } catch (e) {
@@ -58,9 +71,23 @@ export const TodayWords = function() {
     <div className={'page-root'}>
       <div className={'page-content'}>
         {(words?.length !== 0 || loading) && (
-          <H3 className={loading ? 'bp3-skeleton' : ''}>
-            Words to repeat for today
-          </H3>
+          <div className={'today-words-heading-block'}>
+            <H3
+              className={`today-words-heading-text ${
+                loading ? 'bp3-skeleton' : ''
+              }`}
+            >
+              Words to repeat for today
+            </H3>
+            <NavbarDivider />
+            <Button
+              icon={'repeat'}
+              className={`today-words-repeat-btn ${
+                loading ? 'bp3-skeleton' : ''
+              }`}
+              onClick={refreshWords}
+            />
+          </div>
         )}
         {words?.length === 0 && !loading && <NoWords />}
         {loading && (
@@ -70,15 +97,15 @@ export const TodayWords = function() {
         )}
         {words?.length !== 0 && (
           <TransitionGroup>
-            {words?.map(wordsPair => (
+            {words?.map(wordPair => (
               <CSSTransition
                 timeout={700}
-                key={wordsPair._id}
+                key={wordPair._id}
                 classNames={'repeat-word-component'}
               >
                 <RepeatWord
                   disabled={wordsDisabled}
-                  wordsPair={wordsPair}
+                  wordPair={wordPair}
                   updateWordsPair={updateWordsPair}
                 />
               </CSSTransition>
