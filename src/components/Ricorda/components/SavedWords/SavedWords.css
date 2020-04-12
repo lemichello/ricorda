@@ -1,13 +1,45 @@
+.saved-words-heading {
+  text-align: center;
+}
+
+.saved-words-search-input {
+  max-width: 75vw;
+  margin: 5px auto 15px;
+  width: 300px;
+}
+
+.search-input-enter {
+  width: 40px;
+}
+
+.search-input-enter-active {
+  width: 300px;
+  transition: width 700ms;
+  transition-delay: 550ms;
+}
+
+.search-input-exit {
+  width: 300px;
+}
+
+.search-input-exit-active {
+  width: 40px;
+  transition: width 700ms;
+}
+
 .saved-word-component-enter {
   opacity: 0;
 }
+
 .saved-word-component-enter-active {
   opacity: 1;
   transition: opacity 700ms;
 }
+
 .saved-word-component-exit {
   opacity: 1;
 }
+
 .saved-word-component-exit-active {
   opacity: 0;
   transition: opacity 700ms;
