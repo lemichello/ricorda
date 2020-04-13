@@ -15,11 +15,13 @@ import {
   tap,
   switchMap,
 } from 'rxjs/operators';
+import { Pagination } from './components/Pagination/Pagination';
 
 export const SavedWords = function () {
   const [savedWords, setSavedWords] = useState(undefined);
+  const [currentPage, setCurrentPage] = useState({ page: 1, next: false });
   const [isEditModalOpen, setEditModelOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [animateInput, setAnimateInput] = useState(false);
   const [wordPairForEdit, setWordPairForEdit] = useState(undefined);
   const [searchValue, setSearchValue] = useState('');
@@ -30,17 +32,29 @@ export const SavedWords = function () {
       distinctUntilChanged(),
       tap(() => setLoading(true)),
       tap(() => setSavedWords([])),
-      switchMap((term) => wordsService.searchWords(term)),
+      switchMap((term) => wordsService.getSavedWords(1, term)),
       tap(() => setLoading(false))
     )
   );
 
+  const searchWords = useCallback(async (page, term) => {
+    setLoading(true);
+    setSavedWords([]);
+
+    let res = await wordsService.getSavedWords(page, term);
+
+    setLoading(false);
+    setSavedWords(res.data);
+    setCurrentPage({ page: res.page, next: res.next });
+  }, []);
+
   useEffect(() => {
     const subscription = onSearch$$.subscribe((x) => {
-      if (x.length === 0) {
+      if (x.data.length === 0) {
         setSavedWords(null);
       } else {
-        setSavedWords(x);
+        setSavedWords(x.data);
+        setCurrentPage({ page: x.page, next: x.next });
       }
     });
 
@@ -50,16 +64,14 @@ export const SavedWords = function () {
   }, [onSearch$$]);
 
   useEffect(() => {
-    async function getSavedWords() {
-      let res = await wordsService.getSavedWords();
+    async function initializeWords() {
+      await searchWords(1, '');
 
-      setSavedWords(res);
-      setLoading(false);
       setAnimateInput(true);
     }
 
-    getSavedWords();
-  }, []);
+    initializeWords();
+  }, [searchWords]);
 
   const handleEditWord = useCallback((wordPair) => {
     setEditModelOpen(true);
@@ -136,6 +148,13 @@ export const SavedWords = function () {
               "Your search didn't match any word pairs. Try searching for something else."
             }
             action={searchInput}
+          />
+        )}
+        {!loading && savedWords !== null && savedWords?.length !== 0 && (
+          <Pagination
+            searchValue={searchValue}
+            currentPage={currentPage}
+            searchWords={searchWords}
           />
         )}
       </div>

@@ -30,19 +30,22 @@ async function getWordsForToday() {
   return resp.data.data;
 }
 
-async function getSavedWords() {
+async function getSavedWords(page, searchTerm) {
   const token = authService.getUserToken();
-  let resp;
 
   try {
-    resp = await axios.get('api/words/saved', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    let resp = await axios.post(
+      `api/words/saved/${page}`,
+      { word: searchTerm },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    return resp.data;
   } catch (e) {
     return Promise.reject(e);
   }
-
-  return resp.data.data;
 }
 
 async function updateWordPair(wordPair) {
@@ -102,24 +105,6 @@ async function wordPairExists(sourceWord) {
   }
 }
 
-async function searchWords(term) {
-  const token = authService.getUserToken();
-
-  try {
-    let resp = await axios.post(
-      '/api/words/search',
-      { word: term },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-
-    return resp.data.data;
-  } catch (e) {
-    return Promise.reject(e);
-  }
-}
-
 export const wordsService = {
   createWordPair,
   getWordsForToday,
@@ -128,5 +113,4 @@ export const wordsService = {
   updateWordPair,
   getWordsCount,
   wordPairExists,
-  searchWords,
 };
