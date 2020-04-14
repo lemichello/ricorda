@@ -38,6 +38,7 @@
 .translation-word {
   width: 100%;
   text-align: center;
+  white-space: normal;
 }
 
 @media (min-width: 576px) {
