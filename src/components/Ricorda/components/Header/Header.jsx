@@ -11,7 +11,7 @@ import {
   NavbarHeading,
   Popover,
   Position,
-  Switch
+  Switch,
 } from '@blueprintjs/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -25,10 +25,11 @@ import { MobileMenu } from './components/MobileMenu/MobileMenu';
 import { TabletMenu } from './components/TabletMenu/TabletMenu';
 import { ThemeContext } from '../../contexts/themeContext';
 
-export const Header = function({ logout, history }) {
+export const Header = function ({ logout, history }) {
   const [user] = useContext(UserContext);
   const [theme, setTheme] = useContext(ThemeContext);
   const isTablet = useMediaQuery({ query: '(min-width: 576px)' });
+  const isMobile = !isTablet;
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -36,7 +37,7 @@ export const Header = function({ logout, history }) {
     darkThemeService.setThemeState(theme.isDarkTheme);
   }, [theme]);
 
-  const toggleMobileMenuVisibility = useCallback(visibility => {
+  const toggleMobileMenuVisibility = useCallback((visibility) => {
     setMenuOpen(visibility);
   }, []);
 
@@ -90,7 +91,7 @@ export const Header = function({ logout, history }) {
           </Link>
           <NavbarDivider />
         </NavbarGroup>
-        {!isTablet && (
+        {isMobile && (
           <NavbarGroup>
             <Button
               className={Classes.MINIMAL}
@@ -128,7 +129,7 @@ export const Header = function({ logout, history }) {
       </Alert>
       <MobileMenu
         isVisible={isMenuOpen}
-        toggleMenuVisibility={toggleMobileMenuVisibility}
+        setMenuVisibility={toggleMobileMenuVisibility}
       />
     </div>
   );

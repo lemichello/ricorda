@@ -3,9 +3,12 @@ import { WordsCountContext } from '../../../../contexts/wordsCountContext';
 import { Button, Classes, NavbarGroup, Tag } from '@blueprintjs/core';
 import React from 'react';
 
-export const TabletMenu = function() {
+export const TabletMenu = function () {
   return (
     <NavbarGroup>
+      <Link to={'/'} className={'navigation-link'}>
+        <Button className={Classes.MINIMAL} icon={'home'} text={'Home'} />
+      </Link>
       <Link to={'/today-words'} className={'navigation-link'}>
         <WordsCountContext.Consumer>
           {([wordsCount]) => (
