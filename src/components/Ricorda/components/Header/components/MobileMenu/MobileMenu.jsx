@@ -4,15 +4,19 @@ import {
   Menu,
   MenuItem,
   Position,
-  Tag
+  Tag,
 } from '@blueprintjs/core';
 import { WordsCountContext } from '../../../../contexts/wordsCountContext';
 import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { ThemeContext } from '../../../../contexts/themeContext';
 
-export const MobileMenu = function({ isVisible, toggleMenuVisibility }) {
+export const MobileMenu = function ({ isVisible, setMenuVisibility }) {
   const [theme] = useContext(ThemeContext);
+
+  const closeMenu = () => {
+    setMenuVisibility(false);
+  };
 
   return (
     <Drawer
@@ -20,19 +24,22 @@ export const MobileMenu = function({ isVisible, toggleMenuVisibility }) {
       isOpen={isVisible}
       position={Position.LEFT}
       size={200}
-      onClose={() => toggleMenuVisibility(false)}
+      onClose={closeMenu}
       title={'Menu'}
       icon={'menu'}
     >
       <div className={Classes.DRAWER_BODY}>
         <div className={Classes.DIALOG_BODY}>
           <Menu className={'side-menu'}>
+            <Link to={'/'} className={'navigation-link'} onClick={closeMenu}>
+              <MenuItem text={'Home'} icon={'home'} tagName={'span'} />
+            </Link>
             <WordsCountContext.Consumer>
               {([wordsCount]) => (
                 <Link
                   to={'/today-words'}
                   className={'navigation-link'}
-                  onClick={() => toggleMenuVisibility(false)}
+                  onClick={closeMenu}
                 >
                   <MenuItem
                     text={"Today's words"}
@@ -55,7 +62,7 @@ export const MobileMenu = function({ isVisible, toggleMenuVisibility }) {
             <Link
               to={'/saved-words'}
               className={'navigation-link'}
-              onClick={() => toggleMenuVisibility(false)}
+              onClick={closeMenu}
             >
               <MenuItem
                 tagName={'span'}
