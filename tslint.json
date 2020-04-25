@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "typedef": [true, "call-signature", "parameter", "variable-declaration"]
+  }
+}
