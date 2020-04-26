@@ -52,6 +52,12 @@
   margin-bottom: 20px;
 }
 
+.spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+
 @media (max-width: 576px) {
   .page-root {
     padding-top: 80px;
