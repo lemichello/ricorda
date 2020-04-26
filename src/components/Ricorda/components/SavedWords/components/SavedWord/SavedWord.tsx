@@ -9,7 +9,7 @@ import {
   ProgressBar,
 } from '@blueprintjs/core';
 import './SavedWord.css';
-import { IWordPair } from '../../../../../../services/models/wordPair';
+import { IWordPair } from '../../../../../../models/wordPair';
 
 interface IProps {
   wordPair?: IWordPair;

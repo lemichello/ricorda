@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { AuthService } from './authService';
-import { IWordPair } from './models/wordPair';
+import { IWordPair } from '../models/wordPair';
 import { IWordsResponse } from './types/words/wordsResponse';
 import { ISavedWordsRequest } from './types/words/savedWordsRequest';
 import { ISavedWordsResponse } from './types/words/savedWordsResponse';
