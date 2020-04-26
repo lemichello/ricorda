@@ -7,3 +7,18 @@
 .side-menu {
   padding-left: 0;
 }
+
+.animated-text-btn {
+  width: 30px;
+  transition: width 200ms;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.account-btn:hover {
+  width: 95px;
+}
+
+.dark-mode-btn:hover {
+  width: 112px;
+}

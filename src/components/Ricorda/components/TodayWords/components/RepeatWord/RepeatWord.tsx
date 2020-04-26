@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import React, { useCallback, useState, FunctionComponent } from 'react';
 import './RepeatWord.css';
-import { IWordPair } from '../../../../../../services/models/wordPair';
+import { IWordPair } from '../../../../../../models/wordPair';
 
 interface IProps {
   wordPair?: IWordPair;

@@ -11,7 +11,8 @@ import {
   NavbarHeading,
   Popover,
   Position,
-  Switch,
+  MenuDivider,
+  Spinner,
 } from '@blueprintjs/core';
 import React, {
   useCallback,
@@ -19,6 +20,8 @@ import React, {
   useEffect,
   useState,
   FunctionComponent,
+  lazy,
+  Suspense,
 } from 'react';
 import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
@@ -32,6 +35,10 @@ import { ThemeContext } from '../../contexts/themeContext';
 import { History } from 'history';
 import { ThemeService } from '../../../../services/themeService';
 
+const SettingsDialog = lazy(() =>
+  import('./components/SettingsDialog/SettingsDialog')
+);
+
 interface IProps {
   logout: () => void;
   history: History;
@@ -43,7 +50,16 @@ export const Header: FunctionComponent<IProps> = ({ logout, history }) => {
   const isTablet: boolean = useMediaQuery({ query: '(min-width: 576px)' });
   const isMobile: boolean = !isTablet;
   const [isAlertOpen, setAlertOpen] = useState(false);
+  const [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [settingsDialogRendered, setSettingsDialogRendered] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
+
+  const [accountBtnText, setAccountBtnText] = useState<string | undefined>(
+    undefined
+  );
+  const [darkModeBtnText, setDarkModeBtnText] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     ThemeService.setThemeState(theme.isDarkTheme);
@@ -55,6 +71,24 @@ export const Header: FunctionComponent<IProps> = ({ logout, history }) => {
     },
     []
   );
+
+  useEffect(() => {
+    // When user hovering button, updating its text in real-time.
+    if (darkModeBtnText !== undefined) {
+      setDarkModeBtnText(theme.isDarkTheme ? 'Light mode' : 'Dark mode');
+    }
+  }, [darkModeBtnText, theme]);
+
+  const closeSettingsModal: () => void = useCallback(() => {
+    setSettingsDialogOpen(false);
+  }, []);
+
+  const openSettingsModal: () => void = () => {
+    if (!settingsDialogRendered) {
+      setSettingsDialogRendered(true);
+    }
+    setSettingsDialogOpen(true);
+  };
 
   const handleAlertConfirm: () => void = () => {
     setAlertOpen(false);
@@ -68,13 +102,21 @@ export const Header: FunctionComponent<IProps> = ({ logout, history }) => {
   const userMenu: JSX.Element = (
     <Menu>
       {user.token && (
-        <MenuItem
-          icon={'log-out'}
-          text={'Sign out'}
-          onClick={() => {
-            setAlertOpen(true);
-          }}
-        />
+        <div>
+          <MenuItem
+            icon={'cog'}
+            text={'Settings'}
+            onClick={openSettingsModal}
+          />
+          <MenuDivider />
+          <MenuItem
+            icon={'log-out'}
+            text={'Sign out'}
+            onClick={() => {
+              setAlertOpen(true);
+            }}
+          />
+        </div>
       )}
       {!user.token && (
         <MenuItem
@@ -84,17 +126,6 @@ export const Header: FunctionComponent<IProps> = ({ logout, history }) => {
         />
       )}
     </Menu>
-  );
-
-  const settings: JSX.Element = (
-    <div className={'settings-content'}>
-      <Switch
-        checked={theme.isDarkTheme}
-        large={true}
-        onChange={handleDarkThemeChange}
-        label={'Dark Mode'}
-      />
-    </div>
   );
 
   return (
@@ -120,11 +151,24 @@ export const Header: FunctionComponent<IProps> = ({ logout, history }) => {
         <NavbarGroup align={Alignment.RIGHT}>
           <NavbarDivider />
           <Popover content={userMenu} position={Position.BOTTOM}>
-            <Button className={Classes.MINIMAL} icon={'user'} />
+            <Button
+              className={`${Classes.MINIMAL} account-btn animated-text-btn`}
+              icon={'user'}
+              text={accountBtnText}
+              onMouseEnter={() => setAccountBtnText('Account')}
+              onMouseLeave={() => setAccountBtnText(undefined)}
+            />
           </Popover>
-          <Popover content={settings} position={Position.BOTTOM}>
-            <Button className={Classes.MINIMAL} icon={'cog'} />
-          </Popover>
+          <Button
+            className={`${Classes.MINIMAL} dark-mode-btn animated-text-btn`}
+            icon={theme.isDarkTheme ? 'flash' : 'moon'}
+            text={darkModeBtnText}
+            onClick={handleDarkThemeChange}
+            onMouseEnter={() =>
+              setDarkModeBtnText(theme.isDarkTheme ? 'Light mode' : 'Dark mode')
+            }
+            onMouseLeave={() => setDarkModeBtnText(undefined)}
+          />
         </NavbarGroup>
       </Navbar>
       <Alert
@@ -142,6 +186,14 @@ export const Header: FunctionComponent<IProps> = ({ logout, history }) => {
       >
         <p>Are you sure you want to sign out?</p>
       </Alert>
+      <Suspense fallback={<Spinner className={'spinner'} />}>
+        {settingsDialogRendered && (
+          <SettingsDialog
+            isOpen={isSettingsDialogOpen}
+            closeModal={closeSettingsModal}
+          />
+        )}
+      </Suspense>
       <MobileMenu
         isVisible={isMenuOpen}
         setMenuVisibility={toggleMobileMenuVisibility}

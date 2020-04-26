@@ -1,5 +1,5 @@
 import React, { Context, Dispatch } from 'react';
-import { IUser } from '../../../services/models/user';
+import { IUser } from '../../../models/user';
 
 interface IContextFields {
   user: IUser;

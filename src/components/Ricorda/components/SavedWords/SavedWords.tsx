@@ -23,7 +23,7 @@ import {
   switchMap,
 } from 'rxjs/operators';
 import { Pagination } from './components/Pagination/Pagination';
-import { IWordPair } from '../../../../services/models/wordPair';
+import { IWordPair } from '../../../../models/wordPair';
 import { ISavedWordsResponse } from '../../../../services/types/words/savedWordsResponse';
 
 export const SavedWords: FunctionComponent = () => {

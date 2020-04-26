@@ -16,7 +16,7 @@ import { WordsSkeleton } from './components/WordsSkeleton/WordsSkeleton';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
-import { IWordPair } from '../../../../services/models/wordPair';
+import { IWordPair } from '../../../../models/wordPair';
 
 export const TodayWords: FunctionComponent = () => {
   const { setWordsCount } = useContext(WordsCountContext);
