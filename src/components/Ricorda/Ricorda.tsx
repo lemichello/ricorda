@@ -20,7 +20,7 @@ import { WordsService } from '../../services/wordsService';
 import { DefaultToaster } from './models/DefaultToster';
 import config from '../../config';
 import { SavedWords } from './components/SavedWords/SavedWords';
-import { IUser } from '../../services/models/user';
+import { IUser } from '../../models/user';
 import { IWordsCountState } from './contexts/models/wordsCountState';
 
 export const Ricorda: FunctionComponent = () => {

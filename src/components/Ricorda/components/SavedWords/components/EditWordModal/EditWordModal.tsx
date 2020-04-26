@@ -14,7 +14,7 @@ import React, {
 import { ThemeContext } from '../../../../contexts/themeContext';
 import { WordsService } from '../../../../../../services/wordsService';
 import { DefaultToaster } from '../../../../models/DefaultToster';
-import { IWordPair } from '../../../../../../services/models/wordPair';
+import { IWordPair } from '../../../../../../models/wordPair';
 
 interface IProps {
   isOpen: boolean;
