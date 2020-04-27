@@ -1,7 +1,7 @@
 import { FunctionComponent, useContext, useReducer } from 'react';
 import React from 'react';
 import { Dialog, Classes, MenuItem } from '@blueprintjs/core';
-import { ThemeContext } from '../../../../contexts/themeContext';
+import ThemeContext from '../../../../contexts/themeContext';
 import { mapValues } from 'lodash';
 import './SettingsDialog.css';
 import { useMediaQuery } from 'react-responsive';
@@ -14,8 +14,8 @@ type State = {
 };
 
 type Action =
-  | { type: 'select-security-page' }
-  | { type: 'select-account-page' };
+  | { type: 'SELECT_SECURITY_PAGE' }
+  | { type: 'SELECT_ACCOUNT_PAGE' };
 
 interface IProps {
   isOpen: boolean;
@@ -31,11 +31,13 @@ function activePageReducer(state: State, action: Action): State {
   let newState: State = mapValues(state, () => false);
 
   switch (action.type) {
-    case 'select-security-page':
+    case 'SELECT_SECURITY_PAGE':
       newState.securityPageActive = true;
+
       break;
-    case 'select-account-page':
+    case 'SELECT_ACCOUNT_PAGE':
       newState.accountPageActive = true;
+
       break;
     default:
       throw Error('Unknown reducer action');
@@ -50,7 +52,7 @@ const SettingsDialog: FunctionComponent<IProps> = ({ isOpen, closeModal }) => {
     activePageReducer,
     initialState
   );
-  const isTablet: boolean = useMediaQuery({ query: '(min-width: 576px)' });
+  const isMobile: boolean = useMediaQuery({ query: '(max-width: 576px)' });
 
   return (
     <Dialog
@@ -65,17 +67,17 @@ const SettingsDialog: FunctionComponent<IProps> = ({ isOpen, closeModal }) => {
           <div className={`${Classes.LIST_UNSTYLED} settings-nav-list`}>
             <MenuItem
               active={accountPageActive}
-              className={`settings-nav-list-item ${isTablet ? '' : 'mobile'}`}
-              text={isTablet ? 'Account' : undefined}
+              className={`settings-nav-list-item ${isMobile ? 'mobile' : ''}`}
+              text={'Account'}
               icon={'user'}
-              onClick={() => dispatch({ type: 'select-account-page' })}
+              onClick={() => dispatch({ type: 'SELECT_ACCOUNT_PAGE' })}
             />
             <MenuItem
               active={securityPageActive}
-              className={`settings-nav-list-item ${isTablet ? '' : 'mobile'}`}
+              className={`settings-nav-list-item ${isMobile ? 'mobile' : ''}`}
               text={'Security'}
               icon={'shield'}
-              onClick={() => dispatch({ type: 'select-security-page' })}
+              onClick={() => dispatch({ type: 'SELECT_SECURITY_PAGE' })}
             />
           </div>
         </div>

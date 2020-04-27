@@ -7,14 +7,14 @@ import React, {
 } from 'react';
 import { H3, InputGroup, NonIdealState } from '@blueprintjs/core';
 import { WordsService } from '../../../../services/wordsService';
-import { SavedWord } from './components/SavedWord/SavedWord';
+import SavedWord from './components/SavedWord/SavedWord';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { NoSavedWords } from './components/NoSavedWords/NoSavedWords';
+import NoSavedWords from './components/NoSavedWords/NoSavedWords';
 import './SavedWords.css';
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
-import { SavedWordsSkeleton } from './components/SavedWordsSkeleton/SavedWordsSkeleton';
-import { EditWordModal } from './components/EditWordModal/EditWordModal';
+import SavedWordsSkeleton from './components/SavedWordsSkeleton/SavedWordsSkeleton';
+import EditWordModal from './components/EditWordModal/EditWordModal';
 import { Subject, Subscription } from 'rxjs';
 import {
   debounceTime,
@@ -22,11 +22,11 @@ import {
   tap,
   switchMap,
 } from 'rxjs/operators';
-import { Pagination } from './components/Pagination/Pagination';
+import Pagination from './components/Pagination/Pagination';
 import { IWordPair } from '../../../../models/wordPair';
 import { ISavedWordsResponse } from '../../../../services/types/words/savedWordsResponse';
 
-export const SavedWords: FunctionComponent = () => {
+const SavedWords: FunctionComponent = () => {
   const [savedWords, setSavedWords] = useState<IWordPair[] | undefined | null>(
     undefined
   );
@@ -197,3 +197,5 @@ export const SavedWords: FunctionComponent = () => {
     </div>
   );
 };
+
+export default SavedWords;

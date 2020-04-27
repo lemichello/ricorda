@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-import { UserContext } from '../Ricorda/contexts/userContext';
+import UserContext from '../Ricorda/contexts/userContext';
 
 interface IProps extends RouteProps {
   component: any;

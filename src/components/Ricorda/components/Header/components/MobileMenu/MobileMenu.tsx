@@ -6,17 +6,17 @@ import {
   Position,
   Tag,
 } from '@blueprintjs/core';
-import { WordsCountContext } from '../../../../contexts/wordsCountContext';
+import WordsCountContext from '../../../../contexts/wordsCountContext';
 import { Link } from 'react-router-dom';
 import React, { useContext, FunctionComponent } from 'react';
-import { ThemeContext } from '../../../../contexts/themeContext';
+import ThemeContext from '../../../../contexts/themeContext';
 
 interface IProps {
   isVisible: boolean;
   setMenuVisibility: (visibility: boolean) => void;
 }
 
-export const MobileMenu: FunctionComponent<IProps> = ({
+const MobileMenu: FunctionComponent<IProps> = ({
   isVisible,
   setMenuVisibility,
 }) => {
@@ -84,3 +84,5 @@ export const MobileMenu: FunctionComponent<IProps> = ({
     </Drawer>
   );
 };
+
+export default MobileMenu;

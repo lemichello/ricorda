@@ -1,11 +1,11 @@
 import { Router, Route } from 'react-router-dom';
 import { history } from '../../helpers/history';
-import { Header } from './components/Header/Header';
-import { NewWords } from './components/NewWords/NewWords';
+import Header from './components/Header/Header';
+import NewWords from './components/NewWords/NewWords';
 import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
-import { TodayWords } from './components/TodayWords/TodayWords';
-import { Login } from './components/LogIn/LogIn';
-import { UserContext } from './contexts/userContext';
+import TodayWords from './components/TodayWords/TodayWords';
+import LogIn from './components/LogIn/LogIn';
+import UserContext from './contexts/userContext';
 import React, {
   useCallback,
   useEffect,
@@ -13,13 +13,13 @@ import React, {
   FunctionComponent,
 } from 'react';
 import { AuthService } from '../../services/authService';
-import { SignUp } from './components/SignUp/SignUp';
+import SignUp from './components/SignUp/SignUp';
 import axios from 'axios';
-import { WordsCountContext } from './contexts/wordsCountContext';
+import WordsCountContext from './contexts/wordsCountContext';
 import { WordsService } from '../../services/wordsService';
 import { DefaultToaster } from './models/DefaultToster';
 import config from '../../config';
-import { SavedWords } from './components/SavedWords/SavedWords';
+import SavedWords from './components/SavedWords/SavedWords';
 import { IUser } from '../../models/user';
 import { IWordsCountState } from './contexts/models/wordsCountState';
 
@@ -90,7 +90,7 @@ export const Ricorda: FunctionComponent = () => {
             <Route exact path={'/'} component={NewWords} />
             <PrivateRoute exact path={'/today-words'} component={TodayWords} />
             <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
-            <Route exact path={'/login'} component={Login} />
+            <Route exact path={'/login'} component={LogIn} />
             <Route exact path={'/signup'} component={SignUp} />
           </div>
         </Router>

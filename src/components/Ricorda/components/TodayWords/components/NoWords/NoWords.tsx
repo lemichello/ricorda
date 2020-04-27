@@ -5,7 +5,7 @@ import './NoWords.css';
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
 
-export const NoWords: FunctionComponent = () => {
+const NoWords: FunctionComponent = () => {
   const newWordsPageBtn: JSX.Element = (
     <Link to={'/'} className={'navigation-link'}>
       <Button
@@ -29,3 +29,5 @@ export const NoWords: FunctionComponent = () => {
     </Fade>
   );
 };
+
+export default NoWords;

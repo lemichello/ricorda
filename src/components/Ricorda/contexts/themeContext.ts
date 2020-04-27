@@ -6,9 +6,11 @@ interface IContextFields {
   setTheme: Dispatch<IThemeState>;
 }
 
-export const ThemeContext: Context<IContextFields> = React.createContext<
+const ThemeContext: Context<IContextFields> = React.createContext<
   IContextFields
 >({
   theme: { isDarkTheme: false },
   setTheme: () => {},
 });
+
+export default ThemeContext;

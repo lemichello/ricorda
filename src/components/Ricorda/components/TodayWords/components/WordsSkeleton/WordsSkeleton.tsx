@@ -1,7 +1,7 @@
-import { RepeatWord } from '../RepeatWord/RepeatWord';
+import RepeatWord from '../RepeatWord/RepeatWord';
 import React, { FunctionComponent } from 'react';
 
-export const WordsSkeleton: FunctionComponent = () => {
+const WordsSkeleton: FunctionComponent = () => {
   return (
     <div>
       <RepeatWord loading={true} />
@@ -11,3 +11,5 @@ export const WordsSkeleton: FunctionComponent = () => {
     </div>
   );
 };
+
+export default WordsSkeleton;

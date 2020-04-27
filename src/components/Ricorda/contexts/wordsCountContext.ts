@@ -6,9 +6,11 @@ interface IContextFields {
   setWordsCount: Dispatch<IWordsCountState>;
 }
 
-export const WordsCountContext: Context<IContextFields> = React.createContext<
+const WordsCountContext: Context<IContextFields> = React.createContext<
   IContextFields
 >({
   wordsCount: { count: null, loading: false },
   setWordsCount: () => {},
 });
+
+export default WordsCountContext;

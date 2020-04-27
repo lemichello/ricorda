@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { WordsCountContext } from '../../../../contexts/wordsCountContext';
+import WordsCountContext from '../../../../contexts/wordsCountContext';
 import { Button, Classes, NavbarGroup, Tag } from '@blueprintjs/core';
 import React, { FunctionComponent } from 'react';
 
-export const TabletMenu: FunctionComponent = () => {
+const TabletMenu: FunctionComponent = () => {
   return (
     <NavbarGroup>
       <Link to={'/'} className={'navigation-link'}>
@@ -40,3 +40,5 @@ export const TabletMenu: FunctionComponent = () => {
     </NavbarGroup>
   );
 };
+
+export default TabletMenu;
