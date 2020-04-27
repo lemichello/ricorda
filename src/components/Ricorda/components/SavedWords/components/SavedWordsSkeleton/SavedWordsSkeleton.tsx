@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { SavedWord } from '../SavedWord/SavedWord';
+import SavedWord from '../SavedWord/SavedWord';
 
-export const SavedWordsSkeleton: FunctionComponent = () => {
+const SavedWordsSkeleton: FunctionComponent = () => {
   return (
     <div>
       <SavedWord loading={true} />
@@ -11,3 +11,5 @@ export const SavedWordsSkeleton: FunctionComponent = () => {
     </div>
   );
 };
+
+export default SavedWordsSkeleton;

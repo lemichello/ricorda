@@ -21,14 +21,14 @@ import { DefaultToaster } from '../../models/DefaultToster';
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
-import { ThemeContext } from '../../contexts/themeContext';
+import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
 
 interface IProps {
   history: History;
 }
 
-export const NewWords: FunctionComponent<IProps> = ({ history }) => {
+const NewWords: FunctionComponent<IProps> = ({ history }) => {
   const { theme } = useContext(ThemeContext);
 
   const [sourceWord, setSourceWord] = useState('');
@@ -148,3 +148,5 @@ export const NewWords: FunctionComponent<IProps> = ({ history }) => {
     </div>
   );
 };
+
+export default NewWords;

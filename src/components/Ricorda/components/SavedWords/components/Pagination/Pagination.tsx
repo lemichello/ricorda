@@ -8,7 +8,7 @@ interface IProps {
   searchWords: (page: number, searchValue: string) => void;
 }
 
-export const Pagination: FunctionComponent<IProps> = ({
+const Pagination: FunctionComponent<IProps> = ({
   currentPage,
   searchValue,
   searchWords,
@@ -30,3 +30,5 @@ export const Pagination: FunctionComponent<IProps> = ({
     </ButtonGroup>
   );
 };
+
+export default Pagination;

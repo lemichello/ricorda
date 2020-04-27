@@ -27,11 +27,11 @@ import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import '../../Ricorda.css';
 import './Header.css';
-import { UserContext } from '../../contexts/userContext';
+import UserContext from '../../contexts/userContext';
 import { useMediaQuery } from 'react-responsive';
-import { MobileMenu } from './components/MobileMenu/MobileMenu';
-import { TabletMenu } from './components/TabletMenu/TabletMenu';
-import { ThemeContext } from '../../contexts/themeContext';
+import MobileMenu from './components/MobileMenu/MobileMenu';
+import TabletMenu from './components/TabletMenu/TabletMenu';
+import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
 import { ThemeService } from '../../../../services/themeService';
 
@@ -44,7 +44,7 @@ interface IProps {
   history: History;
 }
 
-export const Header: FunctionComponent<IProps> = ({ logout, history }) => {
+const Header: FunctionComponent<IProps> = ({ logout, history }) => {
   const { user } = useContext(UserContext);
   const { theme, setTheme } = useContext(ThemeContext);
   const isTablet: boolean = useMediaQuery({ query: '(min-width: 576px)' });
@@ -201,3 +201,5 @@ export const Header: FunctionComponent<IProps> = ({ logout, history }) => {
     </div>
   );
 };
+
+export default Header;

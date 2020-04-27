@@ -6,9 +6,11 @@ interface IContextFields {
   setUser: Dispatch<IUser>;
 }
 
-export const UserContext: Context<IContextFields> = React.createContext<
+const UserContext: Context<IContextFields> = React.createContext<
   IContextFields
 >({
   user: { token: null },
   setUser: () => {},
 });
+
+export default UserContext;

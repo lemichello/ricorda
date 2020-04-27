@@ -19,7 +19,7 @@ interface IProps {
   disabled?: boolean;
 }
 
-export const RepeatWord: FunctionComponent<IProps> = ({
+const RepeatWord: FunctionComponent<IProps> = ({
   wordPair,
   loading,
   updateWordPair,
@@ -113,3 +113,5 @@ export const RepeatWord: FunctionComponent<IProps> = ({
     </Card>
   );
 };
+
+export default RepeatWord;

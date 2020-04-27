@@ -11,7 +11,7 @@ import React, {
   FunctionComponent,
   ChangeEvent,
 } from 'react';
-import { ThemeContext } from '../../../../contexts/themeContext';
+import ThemeContext from '../../../../contexts/themeContext';
 import { WordsService } from '../../../../../../services/wordsService';
 import { DefaultToaster } from '../../../../models/DefaultToster';
 import { IWordPair } from '../../../../../../models/wordPair';
@@ -22,7 +22,7 @@ interface IProps {
   wordPair?: IWordPair;
 }
 
-export const EditWordModal: FunctionComponent<IProps> = ({
+const EditWordModal: FunctionComponent<IProps> = ({
   isOpen,
   closeModal,
   wordPair,
@@ -123,3 +123,5 @@ export const EditWordModal: FunctionComponent<IProps> = ({
     </Dialog>
   );
 };
+
+export default EditWordModal;

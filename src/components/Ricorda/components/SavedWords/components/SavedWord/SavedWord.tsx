@@ -17,7 +17,7 @@ interface IProps {
   editWord?: (wordPair: IWordPair) => void;
 }
 
-export const SavedWord: FunctionComponent<IProps> = ({
+const SavedWord: FunctionComponent<IProps> = ({
   wordPair,
   loading,
   editWord,
@@ -65,3 +65,5 @@ export const SavedWord: FunctionComponent<IProps> = ({
     </Card>
   );
 };
+
+export default SavedWord;

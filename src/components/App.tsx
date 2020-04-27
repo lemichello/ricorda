@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { Ricorda } from './Ricorda/Ricorda';
-import { ThemeContext } from './Ricorda/contexts/themeContext';
+import ThemeContext from './Ricorda/contexts/themeContext';
 import { ThemeService } from '../services/themeService';
 
 function App() {

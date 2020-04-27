@@ -8,17 +8,17 @@ import React, {
 import { WordsService } from '../../../../services/wordsService';
 import '../../Ricorda.css';
 import './TodayWords.css';
-import { NoWords } from './components/NoWords/NoWords';
-import { RepeatWord } from './components/RepeatWord/RepeatWord';
+import NoWords from './components/NoWords/NoWords';
+import RepeatWord from './components/RepeatWord/RepeatWord';
 import { Button, H3, NavbarDivider } from '@blueprintjs/core';
-import { WordsCountContext } from '../../contexts/wordsCountContext';
-import { WordsSkeleton } from './components/WordsSkeleton/WordsSkeleton';
+import WordsCountContext from '../../contexts/wordsCountContext';
+import WordsSkeleton from './components/WordsSkeleton/WordsSkeleton';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
 import { IWordPair } from '../../../../models/wordPair';
 
-export const TodayWords: FunctionComponent = () => {
+const TodayWords: FunctionComponent = () => {
   const { setWordsCount } = useContext(WordsCountContext);
   const [words, setWords] = useState<IWordPair[] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
@@ -119,3 +119,5 @@ export const TodayWords: FunctionComponent = () => {
     </div>
   );
 };
+
+export default TodayWords;

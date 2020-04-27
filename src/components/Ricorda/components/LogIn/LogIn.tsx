@@ -7,7 +7,7 @@ import React, {
   ChangeEvent,
 } from 'react';
 import { Button, Checkbox, InputGroup, Tooltip } from '@blueprintjs/core';
-import { UserContext } from '../../contexts/userContext';
+import UserContext from '../../contexts/userContext';
 import { AuthService } from '../../../../services/authService';
 import '../../Ricorda.css';
 import './LogIn.css';
@@ -20,7 +20,7 @@ interface IProps {
   location: Location;
 }
 
-export const Login: FunctionComponent<IProps> = ({ history, location }) => {
+const LogIn: FunctionComponent<IProps> = ({ history, location }) => {
   const { setUser } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -148,3 +148,5 @@ export const Login: FunctionComponent<IProps> = ({ history, location }) => {
     </div>
   );
 };
+
+export default LogIn;

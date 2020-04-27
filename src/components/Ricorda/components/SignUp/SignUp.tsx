@@ -14,7 +14,7 @@ interface IProps {
   history: History;
 }
 
-export const SignUp: FunctionComponent<IProps> = ({ history }) => {
+const SignUp: FunctionComponent<IProps> = ({ history }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -114,3 +114,5 @@ export const SignUp: FunctionComponent<IProps> = ({ history }) => {
     </div>
   );
 };
+
+export default SignUp;

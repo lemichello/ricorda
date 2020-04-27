@@ -5,7 +5,7 @@ import { Button, NonIdealState } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
 import './NoSavedWords.css';
 
-export const NoSavedWords: FunctionComponent = () => {
+const NoSavedWords: FunctionComponent = () => {
   const newWordsPageBtn: JSX.Element = (
     <Link to={'/'} className={'navigation-link'}>
       <Button
@@ -27,3 +27,5 @@ export const NoSavedWords: FunctionComponent = () => {
     </Fade>
   );
 };
+
+export default NoSavedWords;
