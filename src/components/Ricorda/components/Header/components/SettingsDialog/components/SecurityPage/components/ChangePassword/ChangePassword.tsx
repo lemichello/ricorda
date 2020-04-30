@@ -32,6 +32,7 @@ const ChangePassword: FunctionComponent = () => {
     try {
       setLoading(true);
       await AccountService.updatePassword(oldPassword, newPassword);
+      await AccountService.revokeToken();
     } catch (e) {
       return;
     } finally {

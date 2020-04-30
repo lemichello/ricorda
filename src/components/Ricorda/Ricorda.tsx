@@ -11,32 +11,100 @@ import React, {
   useEffect,
   useState,
   FunctionComponent,
+  useContext,
 } from 'react';
 import { AuthService } from '../../services/authService';
 import SignUp from './components/SignUp/SignUp';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import WordsCountContext from './contexts/wordsCountContext';
 import { WordsService } from '../../services/wordsService';
 import { DefaultToaster } from './models/DefaultToster';
-import config from '../../config';
 import SavedWords from './components/SavedWords/SavedWords';
-import { IUser } from '../../models/user';
 import { IWordsCountState } from './contexts/models/wordsCountState';
+import { Spinner } from '@blueprintjs/core';
+import { IRefreshTokenResponse } from '../../services/types/auth/refreshToken/refreshTokenResponse';
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 export const Ricorda: FunctionComponent = () => {
-  const [user, setUser] = useState<IUser>({
-    token: AuthService.getUserToken(),
-  });
+  const { user, setUser } = useContext(UserContext);
   const [wordsCount, setWordsCount] = useState<IWordsCountState>({
     count: null,
     loading: false,
   });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const refreshAuthLogic = (failedRequest: any) =>
+      axios
+        .post('/auth/refresh_token', {}, { withCredentials: true })
+        .then(async (refreshToken: AxiosResponse<IRefreshTokenResponse>) => {
+          if (refreshToken.data.ok) {
+            setUser({ token: refreshToken.data.accessToken });
+
+            failedRequest.response.config.headers[
+              'Authorization'
+            ] = `Bearer ${refreshToken.data.accessToken}`;
+            axios.defaults.headers.common[
+              'Authorization'
+            ] = `Bearer ${refreshToken.data.accessToken}`;
+
+            return Promise.resolve();
+          } else {
+            DefaultToaster.show({
+              message: 'Session expired. You need to log in.',
+              icon: 'error',
+              intent: 'danger',
+            });
+
+            return Promise.reject('session exprired');
+          }
+        });
+
+    createAuthRefreshInterceptor(axios, refreshAuthLogic);
+  }, [setUser]);
+
+  let logout: () => void = useCallback(async () => {
+    setLoading(true);
+    await AuthService.logOut();
+
+    setLoading(false);
+    setUser({ token: null });
+    setWordsCount({ count: null, loading: false });
+
+    history.push('/login');
+  }, [setUser]);
+
+  useEffect(() => {
+    axios.interceptors.response.use(
+      (resp) => {
+        return resp;
+      },
+      async (error) => {
+        if (error === 'session exprired') {
+          logout();
+          return Promise.reject();
+        }
+
+        if (error.response) {
+          DefaultToaster.show({
+            message: error.response.data,
+            icon: 'error',
+            intent: 'danger',
+          });
+        }
+
+        return Promise.reject(error.response);
+      }
+    );
+  }, [logout]);
 
   useEffect(() => {
     async function initRicorda(): Promise<void> {
       if (!user.token) {
         return;
       }
+
+      axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 
       try {
         setWordsCount({ count: null, loading: true });
@@ -50,51 +118,19 @@ export const Ricorda: FunctionComponent = () => {
     initRicorda();
   }, [user]);
 
-  let logout: () => void = useCallback(() => {
-    AuthService.logout();
-
-    setUser({ token: null });
-    setWordsCount({ count: null, loading: false });
-
-    history.push('/login');
-  }, []);
-
-  axios.defaults.baseURL = config.apiUrl;
-
-  axios.interceptors.response.use(
-    (resp) => {
-      return resp;
-    },
-    (error) => {
-      if (error.response.status === 401) {
-        logout();
-        window.location.reload();
-      }
-
-      DefaultToaster.show({
-        message: error.response.data,
-        icon: 'error',
-        intent: 'danger',
-      });
-
-      return Promise.reject(error.response);
-    }
-  );
-
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <WordsCountContext.Provider value={{ wordsCount, setWordsCount }}>
-        <Router history={history}>
-          <div>
-            <Header history={history} logout={logout} />
-            <Route exact path={'/'} component={NewWords} />
-            <PrivateRoute exact path={'/today-words'} component={TodayWords} />
-            <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
-            <Route exact path={'/login'} component={LogIn} />
-            <Route exact path={'/signup'} component={SignUp} />
-          </div>
-        </Router>
-      </WordsCountContext.Provider>
-    </UserContext.Provider>
+    <WordsCountContext.Provider value={{ wordsCount, setWordsCount }}>
+      <Router history={history}>
+        {loading && <Spinner className={'spinner'} />}
+        <div>
+          <Header history={history} logout={logout} />
+          <Route exact path={'/'} component={NewWords} />
+          <PrivateRoute exact path={'/today-words'} component={TodayWords} />
+          <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
+          <Route exact path={'/login'} component={LogIn} />
+          <Route exact path={'/signup'} component={SignUp} />
+        </div>
+      </Router>
+    </WordsCountContext.Provider>
   );
 };

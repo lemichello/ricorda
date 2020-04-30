@@ -1,14 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
-import { ILogInResponse } from './types/login/loginResponse';
-import { ISignUpRequest } from './types/signUp/signUpRequest';
-import { ILogInRequest } from './types/login/loginRequest';
+import { ILogInResponse } from './types/auth/login/loginResponse';
+import { ISignUpRequest } from './types/auth/signUp/signUpRequest';
+import { ILogInRequest } from './types/auth/login/loginRequest';
+import { IRefreshTokenResponse } from './types/auth/refreshToken/refreshTokenResponse';
 
 export class AuthService {
-  static async login(
-    email: string,
-    password: string,
-    rememberMe: boolean
-  ): Promise<string> {
+  static async login(email: string, password: string): Promise<string> {
     let resp: AxiosResponse<ILogInResponse>;
     let requestBody: ILogInRequest = {
       email: email,
@@ -16,18 +13,18 @@ export class AuthService {
     };
 
     try {
-      resp = await axios.post<ILogInResponse>('/auth/login', requestBody);
+      resp = await axios.post<ILogInResponse>('/auth/login', requestBody, {
+        withCredentials: true,
+      });
     } catch (e) {
       return Promise.reject(e);
     }
 
-    if (rememberMe) {
-      localStorage.setItem('userToken', resp.data.token);
-    } else {
-      sessionStorage.setItem('userToken', resp.data.token);
-    }
-
     return resp.data.token;
+  }
+
+  static async logOut(): Promise<void> {
+    await axios.post('/auth/logout', {}, { withCredentials: true });
   }
 
   static async signUp(email: string, password: string): Promise<void> {
@@ -43,16 +40,11 @@ export class AuthService {
     }
   }
 
-  static logout(): void {
-    localStorage.removeItem('userToken');
-    sessionStorage.removeItem('userToken');
-  }
+  static async refreshAccessToken(): Promise<IRefreshTokenResponse> {
+    let resp: AxiosResponse<IRefreshTokenResponse> = await axios.post<
+      IRefreshTokenResponse
+    >('/auth/refresh_token', {}, { withCredentials: true });
 
-  static getUserToken(): string {
-    return (
-      localStorage.getItem('userToken') ||
-      sessionStorage.getItem('userToken') ||
-      ''
-    );
+    return resp.data;
   }
 }

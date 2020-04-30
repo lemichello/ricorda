@@ -29,6 +29,7 @@ const ChangeEmail: FunctionComponent = () => {
       setLoading(true);
 
       await AccountService.updateEmail(newEmail);
+      await AccountService.revokeToken();
     } catch (e) {
       return;
     } finally {
@@ -37,7 +38,7 @@ const ChangeEmail: FunctionComponent = () => {
 
     setNewEmail('');
     DefaultToaster.show({
-      message: 'Successfully update email',
+      message: 'Successfully updated email',
       icon: 'tick',
       intent: 'success',
     });
