@@ -5,16 +5,19 @@ import React, {
   FunctionComponent,
   KeyboardEvent,
   ChangeEvent,
+  useContext,
 } from 'react';
 import { AuthService } from '../../../../services/authService';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { History } from 'history';
+import UserContext from '../../contexts/userContext';
 
 interface IProps {
   history: History;
 }
 
 const SignUp: FunctionComponent<IProps> = ({ history }) => {
+  const { user } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,12 +28,10 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
   );
 
   useEffect(() => {
-    let token: string = AuthService.getUserToken();
-
-    if (token) {
+    if (user.token) {
       history.push('/');
     }
-  }, [history]);
+  }, [history, user.token]);
 
   const keyDown: (event: KeyboardEvent) => void = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && isValidCredentials()) {

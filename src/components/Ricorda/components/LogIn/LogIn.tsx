@@ -6,7 +6,7 @@ import React, {
   KeyboardEvent,
   ChangeEvent,
 } from 'react';
-import { Button, Checkbox, InputGroup, Tooltip } from '@blueprintjs/core';
+import { Button, InputGroup, Tooltip } from '@blueprintjs/core';
 import UserContext from '../../contexts/userContext';
 import { AuthService } from '../../../../services/authService';
 import '../../Ricorda.css';
@@ -21,9 +21,8 @@ interface IProps {
 }
 
 const LogIn: FunctionComponent<IProps> = ({ history, location }) => {
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,12 +32,10 @@ const LogIn: FunctionComponent<IProps> = ({ history, location }) => {
   );
 
   useEffect(() => {
-    let token: string = AuthService.getUserToken();
-
-    if (token) {
+    if (user.token) {
       history.push('/');
     }
-  }, [history]);
+  }, [history, user.token]);
 
   const isValidCredentials: () => boolean = () => {
     return emailRegex.test(email) && !!password;
@@ -53,7 +50,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location }) => {
   const logIn: () => void = async () => {
     try {
       setLoading(true);
-      let token: string = await AuthService.login(email, password, rememberMe);
+      let token: string = await AuthService.login(email, password);
 
       setUser({ token: token });
     } catch (e) {
@@ -114,14 +111,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location }) => {
             setPassword(event.target.value)
           }
         />
-        <div className={'page-actions'}>
-          <Checkbox
-            label={'Remember me'}
-            checked={rememberMe}
-            onChange={() => {
-              setRememberMe(!rememberMe);
-            }}
-          />
+        <div className={'page-actions log-in-page-actions'}>
           <Button
             className={'page-btn'}
             intent={'success'}

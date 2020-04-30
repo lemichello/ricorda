@@ -37,7 +37,7 @@ const ChangeEmail: FunctionComponent = () => {
 
     setNewEmail('');
     DefaultToaster.show({
-      message: 'Successfully update email',
+      message: 'Successfully updated email',
       icon: 'tick',
       intent: 'success',
     });
