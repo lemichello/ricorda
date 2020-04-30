@@ -26,10 +26,13 @@ const TodayWords: FunctionComponent = () => {
 
   useEffect(() => {
     async function getWordsForToday() {
-      let res: IWordPair[] = await WordsService.getWordsForToday();
+      try {
+        let res: IWordPair[] = await WordsService.getWordsForToday();
 
-      setLoading(false);
-      setWords(res);
+        setWords(res);
+      } finally {
+        setLoading(false);
+      }
     }
 
     getWordsForToday();

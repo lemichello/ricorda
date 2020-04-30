@@ -15,7 +15,6 @@ import {
 } from '@blueprintjs/core';
 import '../../Ricorda.css';
 import './NewWords.css';
-import { AuthService } from '../../../../services/authService';
 import { WordsService } from '../../../../services/wordsService';
 import { DefaultToaster } from '../../models/DefaultToster';
 // @ts-ignore
@@ -23,6 +22,7 @@ import Fade from 'react-reveal/Fade';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
+import UserContext from '../../contexts/userContext';
 
 interface IProps {
   history: History;
@@ -30,6 +30,7 @@ interface IProps {
 
 const NewWords: FunctionComponent<IProps> = ({ history }) => {
   const { theme } = useContext(ThemeContext);
+  const { user } = useContext(UserContext);
 
   const [sourceWord, setSourceWord] = useState('');
   const [translation, setTranslation] = useState('');
@@ -47,7 +48,7 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
   };
 
   const handleAddButtonClick: () => void = async () => {
-    if (!AuthService.getUserToken()) {
+    if (!user.token) {
       history.push('/login');
       return;
     }
