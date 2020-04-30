@@ -30,4 +30,16 @@ export class AccountService {
       return Promise.reject(e);
     }
   }
+
+  static async revokeToken(): Promise<void> {
+    try {
+      await axios.post(
+        'api/account/revoke_refresh_token',
+        {},
+        { withCredentials: true }
+      );
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
 }

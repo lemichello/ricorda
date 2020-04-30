@@ -29,6 +29,7 @@ const ChangeEmail: FunctionComponent = () => {
       setLoading(true);
 
       await AccountService.updateEmail(newEmail);
+      await AccountService.revokeToken();
     } catch (e) {
       return;
     } finally {
