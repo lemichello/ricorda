@@ -44,9 +44,6 @@ export const Ricorda: FunctionComponent = () => {
             failedRequest.response.config.headers[
               'Authorization'
             ] = `Bearer ${refreshToken.data.accessToken}`;
-            axios.defaults.headers.common[
-              'Authorization'
-            ] = `Bearer ${refreshToken.data.accessToken}`;
 
             return Promise.resolve();
           } else {
@@ -106,6 +103,12 @@ export const Ricorda: FunctionComponent = () => {
 
       axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 
+      // When just updated access token.
+      // No need to fetch words count, as it already fetched.
+      if (wordsCount.count !== null) {
+        return;
+      }
+
       try {
         setWordsCount({ count: null, loading: true });
         let count: number = await WordsService.getWordsCount();
@@ -116,7 +119,7 @@ export const Ricorda: FunctionComponent = () => {
     }
 
     initRicorda();
-  }, [user]);
+  }, [user, wordsCount.count]);
 
   return (
     <WordsCountContext.Provider value={{ wordsCount, setWordsCount }}>

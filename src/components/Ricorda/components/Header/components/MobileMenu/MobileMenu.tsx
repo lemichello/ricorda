@@ -21,6 +21,7 @@ const MobileMenu: FunctionComponent<IProps> = ({
   setMenuVisibility,
 }) => {
   const { theme } = useContext(ThemeContext);
+  const { wordsCount } = useContext(WordsCountContext);
 
   const closeMenu: () => void = () => {
     setMenuVisibility(false);
@@ -42,31 +43,27 @@ const MobileMenu: FunctionComponent<IProps> = ({
             <Link to={'/'} className={'navigation-link'} onClick={closeMenu}>
               <MenuItem text={'Home'} icon={'home'} tagName={'span'} />
             </Link>
-            <WordsCountContext.Consumer>
-              {({ wordsCount }) => (
-                <Link
-                  to={'/today-words'}
-                  className={'navigation-link'}
-                  onClick={closeMenu}
-                >
-                  <MenuItem
-                    text={"Today's words"}
-                    icon={'calendar'}
-                    tagName={'span'}
-                    labelElement={
-                      (wordsCount.count !== null || wordsCount.loading) && (
-                        <Tag
-                          className={wordsCount.loading ? 'bp3-skeleton' : ''}
-                          intent={'success'}
-                        >
-                          {wordsCount.count && wordsCount.count}
-                        </Tag>
-                      )
-                    }
-                  />
-                </Link>
-              )}
-            </WordsCountContext.Consumer>
+            <Link
+              to={'/today-words'}
+              className={'navigation-link'}
+              onClick={closeMenu}
+            >
+              <MenuItem
+                text={"Today's words"}
+                icon={'calendar'}
+                tagName={'span'}
+                labelElement={
+                  (wordsCount.count !== null || wordsCount.loading) && (
+                    <Tag
+                      className={wordsCount.loading ? 'bp3-skeleton' : ''}
+                      intent={'success'}
+                    >
+                      {wordsCount.count && wordsCount.count}
+                    </Tag>
+                  )
+                }
+              />
+            </Link>
             <Link
               to={'/saved-words'}
               className={'navigation-link'}
