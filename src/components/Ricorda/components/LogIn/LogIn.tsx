@@ -18,10 +18,11 @@ import { History, Location } from 'history';
 interface IProps {
   history: History;
   location: Location;
+  userToken: string | null;
 }
 
-const LogIn: FunctionComponent<IProps> = ({ history, location }) => {
-  const { user, setUser } = useContext(UserContext);
+const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
+  const { setUser } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,10 +33,13 @@ const LogIn: FunctionComponent<IProps> = ({ history, location }) => {
   );
 
   useEffect(() => {
-    if (user.token) {
+    // Preventing user of entering this page.
+    if (userToken) {
       history.push('/');
     }
-  }, [history, user.token]);
+
+    // eslint-disable-next-line
+  }, []);
 
   const isValidCredentials: () => boolean = () => {
     return emailRegex.test(email) && !!password;
@@ -113,7 +117,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location }) => {
         />
         <div className={'page-actions log-in-page-actions'}>
           <Button
-            className={'page-btn'}
+            className={'page-btn log-in-btn'}
             intent={'success'}
             loading={loading}
             text={'Log In'}

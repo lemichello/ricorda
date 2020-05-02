@@ -1,10 +1,16 @@
 .login-page-sign-up-btn {
-  margin-top: 10px;
-  width: 100% !important;
+  display: block;
+  margin: 10px auto 0 auto;
+  width: 80% !important;
+  text-align: center;
 }
 
 .log-in-page-actions {
-  justify-content: flex-end;
+  justify-content: center;
+}
+
+.log-in-btn {
+  width: 80%;
 }
 
 @media (min-width: 576px) {

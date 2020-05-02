@@ -15,10 +15,22 @@
   overflow: hidden;
 }
 
-.account-btn:hover {
+.animated-text-btn.account-btn:hover {
   width: 95px;
 }
 
-.dark-mode-btn:hover {
+.animated-text-btn.dark-mode-btn:hover {
   width: 112px;
+}
+
+.header-log-in-btn {
+  margin-right: 10px;
+}
+
+.header-sign-up-btn.navigation-link {
+  width: auto;
+}
+
+.header-log-in-btn.navigation-link {
+  width: auto;
 }
