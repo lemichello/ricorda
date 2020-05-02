@@ -1,4 +1,4 @@
-import { Button, InputGroup, Tooltip } from '@blueprintjs/core';
+import { Button, InputGroup } from '@blueprintjs/core';
 import React, {
   useEffect,
   useState,
@@ -18,9 +18,9 @@ interface IProps {
 }
 
 const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
-  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordRepeat, setPasswordRepeat] = useState('');
   const [loading, setLoading] = useState(false);
 
   const emailRegex: RegExp = RegExp(
@@ -42,7 +42,7 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
   };
 
   const isValidCredentials: () => boolean = () => {
-    return emailRegex.test(email) && !!password;
+    return emailRegex.test(email) && !!password && password === passwordRepeat;
   };
 
   const signUp: () => void = async () => {
@@ -64,18 +64,6 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
     history.push('/login');
   };
 
-  const lockButton: JSX.Element = (
-    <Tooltip content={`${showPassword ? 'Hide' : 'Show'} Password`}>
-      <Button
-        icon={showPassword ? 'eye-off' : 'eye-open'}
-        minimal={true}
-        onClick={() => {
-          setShowPassword(!showPassword);
-        }}
-      />
-    </Tooltip>
-  );
-
   return (
     <div className={'page-root'}>
       <div className={'page-content'} onKeyDown={keyDown}>
@@ -83,8 +71,8 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
         <span className={'page-divider'} />
         <InputGroup
           className={'page-input'}
-          large={true}
-          fill={true}
+          large
+          fill
           type={'email'}
           placeholder={'Email address'}
           value={email}
@@ -95,14 +83,25 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
         <InputGroup
           className={'page-input'}
           name={'password'}
-          large={true}
-          fill={true}
+          large
+          fill
           placeholder={'Password'}
-          rightElement={lockButton}
-          type={showPassword ? 'text' : 'password'}
+          type={'password'}
           value={password}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setPassword(event.target.value)
+          }
+        />
+        <InputGroup
+          className={'page-input'}
+          name={'password-repeat'}
+          large
+          fill
+          placeholder={'Repeat password'}
+          type={'password'}
+          value={passwordRepeat}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            setPasswordRepeat(event.target.value)
           }
         />
         <Button
