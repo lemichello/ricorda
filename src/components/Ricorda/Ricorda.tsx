@@ -103,7 +103,7 @@ export const Ricorda: FunctionComponent = () => {
 
       axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 
-      // When just updated access token.
+      // When only updated access token.
       // No need to fetch words count, as it already fetched.
       if (wordsCount.count !== null) {
         return;
@@ -130,8 +130,16 @@ export const Ricorda: FunctionComponent = () => {
           <Route exact path={'/'} component={NewWords} />
           <PrivateRoute exact path={'/today-words'} component={TodayWords} />
           <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
-          <Route exact path={'/login'} component={LogIn} />
-          <Route exact path={'/signup'} component={SignUp} />
+          <Route
+            exact
+            path={'/login'}
+            render={(props) => <LogIn {...props} userToken={user.token} />}
+          />
+          <Route
+            exact
+            path={'/signup'}
+            render={(props) => <SignUp {...props} userToken={user.token} />}
+          />
         </div>
       </Router>
     </WordsCountContext.Provider>

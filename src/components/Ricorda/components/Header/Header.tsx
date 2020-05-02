@@ -48,6 +48,7 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
   const { user } = useContext(UserContext);
   const { theme, setTheme } = useContext(ThemeContext);
   const isTablet: boolean = useMediaQuery({ query: '(min-width: 576px)' });
+  const isDesktop: boolean = useMediaQuery({ query: '(min-width: 992px)' });
   const isMobile: boolean = !isTablet;
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
@@ -118,13 +119,6 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
           />
         </div>
       )}
-      {!user.token && (
-        <MenuItem
-          icon={'log-in'}
-          text={'Log in or Sign up'}
-          onClick={() => history.push('/login')}
-        />
-      )}
     </Menu>
   );
 
@@ -149,25 +143,63 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
         )}
         {isTablet && <TabletMenu />}
         <NavbarGroup align={Alignment.RIGHT}>
+          {!user.token && (
+            <div>
+              {isDesktop && (
+                <Link
+                  to={'/login'}
+                  className={'navigation-link header-log-in-btn'}
+                >
+                  <Button minimal>Log in</Button>
+                </Link>
+              )}
+              <Link
+                to={'/signup'}
+                className={'navigation-link header-sign-up-btn'}
+              >
+                <Button minimal outlined>
+                  Sign up
+                </Button>
+              </Link>
+            </div>
+          )}
+
           <NavbarDivider />
-          <Popover content={userMenu} position={Position.BOTTOM}>
-            <Button
-              className={`${Classes.MINIMAL} account-btn animated-text-btn`}
-              icon={'user'}
-              text={accountBtnText}
-              onMouseEnter={() => setAccountBtnText('Account')}
-              onMouseLeave={() => setAccountBtnText(undefined)}
-            />
-          </Popover>
+          {user.token && (
+            <Popover content={userMenu} position={Position.BOTTOM}>
+              <Button
+                className={`${Classes.MINIMAL} account-btn ${
+                  isDesktop ? 'animated-text-btn' : ''
+                }`}
+                icon={'user'}
+                text={isDesktop ? accountBtnText : undefined}
+                onMouseEnter={
+                  isDesktop ? () => setAccountBtnText('Account') : undefined
+                }
+                onMouseLeave={
+                  isDesktop ? () => setAccountBtnText(undefined) : undefined
+                }
+              />
+            </Popover>
+          )}
           <Button
-            className={`${Classes.MINIMAL} dark-mode-btn animated-text-btn`}
+            className={`${Classes.MINIMAL} dark-mode-btn ${
+              isDesktop ? 'animated-text-btn' : ''
+            }`}
             icon={theme.isDarkTheme ? 'flash' : 'moon'}
-            text={darkModeBtnText}
+            text={isDesktop ? darkModeBtnText : undefined}
             onClick={handleDarkThemeChange}
-            onMouseEnter={() =>
-              setDarkModeBtnText(theme.isDarkTheme ? 'Light mode' : 'Dark mode')
+            onMouseEnter={
+              isDesktop
+                ? () =>
+                    setDarkModeBtnText(
+                      theme.isDarkTheme ? 'Light mode' : 'Dark mode'
+                    )
+                : undefined
             }
-            onMouseLeave={() => setDarkModeBtnText(undefined)}
+            onMouseLeave={
+              isDesktop ? () => setDarkModeBtnText(undefined) : undefined
+            }
           />
         </NavbarGroup>
       </Navbar>

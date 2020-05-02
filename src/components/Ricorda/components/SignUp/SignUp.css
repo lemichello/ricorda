@@ -1,0 +1,5 @@
+.sign-up-page-have-account-text > a:hover {
+  text-decoration: none;
+  color: #2b95d6;
+  transition: color 0.2s;
+}

@@ -5,19 +5,19 @@ import React, {
   FunctionComponent,
   KeyboardEvent,
   ChangeEvent,
-  useContext,
 } from 'react';
 import { AuthService } from '../../../../services/authService';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { History } from 'history';
-import UserContext from '../../contexts/userContext';
+import { Link } from 'react-router-dom';
+import './SignUp.css';
 
 interface IProps {
   history: History;
+  userToken: string | null;
 }
 
-const SignUp: FunctionComponent<IProps> = ({ history }) => {
-  const { user } = useContext(UserContext);
+const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,10 +28,12 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
   );
 
   useEffect(() => {
-    if (user.token) {
+    if (userToken) {
       history.push('/');
     }
-  }, [history, user.token]);
+
+    // eslint-disable-next-line
+  }, []);
 
   const keyDown: (event: KeyboardEvent) => void = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && isValidCredentials()) {
@@ -111,6 +113,11 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
           loading={loading}
           disabled={!isValidCredentials()}
         />
+        <span className={'page-divider'} />
+
+        <p className={'sign-up-page-have-account-text'}>
+          Already have an account? <Link to={'/login'}>Log in</Link>
+        </p>
       </div>
     </div>
   );
