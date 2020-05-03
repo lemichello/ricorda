@@ -20,7 +20,7 @@ interface IProps {
 const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordRepeat, setPasswordRepeat] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [loading, setLoading] = useState(false);
 
   const emailRegex: RegExp = RegExp(
@@ -42,7 +42,7 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
   };
 
   const isValidCredentials: () => boolean = () => {
-    return emailRegex.test(email) && !!password && password === passwordRepeat;
+    return emailRegex.test(email) && !!password && password === passwordConfirm;
   };
 
   const signUp: () => void = async () => {
@@ -94,14 +94,14 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
         />
         <InputGroup
           className={'page-input'}
-          name={'password-repeat'}
+          name={'password-confirm'}
           large
           fill
-          placeholder={'Repeat password'}
+          placeholder={'Confirm password'}
           type={'password'}
-          value={passwordRepeat}
+          value={passwordConfirm}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setPasswordRepeat(event.target.value)
+            setPasswordConfirm(event.target.value)
           }
         />
         <Button
