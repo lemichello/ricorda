@@ -1,26 +1,26 @@
-import { Button, InputGroup, Tooltip } from '@blueprintjs/core';
+import { Button, InputGroup } from '@blueprintjs/core';
 import React, {
   useEffect,
   useState,
   FunctionComponent,
   KeyboardEvent,
   ChangeEvent,
-  useContext,
 } from 'react';
 import { AuthService } from '../../../../services/authService';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { History } from 'history';
-import UserContext from '../../contexts/userContext';
+import { Link } from 'react-router-dom';
+import './SignUp.css';
 
 interface IProps {
   history: History;
+  userToken: string | null;
 }
 
-const SignUp: FunctionComponent<IProps> = ({ history }) => {
-  const { user } = useContext(UserContext);
-  const [showPassword, setShowPassword] = useState(false);
+const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [loading, setLoading] = useState(false);
 
   const emailRegex: RegExp = RegExp(
@@ -28,10 +28,12 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
   );
 
   useEffect(() => {
-    if (user.token) {
+    if (userToken) {
       history.push('/');
     }
-  }, [history, user.token]);
+
+    // eslint-disable-next-line
+  }, []);
 
   const keyDown: (event: KeyboardEvent) => void = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && isValidCredentials()) {
@@ -40,7 +42,7 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
   };
 
   const isValidCredentials: () => boolean = () => {
-    return emailRegex.test(email) && !!password;
+    return emailRegex.test(email) && !!password && password === passwordConfirm;
   };
 
   const signUp: () => void = async () => {
@@ -62,18 +64,6 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
     history.push('/login');
   };
 
-  const lockButton: JSX.Element = (
-    <Tooltip content={`${showPassword ? 'Hide' : 'Show'} Password`}>
-      <Button
-        icon={showPassword ? 'eye-off' : 'eye-open'}
-        minimal={true}
-        onClick={() => {
-          setShowPassword(!showPassword);
-        }}
-      />
-    </Tooltip>
-  );
-
   return (
     <div className={'page-root'}>
       <div className={'page-content'} onKeyDown={keyDown}>
@@ -81,8 +71,8 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
         <span className={'page-divider'} />
         <InputGroup
           className={'page-input'}
-          large={true}
-          fill={true}
+          large
+          fill
           type={'email'}
           placeholder={'Email address'}
           value={email}
@@ -93,14 +83,25 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
         <InputGroup
           className={'page-input'}
           name={'password'}
-          large={true}
-          fill={true}
+          large
+          fill
           placeholder={'Password'}
-          rightElement={lockButton}
-          type={showPassword ? 'text' : 'password'}
+          type={'password'}
           value={password}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setPassword(event.target.value)
+          }
+        />
+        <InputGroup
+          className={'page-input'}
+          name={'password-confirm'}
+          large
+          fill
+          placeholder={'Confirm password'}
+          type={'password'}
+          value={passwordConfirm}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            setPasswordConfirm(event.target.value)
           }
         />
         <Button
@@ -111,6 +112,11 @@ const SignUp: FunctionComponent<IProps> = ({ history }) => {
           loading={loading}
           disabled={!isValidCredentials()}
         />
+        <span className={'page-divider'} />
+
+        <p className={'sign-up-page-have-account-text'}>
+          Already have an account? <Link to={'/login'}>Log in</Link>
+        </p>
       </div>
     </div>
   );
