@@ -6,7 +6,7 @@ import React, {
   KeyboardEvent,
   ChangeEvent,
 } from 'react';
-import { Button, InputGroup, Tooltip } from '@blueprintjs/core';
+import { Button, InputGroup, Tooltip, Checkbox } from '@blueprintjs/core';
 import UserContext from '../../contexts/userContext';
 import { AuthService } from '../../../../services/authService';
 import '../../Ricorda.css';
@@ -28,6 +28,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const emailRegex: RegExp = RegExp(
@@ -68,7 +69,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
   const logIn: () => void = async () => {
     try {
       setLoading(true);
-      let token: string = await AuthService.login(email, password);
+      let token: string = await AuthService.login(email, password, rememberMe);
 
       setUser({ token: token });
     } catch (e) {
@@ -151,9 +152,16 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
             setPassword(event.target.value)
           }
         />
-        <div className={'page-actions log-in-page-actions'}>
+        <div className={'page-actions'}>
+          <Checkbox
+            label={'Remember me'}
+            checked={rememberMe}
+            onChange={() => {
+              setRememberMe(!rememberMe);
+            }}
+          />
           <Button
-            className={'page-btn log-in-btn'}
+            className={'page-btn'}
             intent={'success'}
             loading={loading}
             text={'Log In'}

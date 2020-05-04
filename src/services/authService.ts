@@ -5,11 +5,16 @@ import { ILogInRequest } from './types/auth/login/loginRequest';
 import { IRefreshTokenResponse } from './types/auth/refreshToken/refreshTokenResponse';
 
 export class AuthService {
-  static async login(email: string, password: string): Promise<string> {
+  static async login(
+    email: string,
+    password: string,
+    rememberMe: boolean
+  ): Promise<string> {
     let resp: AxiosResponse<ILogInResponse>;
     let requestBody: ILogInRequest = {
       email: email,
       password: password,
+      rememberMe,
     };
 
     try {
