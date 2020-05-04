@@ -5,11 +5,16 @@ import { ILogInRequest } from './types/auth/login/loginRequest';
 import { IRefreshTokenResponse } from './types/auth/refreshToken/refreshTokenResponse';
 
 export class AuthService {
-  static async login(email: string, password: string): Promise<string> {
+  static async login(
+    email: string,
+    password: string,
+    rememberMe: boolean
+  ): Promise<string> {
     let resp: AxiosResponse<ILogInResponse>;
     let requestBody: ILogInRequest = {
       email: email,
       password: password,
+      rememberMe,
     };
 
     try {
@@ -21,6 +26,27 @@ export class AuthService {
     }
 
     return resp.data.token;
+  }
+
+  static async loginWithGoogle(idToken: string): Promise<string> {
+    try {
+      let resp: AxiosResponse<ILogInResponse> = await axios.post<
+        ILogInResponse
+      >(
+        '/auth/login-with-google',
+        {},
+        {
+          headers: {
+            Authorization: idToken,
+          },
+          withCredentials: true,
+        }
+      );
+
+      return resp.data.token;
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 
   static async logOut(): Promise<void> {

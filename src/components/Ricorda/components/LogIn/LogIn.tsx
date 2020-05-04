@@ -6,7 +6,7 @@ import React, {
   KeyboardEvent,
   ChangeEvent,
 } from 'react';
-import { Button, InputGroup, Tooltip } from '@blueprintjs/core';
+import { Button, InputGroup, Tooltip, Checkbox } from '@blueprintjs/core';
 import UserContext from '../../contexts/userContext';
 import { AuthService } from '../../../../services/authService';
 import '../../Ricorda.css';
@@ -14,6 +14,8 @@ import './LogIn.css';
 import { Link } from 'react-router-dom';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { History, Location } from 'history';
+import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
+import config from '../../../../config';
 
 interface IProps {
   history: History;
@@ -26,6 +28,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const emailRegex: RegExp = RegExp(
@@ -51,18 +54,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
     }
   };
 
-  const logIn: () => void = async () => {
-    try {
-      setLoading(true);
-      let token: string = await AuthService.login(email, password);
-
-      setUser({ token: token });
-    } catch (e) {
-      return;
-    } finally {
-      setLoading(false);
-    }
-
+  const finishLogInProcess: () => void = () => {
     DefaultToaster.show({
       message: 'Successfully logged in',
       intent: 'success',
@@ -72,6 +64,38 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
     const { from }: any = location.state || { from: '/' };
 
     history.push(from);
+  };
+
+  const logIn: () => void = async () => {
+    try {
+      setLoading(true);
+      let token: string = await AuthService.login(email, password, rememberMe);
+
+      setUser({ token: token });
+    } catch (e) {
+      return;
+    } finally {
+      setLoading(false);
+    }
+
+    finishLogInProcess();
+  };
+
+  const logInWithGoogle: (user: GoogleLoginResponse) => void = async (
+    user: GoogleLoginResponse
+  ) => {
+    try {
+      setLoading(true);
+      let token: string = await AuthService.loginWithGoogle(user.tokenId);
+
+      setUser({ token: token });
+    } catch (e) {
+      return;
+    } finally {
+      setLoading(false);
+    }
+
+    finishLogInProcess();
   };
 
   const lockButton: JSX.Element = (
@@ -90,7 +114,20 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
     <div className={'page-root'}>
       <div className={'page-content'} onKeyDown={keyDown}>
         <h5 className={'bp3-heading'}>To continue, log in to Ricorda.</h5>
-        <span className={'page-divider'} />
+        <GoogleLogin
+          clientId={config.googleClientId}
+          buttonText={'Continue with Google'}
+          className={'google-sign-in-btn'}
+          onSuccess={(response) => {
+            logInWithGoogle(response as GoogleLoginResponse);
+          }}
+          onFailure={() => {}}
+        />
+        <div className={'log-in-page-text-divider'}>
+          <span className={'page-divider'} />
+          <p className={'bp3-heading'}>OR</p>
+          <span className={'page-divider'} />
+        </div>
         <InputGroup
           className={'page-input'}
           large={true}
@@ -115,9 +152,16 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
             setPassword(event.target.value)
           }
         />
-        <div className={'page-actions log-in-page-actions'}>
+        <div className={'page-actions'}>
+          <Checkbox
+            label={'Remember me'}
+            checked={rememberMe}
+            onChange={() => {
+              setRememberMe(!rememberMe);
+            }}
+          />
           <Button
-            className={'page-btn log-in-btn'}
+            className={'page-btn'}
             intent={'success'}
             loading={loading}
             text={'Log In'}
