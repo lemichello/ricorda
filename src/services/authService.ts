@@ -23,6 +23,27 @@ export class AuthService {
     return resp.data.token;
   }
 
+  static async loginWithGoogle(idToken: string): Promise<string> {
+    try {
+      let resp: AxiosResponse<ILogInResponse> = await axios.post<
+        ILogInResponse
+      >(
+        '/auth/login-with-google',
+        {},
+        {
+          headers: {
+            Authorization: idToken,
+          },
+          withCredentials: true,
+        }
+      );
+
+      return resp.data.token;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
   static async logOut(): Promise<void> {
     await axios.post('/auth/logout', {}, { withCredentials: true });
   }

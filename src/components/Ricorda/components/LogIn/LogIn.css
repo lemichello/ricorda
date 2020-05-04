@@ -13,6 +13,40 @@
   width: 80%;
 }
 
+.google-sign-in-btn {
+  width: 80%;
+  border-radius: 22px !important;
+  display: flex;
+  justify-content: center;
+}
+
+.google-sign-in-btn > div {
+  background: transparent !important;
+  margin-right: 0 !important;
+}
+
+.google-sign-in-btn > span {
+  font-weight: bold !important;
+}
+
+.log-in-page-text-divider {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.log-in-page-text-divider > span {
+  width: 50%;
+}
+
+.log-in-page-text-divider > p {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
 @media (min-width: 576px) {
   .page-content {
     width: 50vw;

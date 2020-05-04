@@ -14,6 +14,8 @@ import './LogIn.css';
 import { Link } from 'react-router-dom';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { History, Location } from 'history';
+import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
+import config from '../../../../config';
 
 interface IProps {
   history: History;
@@ -51,6 +53,18 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
     }
   };
 
+  const finishLogInProcess: () => void = () => {
+    DefaultToaster.show({
+      message: 'Successfully logged in',
+      intent: 'success',
+      icon: 'tick',
+    });
+
+    const { from }: any = location.state || { from: '/' };
+
+    history.push(from);
+  };
+
   const logIn: () => void = async () => {
     try {
       setLoading(true);
@@ -63,15 +77,24 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
       setLoading(false);
     }
 
-    DefaultToaster.show({
-      message: 'Successfully logged in',
-      intent: 'success',
-      icon: 'tick',
-    });
+    finishLogInProcess();
+  };
 
-    const { from }: any = location.state || { from: '/' };
+  const logInWithGoogle: (user: GoogleLoginResponse) => void = async (
+    user: GoogleLoginResponse
+  ) => {
+    try {
+      setLoading(true);
+      let token: string = await AuthService.loginWithGoogle(user.tokenId);
 
-    history.push(from);
+      setUser({ token: token });
+    } catch (e) {
+      return;
+    } finally {
+      setLoading(false);
+    }
+
+    finishLogInProcess();
   };
 
   const lockButton: JSX.Element = (
@@ -90,7 +113,20 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
     <div className={'page-root'}>
       <div className={'page-content'} onKeyDown={keyDown}>
         <h5 className={'bp3-heading'}>To continue, log in to Ricorda.</h5>
-        <span className={'page-divider'} />
+        <GoogleLogin
+          clientId={config.googleClientId}
+          buttonText={'Continue with Google'}
+          className={'google-sign-in-btn'}
+          onSuccess={(response) => {
+            logInWithGoogle(response as GoogleLoginResponse);
+          }}
+          onFailure={() => {}}
+        />
+        <div className={'log-in-page-text-divider'}>
+          <span className={'page-divider'} />
+          <p className={'bp3-heading'}>OR</p>
+          <span className={'page-divider'} />
+        </div>
         <InputGroup
           className={'page-input'}
           large={true}
