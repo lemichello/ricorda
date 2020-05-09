@@ -1,0 +1,21 @@
+.word-pair-sentences {
+  margin-top: 5px;
+}
+
+.word-pair-sentences-btn {
+  justify-content: flex-start;
+}
+
+.word-pair-sentences-btn > .bp3-icon {
+  margin-left: auto;
+}
+
+.word-pair-sentences-info {
+  display: flex;
+  width: 100%;
+}
+
+.word-pair-sentences-info-text {
+  margin-bottom: 0;
+  margin-right: 5px;
+}

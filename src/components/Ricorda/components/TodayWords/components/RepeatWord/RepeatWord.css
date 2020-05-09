@@ -51,6 +51,7 @@
   font-style: italic;
   overflow: hidden;
   text-overflow: ellipsis;
+  overflow-wrap: break-word;
 }
 
 .repeat-word-source-word-block > button:nth-child(2) {
