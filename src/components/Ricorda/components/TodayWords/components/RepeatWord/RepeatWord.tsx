@@ -6,7 +6,6 @@ import {
   Icon,
   NavbarDivider,
   Pre,
-  Tooltip,
 } from '@blueprintjs/core';
 import React, { useCallback, useState, FunctionComponent } from 'react';
 import './RepeatWord.css';
@@ -37,16 +36,6 @@ const RepeatWord: FunctionComponent<IProps> = ({
     }
   };
 
-  const getTooltipContent: () => string = () => {
-    if (wordPair?.repetitions === 4) {
-      return wordPair?.translation.length > 13 ? wordPair?.translation : '';
-    }
-
-    return wordPair && wordPair?.sourceWord.length > 13
-      ? wordPair?.sourceWord
-      : '';
-  };
-
   const checkWordPair: () => void = useCallback(() => {
     setChecked(true);
     setCheckBtnLoading(false);
@@ -66,21 +55,14 @@ const RepeatWord: FunctionComponent<IProps> = ({
           >
             <div>
               {wordPair?.repetitions === 4 && (
-                <Tooltip content={'Last repetition'} intent={'primary'}>
-                  <Icon icon={'endorsed'} intent={'primary'} iconSize={20} />
-                </Tooltip>
+                <Icon icon={'endorsed'} intent={'primary'} iconSize={20} />
               )}
             </div>
-            <Tooltip
-              className={'source-word-tooltip'}
-              content={getTooltipContent()}
-            >
-              <H3 className={'source-word'}>
-                {wordPair?.repetitions === 4
-                  ? wordPair?.translation
-                  : wordPair?.sourceWord}
-              </H3>
-            </Tooltip>
+            <H3 className={'source-word'}>
+              {wordPair?.repetitions === 4
+                ? wordPair?.translation
+                : wordPair?.sourceWord}
+            </H3>
             <div className={'repeat-word-actions-block'}>
               <Button
                 disabled={disabled}
