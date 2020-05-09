@@ -55,7 +55,12 @@ const RepeatWord: FunctionComponent<IProps> = ({
           >
             <div>
               {wordPair?.repetitions === 4 && (
-                <Icon icon={'endorsed'} intent={'primary'} iconSize={20} />
+                <Icon
+                  className={'repeat-word-last-repetition-icon'}
+                  icon={'endorsed'}
+                  intent={'primary'}
+                  iconSize={20}
+                />
               )}
             </div>
             <H3 className={'source-word'}>

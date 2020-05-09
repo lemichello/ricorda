@@ -36,12 +36,19 @@
   width: 100%;
 }
 
+.repeat-word-last-repetition-icon {
+  margin-bottom: 5px;
+}
+
 .source-word {
-  padding-top: 5px;
-  margin-right: 5px;
+  margin-top: 5px;
+  margin-right: 15px;
   margin-left: 15px;
+  max-width: 40%;
+  word-wrap: break-word;
   font-style: italic;
-  overflow-wrap: break-word;
+  font-size: 18px !important;
+  line-height: 22px !important;
 }
 
 .repeat-word-source-word-block > button:nth-child(2) {
@@ -76,10 +83,19 @@
   .repeat-word-card {
     width: 50vw;
   }
+
+  .source-word {
+    max-width: 50%;
+  }
 }
 
 @media (min-width: 1200px) {
   .repeat-word-card {
     width: 30vw;
+  }
+
+  .source-word {
+    font-size: 22px !important;
+    line-height: 25px !important;
   }
 }
