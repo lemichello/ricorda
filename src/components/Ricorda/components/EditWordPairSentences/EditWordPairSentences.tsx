@@ -2,10 +2,11 @@ import React, { FunctionComponent, useState, ChangeEvent } from 'react';
 import EditWordPairSentence from './components/EditWordSentence/EditWordPairSentence';
 import './EditWordPairSentences.css';
 import { Card, ControlGroup, Button, TextArea } from '@blueprintjs/core';
+import { ISentence } from '../../../../models/sentence';
 
 interface IProps {
   sourceWord: string;
-  sentences: { text: string; id: number }[];
+  sentences: ISentence[];
   addSentence: (sentence: string) => void;
   removeSentence: (sentenceId: number) => void;
 }
