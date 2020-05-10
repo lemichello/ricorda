@@ -31,7 +31,7 @@ const EditWordPairSentences: FunctionComponent<IProps> = ({
     <Card className={'new-word-sentences'}>
       <p>
         <span className={'bp3-text-muted'}>Examples of</span>{' '}
-        {sourceWord || 'Foreign word'}
+        {sourceWord.trim() || 'Foreign word'}
       </p>
       {sentences.map(({ id, text }) => (
         <EditWordPairSentence

@@ -10,11 +10,14 @@ import React, {
   useState,
   FunctionComponent,
   ChangeEvent,
+  useCallback,
 } from 'react';
 import ThemeContext from '../../../../contexts/themeContext';
 import { WordsService } from '../../../../../../services/wordsService';
 import { DefaultToaster } from '../../../../models/DefaultToster';
 import { IWordPair } from '../../../../../../models/wordPair';
+import { ISentence } from '../../../../../../models/sentence';
+import EditWordPairSentences from '../../../EditWordPairSentences/EditWordPairSentences';
 
 interface IProps {
   isOpen: boolean;
@@ -30,6 +33,8 @@ const EditWordModal: FunctionComponent<IProps> = ({
   const { theme } = useContext(ThemeContext);
   const [sourceWord, setSourceWord] = useState('');
   const [translation, setTranslation] = useState('');
+  const [sentences, setSentences] = useState([] as ISentence[]);
+  const [sentenceIdCounter, setSentenceIdCounter] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const handleClose: () => void = () => {
@@ -50,10 +55,12 @@ const EditWordModal: FunctionComponent<IProps> = ({
         ...wordPair,
         sourceWord,
         translation,
+        sentences: sentences.map((x) => x.text),
       });
 
       wordPair.sourceWord = sourceWord;
       wordPair.translation = translation;
+      wordPair.sentences = sentences.map((x) => x.text);
 
       DefaultToaster.show({
         message: 'Successfully updated word pair',
@@ -67,12 +74,48 @@ const EditWordModal: FunctionComponent<IProps> = ({
     }
   };
 
-  const initializeFormValues: () => void = () => {
-    if (wordPair) {
-      setSourceWord(wordPair.sourceWord);
-      setTranslation(wordPair.translation);
-    }
+  const isValidFields: () => boolean = () => {
+    return !!sourceWord.trim() && !!translation.trim();
   };
+
+  const initializeFormValues: () => void = () => {
+    if (!wordPair) {
+      return;
+    }
+
+    let currentCounter = sentenceIdCounter;
+
+    setSourceWord(wordPair.sourceWord);
+    setTranslation(wordPair.translation);
+    setSentences(
+      wordPair?.sentences?.map((x) => ({
+        id: currentCounter++,
+        text: x,
+      })) ?? []
+    );
+    setSentenceIdCounter(currentCounter);
+  };
+
+  const addNewSentence: (sentence: string) => void = useCallback(
+    (sentence: string) => {
+      setSentences([
+        ...sentences,
+        {
+          text: sentence,
+          id: sentenceIdCounter,
+        },
+      ]);
+      setSentenceIdCounter(sentenceIdCounter + 1);
+    },
+    [sentenceIdCounter, sentences]
+  );
+
+  const removeSentence: (sentenceId: number) => void = useCallback(
+    (sentenceId: number) => {
+      setSentences(sentences.filter((x) => sentenceId !== x.id));
+    },
+    [sentences]
+  );
 
   return (
     <Dialog
@@ -102,6 +145,12 @@ const EditWordModal: FunctionComponent<IProps> = ({
             }
           />
         </FormGroup>
+        <EditWordPairSentences
+          sourceWord={sourceWord}
+          sentences={sentences}
+          addSentence={addNewSentence}
+          removeSentence={removeSentence}
+        />
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
@@ -117,6 +166,7 @@ const EditWordModal: FunctionComponent<IProps> = ({
             text={'Update'}
             onClick={handleEdit}
             loading={loading}
+            disabled={!isValidFields()}
           />
         </div>
       </div>
