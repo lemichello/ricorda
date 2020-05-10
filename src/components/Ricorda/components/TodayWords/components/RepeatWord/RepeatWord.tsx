@@ -6,16 +6,16 @@ import {
   Icon,
   NavbarDivider,
   Pre,
-  Tooltip,
 } from '@blueprintjs/core';
 import React, { useCallback, useState, FunctionComponent } from 'react';
 import './RepeatWord.css';
 import { IWordPair } from '../../../../../../models/wordPair';
+import WordPairSentences from '../../../WordPairSentences/WordPairSentences';
 
 interface IProps {
   wordPair?: IWordPair;
   loading: boolean;
-  updateWordPair?: (wordPair: IWordPair, chackWordPair: () => void) => void;
+  updateWordPair?: (wordPair: IWordPair, checkWordPair: () => void) => void;
   disabled?: boolean;
 }
 
@@ -34,16 +34,6 @@ const RepeatWord: FunctionComponent<IProps> = ({
       setCheckBtnLoading(true);
       updateWordPair(wordPair, checkWordPair);
     }
-  };
-
-  const getTooltipContent: () => string = () => {
-    if (wordPair?.repetitions === 4) {
-      return wordPair?.translation.length > 13 ? wordPair?.translation : '';
-    }
-
-    return wordPair && wordPair?.sourceWord.length > 13
-      ? wordPair?.sourceWord
-      : '';
   };
 
   const checkWordPair: () => void = useCallback(() => {
@@ -65,26 +55,25 @@ const RepeatWord: FunctionComponent<IProps> = ({
           >
             <div>
               {wordPair?.repetitions === 4 && (
-                <Tooltip content={'Last repetition'} intent={'primary'}>
-                  <Icon icon={'endorsed'} intent={'primary'} iconSize={20} />
-                </Tooltip>
+                <Icon
+                  className={'repeat-word-last-repetition-icon'}
+                  icon={'endorsed'}
+                  intent={'primary'}
+                  iconSize={20}
+                />
               )}
             </div>
-            <Tooltip
-              className={'source-word-tooltip'}
-              content={getTooltipContent()}
-            >
-              <H3 className={'source-word'}>
-                {wordPair?.repetitions === 4
-                  ? wordPair?.translation
-                  : wordPair?.sourceWord}
-              </H3>
-            </Tooltip>
+            <H3 className={'source-word'}>
+              {wordPair?.repetitions === 4
+                ? wordPair?.translation
+                : wordPair?.sourceWord}
+            </H3>
             <div className={'repeat-word-actions-block'}>
               <Button
                 disabled={disabled}
                 minimal={true}
                 icon={'translate'}
+                active={translationOpen}
                 onClick={() => setTranslationOpen(!translationOpen)}
               />
               <NavbarDivider />
@@ -102,11 +91,19 @@ const RepeatWord: FunctionComponent<IProps> = ({
             isOpen={translationOpen}
             className={`translation-collapse-block`}
           >
-            <Pre className={'translation-word'}>
-              {wordPair?.repetitions === 4
-                ? wordPair?.sourceWord
-                : wordPair?.translation}
-            </Pre>
+            <div>
+              <Pre className={'translation-word'}>
+                {wordPair?.repetitions === 4
+                  ? wordPair?.sourceWord
+                  : wordPair?.translation}
+              </Pre>
+              {!!wordPair?.sentences?.length && (
+                <WordPairSentences
+                  sentences={wordPair.sentences}
+                  sourceWord={wordPair.sourceWord}
+                />
+              )}
+            </div>
           </Collapse>
         </div>
       )}

@@ -10,10 +10,11 @@ import { IWordPairExistsRequest } from './types/words/wordPairExistsRequest';
 export class WordsService {
   static async createWordPair(
     sourceWord: string,
-    translation: string
+    translation: string,
+    sentences: string[]
   ): Promise<void> {
     try {
-      await axios.post('/api/words', { sourceWord, translation });
+      await axios.post('/api/words', { sourceWord, translation, sentences });
     } catch (e) {
       return Promise.reject(e);
     }
