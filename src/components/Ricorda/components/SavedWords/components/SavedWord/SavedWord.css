@@ -11,9 +11,11 @@
 
 .saved-word-source-word {
   width: 40%;
-  max-width: 40%;
+  max-width: 30%;
   text-overflow: ellipsis;
   overflow-wrap: break-word;
+  font-size: 16px !important;
+  line-height: 19px !important;
 }
 
 .saved-word-source-word:hover {
@@ -44,6 +46,13 @@
 @media (min-width: 576px) {
   .saved-word-card {
     width: 50vw;
+  }
+
+  .saved-word-source-word {
+    max-width: 40%;
+    width: 40%;
+    font-size: 18px !important;
+    line-height: 21px !important;
   }
 }
 
