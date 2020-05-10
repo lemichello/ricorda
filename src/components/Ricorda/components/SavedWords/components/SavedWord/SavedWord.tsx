@@ -10,6 +10,7 @@ import {
 } from '@blueprintjs/core';
 import './SavedWord.css';
 import { IWordPair } from '../../../../../../models/wordPair';
+import WordPairSentences from '../../../WordPairSentences/WordPairSentences';
 
 interface IProps {
   wordPair?: IWordPair;
@@ -45,6 +46,7 @@ const SavedWord: FunctionComponent<IProps> = ({
           <Button
             minimal={true}
             icon={'translate'}
+            active={translationOpen}
             onClick={() => setTranslationOpen(!translationOpen)}
           />
           <NavbarDivider />
@@ -60,7 +62,15 @@ const SavedWord: FunctionComponent<IProps> = ({
         isOpen={translationOpen}
         className={`translation-collapse-block`}
       >
-        <Pre className={'translation-word'}>{wordPair?.translation}</Pre>
+        <div>
+          <Pre className={'translation-word'}>{wordPair?.translation}</Pre>
+          {!!wordPair?.sentences?.length && (
+            <WordPairSentences
+              sentences={wordPair.sentences}
+              sourceWord={wordPair.sourceWord}
+            />
+          )}
+        </div>
       </Collapse>
     </Card>
   );

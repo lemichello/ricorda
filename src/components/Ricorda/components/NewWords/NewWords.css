@@ -2,11 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 90vw;
+  transition: width 400ms;
 }
 
 .new-words-page-inputs {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .new-words-page-inputs > * {
@@ -17,18 +21,24 @@
   margin-right: 0;
 }
 
-.new-words-page-source-input {
+.new-words-page-input {
   font-size: 16px !important;
   line-height: 19px !important;
   margin-bottom: 0;
+  width: 45%;
+  max-width: 45%;
 }
 
-.new-words-editable-text {
-  max-width: 30vw;
+.new-words-page-input:nth-child(1) > div {
+  float: right;
+}
+
+.new-words-page-sentences {
+  width: 100%;
 }
 
 .new-words-page-add-btn {
-  margin-top: 20px;
+  margin-left: auto;
   border-radius: 15px;
   text-transform: uppercase;
   height: 30px;
@@ -36,16 +46,97 @@
   max-width: 25vw;
 }
 
-@media (min-width: 576px) {
-  .new-words-page-source-input {
+.new-words-page-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.new-words-page-actions-others {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+@media (min-width: 350px) {
+  .new-words-page-input {
+    font-size: 18px !important;
+    line-height: 21px !important;
+  }
+}
+
+@media (min-width: 400px) {
+  .new-words-page-input {
+    font-size: 20px !important;
+    line-height: 23px !important;
+  }
+}
+
+@media (min-width: 450px) {
+  .new-words-page-input {
     font-size: 22px !important;
     line-height: 25px !important;
   }
 }
 
+@media (min-width: 576px) {
+  .new-words-page-card {
+    width: 70vw;
+  }
+
+  .new-words-page-card.detailed {
+    width: 85vw;
+  }
+
+  .new-words-page-input {
+    font-size: 22px !important;
+    line-height: 25px !important;
+  }
+}
+
+@media (min-width: 650px) {
+  .new-words-page-card {
+    width: 60vw;
+  }
+
+  .new-words-page-card.detailed {
+    width: 75vw;
+  }
+}
+
+@media (min-width: 650px) {
+  .new-words-page-card {
+    width: 50vw;
+  }
+
+  .new-words-page-card.detailed {
+    width: 65vw;
+  }
+}
+
 @media (min-width: 1200px) {
-  .new-words-page-source-input {
+  .new-words-page-card {
+    width: 40vw;
+  }
+
+  .new-words-page-card.detailed {
+    width: 55vw;
+  }
+
+  .new-words-page-input {
     font-size: 28px !important;
     line-height: 32px !important;
+  }
+}
+
+@media (min-width: 1450px) {
+  .new-words-page-card {
+    width: 35vw;
+  }
+
+  .new-words-page-card.detailed {
+    width: 55vw;
   }
 }

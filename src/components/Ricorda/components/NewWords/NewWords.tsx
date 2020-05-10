@@ -3,6 +3,7 @@ import React, {
   useState,
   FunctionComponent,
   KeyboardEvent,
+  useCallback,
 } from 'react';
 import {
   Alert,
@@ -12,6 +13,8 @@ import {
   H3,
   H5,
   Icon,
+  NavbarDivider,
+  Collapse,
 } from '@blueprintjs/core';
 import '../../Ricorda.css';
 import './NewWords.css';
@@ -23,6 +26,8 @@ import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
 import UserContext from '../../contexts/userContext';
+import EditWordPairSentences from '../EditWordPairSentences/EditWordPairSentences';
+import { ISentence } from '../../../../models/sentence';
 
 interface IProps {
   history: History;
@@ -32,8 +37,12 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(UserContext);
 
+  const [isSentencesOpen, setSentencesOpen] = useState(false);
+
   const [sourceWord, setSourceWord] = useState('');
   const [translation, setTranslation] = useState('');
+  const [sentences, setSentences] = useState([] as ISentence[]);
+  const [sentenceIdCounter, setSentenceIdCounter] = useState(1);
   const [loading, setLoading] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
 
@@ -74,7 +83,11 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
   const createWordsPair: () => void = async () => {
     try {
       setLoading(true);
-      await WordsService.createWordPair(sourceWord, translation);
+      await WordsService.createWordPair(
+        sourceWord,
+        translation,
+        sentences.map((x) => x.text)
+      );
     } catch (e) {
       return;
     } finally {
@@ -89,42 +102,93 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
 
     setSourceWord('');
     setTranslation('');
+    setSentences([]);
   };
 
+  const addNewSentence: (sentence: string) => void = useCallback(
+    (sentence: string) => {
+      setSentences([
+        ...sentences,
+        {
+          text: sentence,
+          id: sentenceIdCounter,
+        },
+      ]);
+      setSentenceIdCounter(sentenceIdCounter + 1);
+    },
+    [sentenceIdCounter, sentences]
+  );
+
+  const removeSentence: (sentenceId: number) => void = useCallback(
+    (sentenceId: number) => {
+      setSentences(sentences.filter((x) => sentenceId !== x.id));
+    },
+    [sentences]
+  );
   return (
     <div className={'page-root'}>
       <div className={'page-content'} onKeyDown={keyDown}>
         <H3>New Word Pair</H3>
         <Fade top timeout={500} distance={'100px'}>
-          <Card className={'new-words-page-card'} elevation={2}>
+          <Card
+            className={`new-words-page-card ${
+              isSentencesOpen ? 'detailed' : ''
+            }`}
+            elevation={2}
+          >
             <div className={'new-words-page-inputs'}>
-              <H5 className={'new-words-page-source-input'}>
+              <H5 className={'new-words-page-input'}>
                 <EditableText
                   className={'new-words-editable-text'}
                   placeholder={'Foreign word...'}
                   value={sourceWord}
+                  maxLength={80}
                   onChange={(event) => setSourceWord(event)}
                 />
               </H5>
-              <Icon icon={'chevron-right'} iconSize={Icon.SIZE_LARGE} />
-              <H5 className={'new-words-page-source-input'}>
+              <Icon icon={'chevron-right'} iconSize={23} />
+              <H5 className={'new-words-page-input'}>
                 <EditableText
                   className={'new-words-editable-text'}
                   placeholder={'Translation...'}
                   value={translation}
+                  maxLength={80}
                   onChange={(event) => setTranslation(event)}
                 />
               </H5>
             </div>
-            <Button
-              icon={'add'}
-              type={'submit'}
-              className={'new-words-page-add-btn'}
-              loading={loading}
-              intent={'success'}
-              disabled={!isValidWordPair()}
-              onClick={handleAddButtonClick}
-            />
+            <Collapse
+              isOpen={isSentencesOpen}
+              className={'new-words-page-sentences'}
+              transitionDuration={450}
+            >
+              <EditWordPairSentences
+                sourceWord={sourceWord}
+                sentences={sentences}
+                addSentence={addNewSentence}
+                removeSentence={removeSentence}
+              />
+            </Collapse>
+            <div className={'new-words-page-actions'}>
+              <Button
+                icon={'add'}
+                type={'submit'}
+                className={'new-words-page-add-btn'}
+                loading={loading}
+                intent={'success'}
+                disabled={!isValidWordPair()}
+                onClick={handleAddButtonClick}
+              />
+              <div className={'new-words-page-actions-others'}>
+                <NavbarDivider />
+                <Button
+                  minimal
+                  icon={'citation'}
+                  active={isSentencesOpen}
+                  onClick={() => setSentencesOpen(!isSentencesOpen)}
+                />
+              </div>
+            </div>
           </Card>
         </Fade>
       </div>
