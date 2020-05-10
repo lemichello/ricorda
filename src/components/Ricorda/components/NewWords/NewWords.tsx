@@ -26,7 +26,7 @@ import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
 import UserContext from '../../contexts/userContext';
-import NewWordSentences from './components/NewWordSentences/NewWordSentences';
+import EditWordPairSentences from '../EditWordPairSentences/EditWordPairSentences';
 import { ISentence } from '../../../../models/sentence';
 
 interface IProps {
@@ -162,7 +162,7 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
               className={'new-words-page-sentences'}
               transitionDuration={450}
             >
-              <NewWordSentences
+              <EditWordPairSentences
                 sourceWord={sourceWord}
                 sentences={sentences}
                 addSentence={addNewSentence}

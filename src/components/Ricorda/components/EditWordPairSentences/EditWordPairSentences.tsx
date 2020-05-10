@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, ChangeEvent } from 'react';
-import NewWordSentence from './components/NewWordSentence/NewWordSentence';
-import './NewWordSentences.css';
+import EditWordPairSentence from './components/EditWordSentence/EditWordPairSentence';
+import './EditWordPairSentences.css';
 import { Card, ControlGroup, Button, TextArea } from '@blueprintjs/core';
 
 interface IProps {
@@ -10,7 +10,7 @@ interface IProps {
   removeSentence: (sentenceId: number) => void;
 }
 
-const NewWordSentences: FunctionComponent<IProps> = ({
+const EditWordPairSentences: FunctionComponent<IProps> = ({
   sourceWord,
   sentences,
   addSentence,
@@ -34,7 +34,7 @@ const NewWordSentences: FunctionComponent<IProps> = ({
         {sourceWord || 'Foreign word'}
       </p>
       {sentences.map(({ id, text }) => (
-        <NewWordSentence
+        <EditWordPairSentence
           key={id}
           sentence={text}
           sentenceId={id}
@@ -62,4 +62,4 @@ const NewWordSentences: FunctionComponent<IProps> = ({
   );
 };
 
-export default NewWordSentences;
+export default EditWordPairSentences;

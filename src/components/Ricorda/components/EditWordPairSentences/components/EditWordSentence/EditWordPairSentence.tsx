@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Icon, Button } from '@blueprintjs/core';
-import './NewWordSentence.css';
+import './EditWordPairSentence.css';
 
 interface IProps {
   sentence: string;
@@ -8,7 +8,7 @@ interface IProps {
   removeSentence: (sentenceId: number) => void;
 }
 
-const NewWordSentence: FunctionComponent<IProps> = ({
+const EditWordPairSentence: FunctionComponent<IProps> = ({
   sentence,
   sentenceId,
   removeSentence,
@@ -33,4 +33,4 @@ const NewWordSentence: FunctionComponent<IProps> = ({
   );
 };
 
-export default NewWordSentence;
+export default EditWordPairSentence;
