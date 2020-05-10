@@ -73,6 +73,7 @@ const RepeatWord: FunctionComponent<IProps> = ({
                 disabled={disabled}
                 minimal={true}
                 icon={'translate'}
+                active={translationOpen}
                 onClick={() => setTranslationOpen(!translationOpen)}
               />
               <NavbarDivider />

@@ -46,6 +46,7 @@ const SavedWord: FunctionComponent<IProps> = ({
           <Button
             minimal={true}
             icon={'translate'}
+            active={translationOpen}
             onClick={() => setTranslationOpen(!translationOpen)}
           />
           <NavbarDivider />
