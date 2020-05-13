@@ -1,5 +1,5 @@
 import React, { Context, Dispatch } from 'react';
-import { IAccountSettingsState } from './models/accountSettingsState';
+import { IAccountSettingsState } from './states/accountSettingsState';
 
 interface IContextFields {
   accountSettings: IAccountSettingsState;

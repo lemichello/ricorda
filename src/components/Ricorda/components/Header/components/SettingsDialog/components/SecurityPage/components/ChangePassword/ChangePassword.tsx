@@ -14,7 +14,7 @@ import {
 } from '@blueprintjs/core';
 import './ChangePassword.css';
 import { AccountService } from '../../../../../../../../../../services/accountService';
-import { DefaultToaster } from '../../../../../../../../models/DefaultToster';
+import { DefaultToaster } from '../../../../../../../../../../helpers/DefaultToaster';
 import { useMediaQuery } from 'react-responsive';
 import AccountSettingsContext from '../../../../../../../../contexts/accountSettingsContext';
 import { useHistory } from 'react-router-dom';

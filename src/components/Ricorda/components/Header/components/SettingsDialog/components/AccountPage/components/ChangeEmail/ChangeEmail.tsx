@@ -14,7 +14,7 @@ import {
 } from '@blueprintjs/core';
 import './ChangeEmail.css';
 import { AccountService } from '../../../../../../../../../../services/accountService';
-import { DefaultToaster } from '../../../../../../../../models/DefaultToster';
+import { DefaultToaster } from '../../../../../../../../../../helpers/DefaultToaster';
 import { useMediaQuery } from 'react-responsive';
 import UserContext from '../../../../../../../../contexts/userContext';
 import AccountSettingsContext from '../../../../../../../../contexts/accountSettingsContext';

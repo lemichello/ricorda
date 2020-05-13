@@ -7,7 +7,7 @@ import React, {
   ChangeEvent,
 } from 'react';
 import { AuthService } from '../../../../services/authService';
-import { DefaultToaster } from '../../models/DefaultToster';
+import { DefaultToaster } from '../../../../helpers/DefaultToaster';
 import { History } from 'history';
 import { Link, Switch, Route, useRouteMatch } from 'react-router-dom';
 import './SignUp.css';

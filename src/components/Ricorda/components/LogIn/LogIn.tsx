@@ -12,7 +12,7 @@ import { AuthService } from '../../../../services/authService';
 import '../../Ricorda.css';
 import './LogIn.css';
 import { Link } from 'react-router-dom';
-import { DefaultToaster } from '../../models/DefaultToster';
+import { DefaultToaster } from '../../../../helpers/DefaultToaster';
 import { History, Location } from 'history';
 import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
 import config from '../../../../config';

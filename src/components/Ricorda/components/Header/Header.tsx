@@ -35,7 +35,7 @@ import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
 import { ThemeService } from '../../../../services/themeService';
 import AccountSettingsContext from '../../contexts/accountSettingsContext';
-import { IAccountSettingsState } from '../../contexts/models/accountSettingsState';
+import { IAccountSettingsState } from '../../contexts/states/accountSettingsState';
 
 const SettingsDialog = lazy(() =>
   import('./components/SettingsDialog/SettingsDialog')

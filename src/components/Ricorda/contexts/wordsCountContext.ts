@@ -1,5 +1,5 @@
 import React, { Context, Dispatch } from 'react';
-import { IWordsCountState } from './models/wordsCountState';
+import { IWordsCountState } from './states/wordsCountState';
 
 interface IContextFields {
   wordsCount: IWordsCountState;

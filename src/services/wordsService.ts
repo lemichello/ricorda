@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IWordPair } from '../models/wordPair';
+import { IWordPair } from '../apiModels/wordPair';
 import { IWordsResponse } from './types/words/wordsResponse';
 import { ISavedWordsRequest } from './types/words/savedWordsRequest';
 import { ISavedWordsResponse } from './types/words/savedWordsResponse';

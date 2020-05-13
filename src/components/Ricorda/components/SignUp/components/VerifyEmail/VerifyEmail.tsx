@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { NonIdealState, Button } from '@blueprintjs/core';
 import { Location } from 'history';
 import { AuthService } from '../../../../../../services/authService';
-import { DefaultToaster } from '../../../../models/DefaultToster';
+import { DefaultToaster } from '../../../../../../helpers/DefaultToaster';
 import './VerifyEmail.css';
 
 interface IProps {

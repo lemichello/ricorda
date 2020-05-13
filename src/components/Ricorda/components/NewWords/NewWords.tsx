@@ -19,7 +19,7 @@ import {
 import '../../Ricorda.css';
 import './NewWords.css';
 import { WordsService } from '../../../../services/wordsService';
-import { DefaultToaster } from '../../models/DefaultToster';
+import { DefaultToaster } from '../../../../helpers/DefaultToaster';
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
@@ -27,7 +27,7 @@ import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
 import UserContext from '../../contexts/userContext';
 import EditWordPairSentences from '../EditWordPairSentences/EditWordPairSentences';
-import { ISentence } from '../../../../models/sentence';
+import { ISentence } from '../../../../apiModels/sentence';
 
 interface IProps {
   history: History;
