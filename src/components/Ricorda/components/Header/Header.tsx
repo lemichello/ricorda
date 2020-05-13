@@ -34,6 +34,8 @@ import TabletMenu from './components/TabletMenu/TabletMenu';
 import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
 import { ThemeService } from '../../../../services/themeService';
+import AccountSettingsContext from '../../contexts/accountSettingsContext';
+import { IAccountSettingsState } from '../../contexts/states/accountSettingsState';
 
 const SettingsDialog = lazy(() =>
   import('./components/SettingsDialog/SettingsDialog')
@@ -51,7 +53,9 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
   const isDesktop: boolean = useMediaQuery({ query: '(min-width: 992px)' });
   const isMobile: boolean = !isTablet;
   const [isAlertOpen, setAlertOpen] = useState(false);
-  const [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [accountSettings, setAccountSettings] = useState<IAccountSettingsState>(
+    { isDialogOpen: false }
+  );
   const [settingsDialogRendered, setSettingsDialogRendered] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -80,15 +84,11 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
     }
   }, [darkModeBtnText, theme]);
 
-  const closeSettingsModal: () => void = useCallback(() => {
-    setSettingsDialogOpen(false);
-  }, []);
-
   const openSettingsModal: () => void = () => {
     if (!settingsDialogRendered) {
       setSettingsDialogRendered(true);
     }
-    setSettingsDialogOpen(true);
+    setAccountSettings({ isDialogOpen: true });
   };
 
   const handleAlertConfirm: () => void = () => {
@@ -218,14 +218,13 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
       >
         <p>Are you sure you want to sign out?</p>
       </Alert>
-      <Suspense fallback={<Spinner className={'spinner'} />}>
-        {settingsDialogRendered && (
-          <SettingsDialog
-            isOpen={isSettingsDialogOpen}
-            closeModal={closeSettingsModal}
-          />
-        )}
-      </Suspense>
+      <AccountSettingsContext.Provider
+        value={{ accountSettings, setAccountSettings }}
+      >
+        <Suspense fallback={<Spinner className={'spinner'} />}>
+          {settingsDialogRendered && <SettingsDialog />}
+        </Suspense>
+      </AccountSettingsContext.Provider>
       <MobileMenu
         isVisible={isMenuOpen}
         setMenuVisibility={toggleMobileMenuVisibility}

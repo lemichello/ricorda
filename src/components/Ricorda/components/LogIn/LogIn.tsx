@@ -12,7 +12,7 @@ import { AuthService } from '../../../../services/authService';
 import '../../Ricorda.css';
 import './LogIn.css';
 import { Link } from 'react-router-dom';
-import { DefaultToaster } from '../../models/DefaultToster';
+import { DefaultToaster } from '../../../../helpers/DefaultToaster';
 import { History, Location } from 'history';
 import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
 import config from '../../../../config';
@@ -39,6 +39,21 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
     // Preventing user of entering this page.
     if (userToken) {
       history.push('/');
+    }
+
+    /**
+     * Backend server redirects to this link with query parameter
+     * after successful email verification.
+     */
+    const params: URLSearchParams = new URLSearchParams(location.search);
+    const verified: string | null = params.get('verified');
+
+    if (verified !== null && verified === 'true') {
+      DefaultToaster.show({
+        message: 'Successfully verified email address.',
+        icon: 'tick',
+        intent: 'success',
+      });
     }
 
     // eslint-disable-next-line
@@ -122,6 +137,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
             logInWithGoogle(response as GoogleLoginResponse);
           }}
           onFailure={() => {}}
+          onAutoLoadFinished={() => {}}
         />
         <div className={'log-in-page-text-divider'}>
           <span className={'page-divider'} />

@@ -7,7 +7,7 @@ import './App.css';
 import config from '../config';
 import { AuthService } from '../services/authService';
 import { Spinner } from '@blueprintjs/core';
-import { IUser } from '../models/user';
+import { IUser } from '../apiModels/user';
 
 import { IRefreshTokenResponse } from '../services/types/auth/refreshToken/refreshTokenResponse';
 import UserContext from './Ricorda/contexts/userContext';

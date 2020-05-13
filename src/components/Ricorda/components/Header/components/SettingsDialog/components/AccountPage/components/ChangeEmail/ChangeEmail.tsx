@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, ChangeEvent } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  ChangeEvent,
+  useContext,
+} from 'react';
 import {
   Icon,
   H4,
@@ -9,16 +14,23 @@ import {
 } from '@blueprintjs/core';
 import './ChangeEmail.css';
 import { AccountService } from '../../../../../../../../../../services/accountService';
-import { DefaultToaster } from '../../../../../../../../models/DefaultToster';
+import { DefaultToaster } from '../../../../../../../../../../helpers/DefaultToaster';
 import { useMediaQuery } from 'react-responsive';
+import UserContext from '../../../../../../../../contexts/userContext';
+import AccountSettingsContext from '../../../../../../../../contexts/accountSettingsContext';
+import { useHistory } from 'react-router-dom';
 
 const ChangeEmail: FunctionComponent = () => {
+  const { setUser } = useContext(UserContext);
+  const { setAccountSettings } = useContext(AccountSettingsContext);
+
   const [newEmail, setNewEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const emailRegex: RegExp = RegExp(
     /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
   );
   const isMobile: boolean = useMediaQuery({ query: '(max-width: 576px)' });
+  const history = useHistory();
 
   const isValidEmail: () => boolean = () => {
     return emailRegex.test(newEmail);
@@ -42,6 +54,11 @@ const ChangeEmail: FunctionComponent = () => {
       icon: 'tick',
       intent: 'success',
     });
+
+    setUser({ token: null });
+    setAccountSettings({ isDialogOpen: false });
+
+    history.push('/signup/verify');
   };
 
   return (

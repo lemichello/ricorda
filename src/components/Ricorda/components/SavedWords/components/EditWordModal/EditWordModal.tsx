@@ -14,9 +14,9 @@ import React, {
 } from 'react';
 import ThemeContext from '../../../../contexts/themeContext';
 import { WordsService } from '../../../../../../services/wordsService';
-import { DefaultToaster } from '../../../../models/DefaultToster';
-import { IWordPair } from '../../../../../../models/wordPair';
-import { ISentence } from '../../../../../../models/sentence';
+import { DefaultToaster } from '../../../../../../helpers/DefaultToaster';
+import { IWordPair } from '../../../../../../apiModels/wordPair';
+import { ISentence } from '../../../../../../apiModels/sentence';
 import EditWordPairSentences from '../../../EditWordPairSentences/EditWordPairSentences';
 
 interface IProps {

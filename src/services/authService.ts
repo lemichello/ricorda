@@ -73,4 +73,12 @@ export class AuthService {
 
     return resp.data;
   }
+
+  static async resendVerificationEmail(email: string): Promise<void> {
+    try {
+      await axios.post('/auth/resend-email-verification', { email });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
 }

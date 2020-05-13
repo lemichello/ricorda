@@ -22,7 +22,7 @@ const TabletMenu: FunctionComponent = () => {
                 className={wordsCount.loading ? 'bp3-skeleton' : ''}
                 intent={'success'}
               >
-                {wordsCount.count && wordsCount.count}
+                {wordsCount.count}
               </Tag>
             )
           }

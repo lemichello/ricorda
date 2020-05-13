@@ -1,5 +1,5 @@
 import React, { Context, Dispatch } from 'react';
-import { IThemeState } from './models/themeState';
+import { IThemeState } from './states/themeState';
 
 interface IContextFields {
   theme: IThemeState;

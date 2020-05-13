@@ -7,6 +7,7 @@ import './SettingsDialog.css';
 import { useMediaQuery } from 'react-responsive';
 import SecurityPage from './components/SecurityPage/SecurityPage';
 import AccountPage from './components/AccountPage/AccountPage';
+import AccountSettingsContext from '../../../../contexts/accountSettingsContext';
 
 type State = {
   securityPageActive: boolean;
@@ -16,11 +17,6 @@ type State = {
 type Action =
   | { type: 'SELECT_SECURITY_PAGE' }
   | { type: 'SELECT_ACCOUNT_PAGE' };
-
-interface IProps {
-  isOpen: boolean;
-  closeModal: () => void;
-}
 
 const initialState: State = {
   securityPageActive: false,
@@ -46,8 +42,11 @@ function activePageReducer(state: State, action: Action): State {
   return newState;
 }
 
-const SettingsDialog: FunctionComponent<IProps> = ({ isOpen, closeModal }) => {
+const SettingsDialog: FunctionComponent = () => {
   const { theme } = useContext(ThemeContext);
+  const { accountSettings, setAccountSettings } = useContext(
+    AccountSettingsContext
+  );
   const [{ securityPageActive, accountPageActive }, dispatch] = useReducer(
     activePageReducer,
     initialState
@@ -58,8 +57,8 @@ const SettingsDialog: FunctionComponent<IProps> = ({ isOpen, closeModal }) => {
     <Dialog
       icon={'cog'}
       title={'Account settings'}
-      isOpen={isOpen}
-      onClose={closeModal}
+      isOpen={accountSettings.isDialogOpen}
+      onClose={() => setAccountSettings({ isDialogOpen: false })}
       className={`${theme.isDarkTheme ? 'bp3-dark' : ''} settings-dialog`}
     >
       <div className={'settings-dialog-content'}>
