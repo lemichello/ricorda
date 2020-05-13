@@ -9,8 +9,9 @@ import React, {
 import { AuthService } from '../../../../services/authService';
 import { DefaultToaster } from '../../models/DefaultToster';
 import { History } from 'history';
-import { Link } from 'react-router-dom';
+import { Link, Switch, Route, useRouteMatch } from 'react-router-dom';
 import './SignUp.css';
+import VerifyEmail from './components/VerifyEmail/VerifyEmail';
 
 interface IProps {
   history: History;
@@ -18,6 +19,8 @@ interface IProps {
 }
 
 const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
+  const { path } = useRouteMatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -61,62 +64,67 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
       icon: 'tick',
     });
 
-    history.push('/login');
+    history.push('/signup/verify');
   };
 
   return (
     <div className={'page-root'}>
       <div className={'page-content'} onKeyDown={keyDown}>
-        <h5 className={'bp3-heading'}>Sign up with your email address</h5>
-        <span className={'page-divider'} />
-        <InputGroup
-          className={'page-input'}
-          large
-          fill
-          type={'email'}
-          placeholder={'Email address'}
-          value={email}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setEmail(event.target.value)
-          }
-        />
-        <InputGroup
-          className={'page-input'}
-          name={'password'}
-          large
-          fill
-          placeholder={'Password'}
-          type={'password'}
-          value={password}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setPassword(event.target.value)
-          }
-        />
-        <InputGroup
-          className={'page-input'}
-          name={'password-confirm'}
-          large
-          fill
-          placeholder={'Confirm password'}
-          type={'password'}
-          value={passwordConfirm}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setPasswordConfirm(event.target.value)
-          }
-        />
-        <Button
-          className={'page-btn login-page-sign-up-btn bp3-heading'}
-          text={'Sign Up'}
-          intent={'success'}
-          onClick={signUp}
-          loading={loading}
-          disabled={!isValidCredentials()}
-        />
-        <span className={'page-divider'} />
+        <Switch>
+          <Route path={`${path}/verify`} component={VerifyEmail} />
+          <Route exact path={path}>
+            <h5 className={'bp3-heading'}>Sign up with your email address</h5>
+            <span className={'page-divider'} />
+            <InputGroup
+              className={'page-input'}
+              large
+              fill
+              type={'email'}
+              placeholder={'Email address'}
+              value={email}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setEmail(event.target.value)
+              }
+            />
+            <InputGroup
+              className={'page-input'}
+              name={'password'}
+              large
+              fill
+              placeholder={'Password'}
+              type={'password'}
+              value={password}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setPassword(event.target.value)
+              }
+            />
+            <InputGroup
+              className={'page-input'}
+              name={'password-confirm'}
+              large
+              fill
+              placeholder={'Confirm password'}
+              type={'password'}
+              value={passwordConfirm}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setPasswordConfirm(event.target.value)
+              }
+            />
+            <Button
+              className={'page-btn login-page-sign-up-btn bp3-heading'}
+              text={'Sign Up'}
+              intent={'success'}
+              onClick={signUp}
+              loading={loading}
+              disabled={!isValidCredentials()}
+            />
+            <span className={'page-divider'} />
 
-        <p className={'sign-up-page-have-account-text'}>
-          Already have an account? <Link to={'/login'}>Log in</Link>
-        </p>
+            <p className={'sign-up-page-have-account-text'}>
+              Already have an account? <Link to={'/login'}>Log in</Link>
+            </p>
+          </Route>
+        </Switch>
       </div>
     </div>
   );

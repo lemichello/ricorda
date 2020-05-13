@@ -53,12 +53,18 @@ export const Ricorda: FunctionComponent = () => {
               intent: 'danger',
             });
 
-            return Promise.reject('session exprired');
+            return Promise.reject('session expired');
           }
         });
 
     createAuthRefreshInterceptor(axios, refreshAuthLogic);
   }, [setUser]);
+
+  useEffect(() => {
+    if (!user.token) {
+      setWordsCount({ count: null, loading: false });
+    }
+  }, [user.token]);
 
   let logout: () => void = useCallback(async () => {
     setLoading(true);
@@ -66,7 +72,6 @@ export const Ricorda: FunctionComponent = () => {
 
     setLoading(false);
     setUser({ token: null });
-    setWordsCount({ count: null, loading: false });
 
     history.push('/login');
   }, [setUser]);
@@ -77,9 +82,15 @@ export const Ricorda: FunctionComponent = () => {
         return resp;
       },
       async (error) => {
-        if (error === 'session exprired') {
+        if (error === 'session expired') {
           logout();
           return Promise.reject();
+        }
+
+        if (error.response.status === 403) {
+          history.push(`/signup/verify/?email=${error.response.data.email}`);
+
+          return Promise.reject(error.response);
         }
 
         if (error.response) {
@@ -136,7 +147,6 @@ export const Ricorda: FunctionComponent = () => {
             render={(props) => <LogIn {...props} userToken={user.token} />}
           />
           <Route
-            exact
             path={'/signup'}
             render={(props) => <SignUp {...props} userToken={user.token} />}
           />
