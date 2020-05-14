@@ -34,7 +34,11 @@ const WordPairSentences: FunctionComponent<IProps> = ({
       <Collapse isOpen={isSentencesOpen}>
         <div className={'word-pair-sentences'}>
           {sentences.map((sentence, i) => (
-            <WordPairSentence sentence={sentence} key={i} />
+            <WordPairSentence
+              sentence={sentence}
+              sourceWord={sourceWord}
+              key={i}
+            />
           ))}
         </div>
       </Collapse>
