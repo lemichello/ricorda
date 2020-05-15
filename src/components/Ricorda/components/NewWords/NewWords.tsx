@@ -28,6 +28,7 @@ import { History } from 'history';
 import UserContext from '../../contexts/userContext';
 import EditWordPairSentences from '../EditWordPairSentences/EditWordPairSentences';
 import { ISentence } from '../../../../apiModels/sentence';
+import RepeatSettings from './components/RepeatSettings/RepeatSettings';
 
 interface IProps {
   history: History;
@@ -38,16 +39,25 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
   const { user } = useContext(UserContext);
 
   const [isSentencesOpen, setSentencesOpen] = useState(false);
+  const [isSettingsOpen, setSettingsOpen] = useState(false);
+
+  const [sentences, setSentences] = useState([] as ISentence[]);
+  const [maxRepetitions, setMaxRepetitions] = useState(5);
+  const [repetitionInterval, setRepetitionInterval] = useState(24);
 
   const [sourceWord, setSourceWord] = useState('');
   const [translation, setTranslation] = useState('');
-  const [sentences, setSentences] = useState([] as ISentence[]);
   const [sentenceIdCounter, setSentenceIdCounter] = useState(1);
   const [loading, setLoading] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
 
   const isValidWordPair: () => boolean = () => {
-    return sourceWord.trim() !== '' && translation.trim() !== '';
+    return (
+      sourceWord.trim() !== '' &&
+      translation.trim() !== '' &&
+      maxRepetitions > 0 &&
+      repetitionInterval > 0
+    );
   };
 
   const keyDown: (event: KeyboardEvent) => void = (event: KeyboardEvent) => {
@@ -86,7 +96,9 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
       await WordsService.createWordPair(
         sourceWord,
         translation,
-        sentences.map((x) => x.text)
+        sentences.map((x) => x.text),
+        Math.floor(maxRepetitions),
+        Math.floor(repetitionInterval)
       );
     } catch (e) {
       return;
@@ -103,6 +115,8 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
     setSourceWord('');
     setTranslation('');
     setSentences([]);
+    setMaxRepetitions(5);
+    setRepetitionInterval(24);
   };
 
   const addNewSentence: (sentence: string) => void = useCallback(
@@ -159,7 +173,7 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
             </div>
             <Collapse
               isOpen={isSentencesOpen}
-              className={'new-words-page-sentences'}
+              className={'new-words-page-collapse'}
               transitionDuration={450}
             >
               <EditWordPairSentences
@@ -167,6 +181,17 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
                 sentences={sentences}
                 addSentence={addNewSentence}
                 removeSentence={removeSentence}
+              />
+            </Collapse>
+            <Collapse
+              isOpen={isSettingsOpen}
+              className={'new-words-page-collapse'}
+            >
+              <RepeatSettings
+                maxRepetitions={maxRepetitions}
+                repetitionInterval={repetitionInterval}
+                setMaxRepetitions={setMaxRepetitions}
+                setRepetitionInterval={setRepetitionInterval}
               />
             </Collapse>
             <div className={'new-words-page-actions'}>
@@ -186,6 +211,12 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
                   icon={'citation'}
                   active={isSentencesOpen}
                   onClick={() => setSentencesOpen(!isSentencesOpen)}
+                />
+                <Button
+                  minimal
+                  icon={'cog'}
+                  active={isSettingsOpen}
+                  onClick={() => setSettingsOpen(!isSettingsOpen)}
                 />
               </div>
             </div>
