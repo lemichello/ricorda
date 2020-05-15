@@ -33,7 +33,7 @@
   float: right;
 }
 
-.new-words-page-sentences {
+.new-words-page-collapse {
   width: 100%;
 }
 
@@ -58,6 +58,10 @@
   display: flex;
   align-items: center;
   margin-left: auto;
+}
+
+.new-words-page-actions-others > .bp3-button:nth-child(2) {
+  margin-right: 7px;
 }
 
 @media (min-width: 350px) {
