@@ -110,13 +110,35 @@
   }
 }
 
-@media (min-width: 650px) {
+@media (min-width: 750px) {
   .new-words-page-card {
     width: 50vw;
   }
 
   .new-words-page-card.detailed {
     width: 65vw;
+  }
+}
+
+@media (min-width: 850px) {
+  .new-words-page-input {
+    font-size: 24px !important;
+    line-height: 28px !important;
+  }
+}
+
+@media (min-width: 1000px) {
+  .new-words-page-card {
+    width: 45vw;
+  }
+
+  .new-words-page-card.detailed {
+    width: 60vw;
+  }
+
+  .new-words-page-input {
+    font-size: 26px !important;
+    line-height: 30px !important;
   }
 }
 
