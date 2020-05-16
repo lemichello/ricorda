@@ -1,24 +1,16 @@
-import React, {
-  FunctionComponent,
-  useState,
-  ChangeEvent,
-  useContext,
-} from 'react';
-import {
-  Icon,
-  H4,
-  MenuDivider,
-  FormGroup,
-  InputGroup,
-  Button,
-} from '@blueprintjs/core';
-import './ChangeEmail.css';
+/** @jsx jsx */
+
+import { FunctionComponent, useState, ChangeEvent, useContext } from 'react';
+import { FormGroup, InputGroup, Button } from '@blueprintjs/core';
 import { AccountService } from '../../../../../../../../../../services/accountService';
 import { DefaultToaster } from '../../../../../../../../../../helpers/DefaultToaster';
 import { useMediaQuery } from 'react-responsive';
 import UserContext from '../../../../../../../../contexts/userContext';
 import AccountSettingsContext from '../../../../../../../../contexts/accountSettingsContext';
 import { useHistory } from 'react-router-dom';
+import { jsx, css } from '@emotion/core';
+import { History } from 'history';
+import SectionHeader from '../../../SectionHeader/SectionHeader';
 
 const ChangeEmail: FunctionComponent = () => {
   const { setUser } = useContext(UserContext);
@@ -30,7 +22,7 @@ const ChangeEmail: FunctionComponent = () => {
     /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
   );
   const isMobile: boolean = useMediaQuery({ query: '(max-width: 576px)' });
-  const history = useHistory();
+  const history: History = useHistory();
 
   const isValidEmail: () => boolean = () => {
     return emailRegex.test(newEmail);
@@ -63,20 +55,18 @@ const ChangeEmail: FunctionComponent = () => {
 
   return (
     <div>
-      <div className={'section-header'}>
-        <Icon icon={'envelope'} />
-        <H4 className={'section-header-text'}>Change email</H4>
-      </div>
-      <MenuDivider className={'section-divider'} />
+      <SectionHeader text={'Change email'} icon={'envelope'} />
       <FormGroup label={'New email'}>
         <InputGroup
-          className={'section-page-input'}
           value={newEmail}
           small={isMobile}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setNewEmail(e.target.value)
           }
           type={'email'}
+          css={css`
+            width: 230px;
+          `}
         />
       </FormGroup>
       <Button

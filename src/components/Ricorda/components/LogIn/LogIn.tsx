@@ -260,15 +260,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
         </div>
         <span css={dividerStyles} />
         <h5 className={'bp3-heading'}>Don't have an account?</h5>
-        <Link
-          to={'/signup'}
-          css={css`
-            text-decoration: none !important;
-            color: inherit !important;
-            width: 100%;
-            white-space: nowrap;
-          `}
-        >
+        <Link to={'/signup'} className={'navigation-link'}>
           <Button
             className={'bp3-heading'}
             outlined

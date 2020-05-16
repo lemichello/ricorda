@@ -24,6 +24,7 @@ import { IWordsCountState } from './contexts/states/wordsCountState';
 import { Spinner } from '@blueprintjs/core';
 import { IRefreshTokenResponse } from '../../services/types/auth/refreshToken/refreshTokenResponse';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import { Global, css } from '@emotion/core';
 
 export const Ricorda: FunctionComponent = () => {
   const { user, setUser } = useContext(UserContext);
@@ -134,10 +135,26 @@ export const Ricorda: FunctionComponent = () => {
 
   return (
     <WordsCountContext.Provider value={{ wordsCount, setWordsCount }}>
+      <Global
+        styles={css`
+          .navigation-link {
+            text-decoration: none !important;
+            color: inherit !important;
+            width: 100%;
+            white-space: nowrap;
+          }
+
+          .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+          }
+        `}
+      />
       <Router history={history}>
-        {loading && <Spinner className={'spinner'} />}
+        {loading && <Spinner className={'loading-spinner'} />}
         <div>
-          <Header history={history} logout={logout} />
+          <Header logout={logout} />
           <Route exact path={'/'} component={NewWords} />
           <PrivateRoute exact path={'/today-words'} component={TodayWords} />
           <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
