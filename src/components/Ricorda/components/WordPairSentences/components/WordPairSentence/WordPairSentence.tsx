@@ -1,7 +1,9 @@
-import React, { FunctionComponent } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent } from 'react';
 import { Icon } from '@blueprintjs/core';
 import { sanitize } from 'dompurify';
-import './WordPairSentence.css';
+import { jsx, css } from '@emotion/core';
 
 interface IProps {
   sentence: string;
@@ -21,13 +23,29 @@ const WordPairSentence: FunctionComponent<IProps> = ({
   };
 
   return (
-    <div className={'word-sentence'}>
-      <Icon className={'word-sentence-icon'} icon={'citation'} iconSize={17} />
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      `}
+    >
+      <Icon
+        icon={'citation'}
+        iconSize={17}
+        css={css`
+          margin-right: 10px;
+          margin-left: 10px;
+        `}
+      />
       <p
-        className={'word-sentence-text'}
         dangerouslySetInnerHTML={{
           __html: sanitize(getSentenceWithBoldSourceWords()),
         }}
+        css={css`
+          margin-bottom: 0;
+          white-space: pre-wrap;
+        `}
       />
     </div>
   );
