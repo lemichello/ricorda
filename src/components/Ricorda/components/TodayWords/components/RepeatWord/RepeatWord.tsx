@@ -6,6 +6,7 @@ import {
   Icon,
   NavbarDivider,
   Pre,
+  Tooltip,
 } from '@blueprintjs/core';
 import React, { useCallback, useState, FunctionComponent } from 'react';
 import './RepeatWord.css';
@@ -55,12 +56,14 @@ const RepeatWord: FunctionComponent<IProps> = ({
           >
             <div>
               {wordPair?.repetitions === 4 && (
-                <Icon
-                  className={'repeat-word-last-repetition-icon'}
-                  icon={'endorsed'}
-                  intent={'primary'}
-                  iconSize={20}
-                />
+                <Tooltip content={'Last repetition'} intent={'primary'}>
+                  <Icon
+                    className={'repeat-word-last-repetition-icon'}
+                    icon={'endorsed'}
+                    intent={'primary'}
+                    iconSize={20}
+                  />
+                </Tooltip>
               )}
             </div>
             <H3 className={'source-word'}>
