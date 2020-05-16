@@ -13,6 +13,7 @@ import { DefaultToaster } from '../../../../helpers/DefaultToaster';
 import { History } from 'history';
 import { Link, Switch, Route, useRouteMatch } from 'react-router-dom';
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
+import PageRoot from '../PageRoot/PageRoot';
 import { jsx, css, SerializedStyles } from '@emotion/core';
 
 interface IProps {
@@ -69,7 +70,7 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
     history.push('/signup/verify');
   };
 
-  const pageDividerStyles: SerializedStyles = css`
+  const dividerStyles: SerializedStyles = css`
     display: block;
     border-top: 1px solid rgba(16, 22, 26, 0.15);
     width: 80%;
@@ -80,48 +81,28 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
       border-top: 1px solid hsla(0, 0%, 100%, 0.15);
     }
   `;
-  const pageInputStyles: SerializedStyles = css`
+
+  const inputStyles: SerializedStyles = css`
     margin-bottom: 20px;
   `;
 
   return (
-    <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 50px;
-        padding-bottom: 50px;
-        justify-content: center;
-
-        @media (max-width: 576px) {
-          padding-top: 80px;
-        }
-      `}
-    >
-      <div
-        onKeyDown={keyDown}
-        css={css`
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          width: 75vw;
-
-          @media (min-width: 576px) {
-            width: 50vw;
-          }
-
-          @media (min-width: 1200px) {
-            width: 25vw;
-          }
-        `}
-      >
-        <Switch>
-          <Route path={`${path}/verify`} component={VerifyEmail} />
-          <Route exact path={path}>
+    <PageRoot>
+      <Switch>
+        <Route path={`${path}/verify`} component={VerifyEmail} />
+        <Route exact path={path}>
+          <div
+            onKeyDown={keyDown}
+            css={css`
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+            `}
+          >
             <h5 className={'bp3-heading'}>Sign up with your email address</h5>
-            <span css={pageDividerStyles} />
+            <span css={dividerStyles} />
             <InputGroup
               large
               fill
@@ -131,7 +112,7 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setEmail(event.target.value)
               }
-              css={pageInputStyles}
+              css={inputStyles}
             />
             <InputGroup
               name={'password'}
@@ -143,7 +124,7 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setPassword(event.target.value)
               }
-              css={pageInputStyles}
+              css={inputStyles}
             />
             <InputGroup
               name={'password-confirm'}
@@ -155,7 +136,7 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setPasswordConfirm(event.target.value)
               }
-              css={pageInputStyles}
+              css={inputStyles}
             />
             <Button
               className={'bp3-heading'}
@@ -164,6 +145,7 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
               onClick={signUp}
               loading={loading}
               disabled={!isValidCredentials()}
+              onKeyDownCapture={keyDown}
               css={css`
                 display: block;
                 margin: 10px auto 0 auto;
@@ -174,7 +156,7 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
                 text-transform: uppercase;
               `}
             />
-            <span css={pageDividerStyles} />
+            <span css={dividerStyles} />
             <p
               css={css`
                 & > a:hover {
@@ -186,10 +168,10 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
             >
               Already have an account? <Link to={'/login'}>Log in</Link>
             </p>
-          </Route>
-        </Switch>
-      </div>
-    </div>
+          </div>
+        </Route>
+      </Switch>
+    </PageRoot>
   );
 };
 
