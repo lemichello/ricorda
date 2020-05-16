@@ -5,5 +5,7 @@ export interface IWordPair {
   sentences: string[];
   translation: string;
   repetitions: number;
+  maxRepetitions: number;
+  repetitionInterval: number;
   nextRepetitionDate: Date;
 }

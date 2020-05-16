@@ -1,7 +1,9 @@
-import React, { FunctionComponent, useState } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent, useState } from 'react';
 import WordPairSentence from './components/WordPairSentence/WordPairSentence';
-import './WordPairSentences.css';
 import { Button, Collapse } from '@blueprintjs/core';
+import { jsx, css } from '@emotion/core';
 
 interface IProps {
   sourceWord: string;
@@ -19,22 +21,46 @@ const WordPairSentences: FunctionComponent<IProps> = ({
       <Button
         minimal
         fill
-        className={'word-pair-sentences-btn'}
         rightIcon={'expand-all'}
         onClick={() => {
           setSentencesOpen(!isSentencesOpen);
         }}
+        css={css`
+          justify-content: flex-start;
+
+          & > .bp3-icon {
+            margin-left: auto;
+          }
+        `}
       >
-        <div className={'word-pair-sentences-info'}>
-          <p className={'word-pair-sentences-info-text'}>
+        <div
+          css={css`
+            display: flex;
+            width: 100%;
+          `}
+        >
+          <p
+            css={css`
+              margin-bottom: 0;
+              margin-right: 5px;
+            `}
+          >
             <span className={'bp3-text-muted'}>Examples of</span> {sourceWord}
           </p>
         </div>
       </Button>
       <Collapse isOpen={isSentencesOpen}>
-        <div className={'word-pair-sentences'}>
+        <div
+          css={css`
+            margin-top: 5px;
+          `}
+        >
           {sentences.map((sentence, i) => (
-            <WordPairSentence sentence={sentence} key={i} />
+            <WordPairSentence
+              sentence={sentence}
+              sourceWord={sourceWord}
+              key={i}
+            />
           ))}
         </div>
       </Collapse>

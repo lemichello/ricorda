@@ -9,7 +9,7 @@ import {
   ProgressBar,
 } from '@blueprintjs/core';
 import './SavedWord.css';
-import { IWordPair } from '../../../../../../models/wordPair';
+import { IWordPair } from '../../../../../../apiModels/wordPair';
 import WordPairSentences from '../../../WordPairSentences/WordPairSentences';
 
 interface IProps {
@@ -37,10 +37,18 @@ const SavedWord: FunctionComponent<IProps> = ({
         <H4 className={'saved-word-source-word'}>{wordPair?.sourceWord}</H4>
         <ProgressBar
           className={'saved-word-progress-bar'}
-          intent={wordPair?.repetitions === 5 ? 'success' : 'primary'}
+          intent={
+            wordPair?.repetitions === wordPair?.maxRepetitions
+              ? 'success'
+              : 'primary'
+          }
           animate={false}
           stripes={false}
-          value={wordPair?.repetitions ? wordPair.repetitions / 5 : 0}
+          value={
+            wordPair
+              ? wordPair.repetitions / wordPair.maxRepetitions
+              : undefined
+          }
         />
         <div className={'saved-word-actions'}>
           <Button

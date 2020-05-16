@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState, ChangeEvent } from 'react';
 import EditWordPairSentence from './components/EditWordSentence/EditWordPairSentence';
 import './EditWordPairSentences.css';
 import { Card, ControlGroup, Button, TextArea } from '@blueprintjs/core';
-import { ISentence } from '../../../../models/sentence';
+import { ISentence } from '../../../../apiModels/sentence';
 
 interface IProps {
   sourceWord: string;

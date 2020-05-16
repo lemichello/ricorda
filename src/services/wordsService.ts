@@ -1,20 +1,29 @@
 import axios, { AxiosResponse } from 'axios';
-import { IWordPair } from '../models/wordPair';
+import { IWordPair } from '../apiModels/wordPair';
 import { IWordsResponse } from './types/words/wordsResponse';
 import { ISavedWordsRequest } from './types/words/savedWordsRequest';
 import { ISavedWordsResponse } from './types/words/savedWordsResponse';
 import { IWordsCountResponse } from './types/words/wordsCountResponse';
 import { IWordPairExistsResponse } from './types/words/wordPairExistsResponse';
 import { IWordPairExistsRequest } from './types/words/wordPairExistsRequest';
+import dayjs from 'dayjs';
 
 export class WordsService {
   static async createWordPair(
     sourceWord: string,
     translation: string,
-    sentences: string[]
+    sentences: string[],
+    maxRepetitions: number,
+    repetitionInterval: number
   ): Promise<void> {
     try {
-      await axios.post('/api/words', { sourceWord, translation, sentences });
+      await axios.post('/api/words', {
+        sourceWord,
+        translation,
+        sentences,
+        maxRepetitions,
+        repetitionInterval,
+      });
     } catch (e) {
       return Promise.reject(e);
     }
@@ -60,13 +69,13 @@ export class WordsService {
   }
 
   static async checkWordPair(wordPair: IWordPair): Promise<void> {
-    let todayDate: Date = new Date();
-
-    todayDate.setDate(todayDate.getDate() + 2);
+    const nextRepetitionDate: Date = dayjs()
+      .add(wordPair.repetitionInterval, 'hour')
+      .toDate();
 
     let changedWordPair: IWordPair = Object.assign({}, wordPair);
 
-    changedWordPair.nextRepetitionDate = todayDate;
+    changedWordPair.nextRepetitionDate = nextRepetitionDate;
     changedWordPair.repetitions++;
 
     try {

@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, ChangeEvent } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  ChangeEvent,
+  useContext,
+} from 'react';
 import {
   FormGroup,
   MenuDivider,
@@ -9,15 +14,23 @@ import {
 } from '@blueprintjs/core';
 import './ChangePassword.css';
 import { AccountService } from '../../../../../../../../../../services/accountService';
-import { DefaultToaster } from '../../../../../../../../models/DefaultToster';
+import { DefaultToaster } from '../../../../../../../../../../helpers/DefaultToaster';
 import { useMediaQuery } from 'react-responsive';
+import AccountSettingsContext from '../../../../../../../../contexts/accountSettingsContext';
+import { useHistory } from 'react-router-dom';
+import UserContext from '../../../../../../../../contexts/userContext';
 
 const ChangePassword: FunctionComponent = () => {
+  const { setAccountSettings } = useContext(AccountSettingsContext);
+  const { setUser } = useContext(UserContext);
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
   const [loading, setLoading] = useState(false);
+
   const isMobile: boolean = useMediaQuery({ query: '(max-width: 576px)' });
+  const history = useHistory();
 
   const isValidState: () => boolean = () => {
     return (
@@ -42,6 +55,11 @@ const ChangePassword: FunctionComponent = () => {
     setOldPassword('');
     setNewPassword('');
     setNewPasswordRepeat('');
+
+    setAccountSettings({ isDialogOpen: false });
+    setUser({ token: null });
+
+    history.push('/login');
 
     DefaultToaster.show({
       message: 'Successfully updated password',

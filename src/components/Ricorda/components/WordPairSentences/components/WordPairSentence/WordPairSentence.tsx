@@ -1,16 +1,52 @@
-import React, { FunctionComponent } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent } from 'react';
 import { Icon } from '@blueprintjs/core';
-import './WordPairSentence.css';
+import { sanitize } from 'dompurify';
+import { jsx, css } from '@emotion/core';
 
 interface IProps {
   sentence: string;
+  sourceWord: string;
 }
 
-const WordPairSentence: FunctionComponent<IProps> = ({ sentence }) => {
+const WordPairSentence: FunctionComponent<IProps> = ({
+  sentence,
+  sourceWord,
+}) => {
+  const getSentenceWithBoldSourceWords: () => string = () => {
+    let regEx: RegExp = new RegExp(sourceWord, 'ig');
+
+    return sentence.replace(regEx, (match) => {
+      return `<strong>${match}</strong>`;
+    });
+  };
+
   return (
-    <div className={'word-sentence'}>
-      <Icon className={'word-sentence-icon'} icon={'citation'} iconSize={17} />
-      <p className={'word-sentence-text'}>{sentence}</p>
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      `}
+    >
+      <Icon
+        icon={'citation'}
+        iconSize={17}
+        css={css`
+          margin-right: 10px;
+          margin-left: 10px;
+        `}
+      />
+      <p
+        dangerouslySetInnerHTML={{
+          __html: sanitize(getSentenceWithBoldSourceWords()),
+        }}
+        css={css`
+          margin-bottom: 0;
+          white-space: pre-wrap;
+        `}
+      />
     </div>
   );
 };
