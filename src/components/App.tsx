@@ -46,7 +46,7 @@ function App() {
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <UserContext.Provider value={{ user, setUser }}>
         <div className={`app-root ${theme.isDarkTheme ? 'bp3-dark' : ''}`}>
-          {loading && <Spinner className={'spinner'} />}
+          {loading && <Spinner className={'loading-spinner'} />}
           {!loading && <Ricorda />}
         </div>
       </UserContext.Provider>
