@@ -1,4 +1,6 @@
-import React, { useState, FunctionComponent } from 'react';
+/** @jsx jsx */
+
+import { useState, FunctionComponent } from 'react';
 import {
   Button,
   Card,
@@ -8,9 +10,9 @@ import {
   Pre,
   ProgressBar,
 } from '@blueprintjs/core';
-import './SavedWord.css';
 import { IWordPair } from '../../../../../../apiModels/wordPair';
 import WordPairSentences from '../../../WordPairSentences/WordPairSentences';
+import { jsx, css } from '@emotion/core';
 
 interface IProps {
   wordPair?: IWordPair;
@@ -32,11 +34,48 @@ const SavedWord: FunctionComponent<IProps> = ({
   };
 
   return (
-    <Card elevation={2} className={'saved-word-card'}>
-      <div className={`saved-word-summary ${loading ? 'bp3-skeleton' : ''}`}>
-        <H4 className={'saved-word-source-word'}>{wordPair?.sourceWord}</H4>
+    <Card
+      elevation={2}
+      css={css`
+        margin-bottom: 25px;
+        width: 75vw;
+
+        @media (min-width: 576px) {
+          width: 50vw;
+        }
+        @media (min-width: 1200px) {
+          width: 30vw;
+        }
+      `}
+    >
+      <div
+        className={`${loading ? 'bp3-skeleton' : ''}`}
+        css={css`
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        `}
+      >
+        <H4
+          css={css`
+            width: 40%;
+            max-width: 30%;
+            text-overflow: ellipsis;
+            overflow-wrap: break-word;
+            font-size: 16px !important;
+            line-height: 19px !important;
+
+            @media (min-width: 576px) {
+              max-width: 40%;
+              width: 40%;
+              font-size: 18px !important;
+              line-height: 21px !important;
+            }
+          `}
+        >
+          {wordPair?.sourceWord}
+        </H4>
         <ProgressBar
-          className={'saved-word-progress-bar'}
           intent={
             wordPair?.repetitions === wordPair?.maxRepetitions
               ? 'success'
@@ -49,8 +88,18 @@ const SavedWord: FunctionComponent<IProps> = ({
               ? wordPair.repetitions / wordPair.maxRepetitions
               : undefined
           }
+          css={css`
+            margin-left: 15px;
+            margin-right: 15px;
+            width: 35%;
+          `}
         />
-        <div className={'saved-word-actions'}>
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
           <Button
             minimal={true}
             icon={'translate'}
@@ -68,10 +117,20 @@ const SavedWord: FunctionComponent<IProps> = ({
       </div>
       <Collapse
         isOpen={translationOpen}
-        className={`translation-collapse-block`}
+        css={css`
+          width: 100%;
+        `}
       >
         <div>
-          <Pre className={'translation-word'}>{wordPair?.translation}</Pre>
+          <Pre
+            css={css`
+              width: 100%;
+              text-align: center;
+              white-space: normal;
+            `}
+          >
+            {wordPair?.translation}
+          </Pre>
           {!!wordPair?.sentences?.length && (
             <WordPairSentences
               sentences={wordPair.sentences}

@@ -18,10 +18,6 @@
   line-height: 19px !important;
 }
 
-.saved-word-source-word:hover {
-  overflow: visible;
-}
-
 .saved-word-progress-bar {
   margin-left: 15px;
   margin-right: 15px;

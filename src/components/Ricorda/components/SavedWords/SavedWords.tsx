@@ -1,16 +1,18 @@
-import React, {
+/** @jsx jsx */
+
+import {
   useCallback,
   useEffect,
   useState,
   FunctionComponent,
   ChangeEvent,
+  Fragment,
 } from 'react';
 import { H3, InputGroup, NonIdealState } from '@blueprintjs/core';
 import { WordsService } from '../../../../services/wordsService';
 import SavedWord from './components/SavedWord/SavedWord';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 import NoSavedWords from './components/NoSavedWords/NoSavedWords';
-import './SavedWords.css';
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
 import SavedWordsSkeleton from './components/SavedWordsSkeleton/SavedWordsSkeleton';
@@ -25,6 +27,8 @@ import {
 import Pagination from './components/Pagination/Pagination';
 import { IWordPair } from '../../../../apiModels/wordPair';
 import { ISavedWordsResponse } from '../../../../services/types/words/savedWordsResponse';
+import { jsx, css, ClassNames } from '@emotion/core';
+import PageRoot from '../PageRoot/PageRoot';
 
 const SavedWords: FunctionComponent = () => {
   const [savedWords, setSavedWords] = useState<IWordPair[] | undefined | null>(
@@ -119,82 +123,103 @@ const SavedWords: FunctionComponent = () => {
     <InputGroup
       type={'search'}
       leftIcon={'search'}
-      className={'saved-words-search-input'}
       placeholder={'Foreign or translation word'}
       value={searchValue}
       onChange={handleSearchChange}
       autoFocus={true}
+      css={css`
+        max-width: 75vw;
+        margin: 5px auto 15px;
+        width: 300px;
+      `}
     />
   );
 
   return (
-    <div className={'page-root'}>
-      <div className={'page-content'}>
-        {savedWords !== null && (savedWords?.length !== 0 || loading) && (
-          <H3
-            className={`saved-words-heading ${loading ? 'bp3-skeleton' : ''}`}
-          >
-            Saved words
-          </H3>
-        )}
-        {savedWords !== null && savedWords?.length !== 0 && !loading && (
-          <CSSTransition
-            timeout={1250}
-            classNames={'search-input'}
-            in={animateInput}
-          >
-            {searchInput}
-          </CSSTransition>
-        )}
-        {savedWords !== null && savedWords?.length === 0 && !loading && (
-          <NoSavedWords />
-        )}
-        {loading && (
-          <Fade timeout={500} top distance={'100px'}>
-            <SavedWordsSkeleton />
-          </Fade>
-        )}
-        {savedWords !== null && savedWords?.length !== 0 && (
-          <TransitionGroup>
-            {savedWords?.map((wordPair) => (
-              <CSSTransition
-                timeout={700}
-                key={wordPair._id}
-                classNames={'saved-word-component'}
-              >
-                <SavedWord
-                  loading={false}
-                  wordPair={wordPair}
-                  editWord={handleEditWord}
-                />
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-        )}
-        {savedWords === null && !loading && (
-          <NonIdealState
-            icon={'search'}
-            title={'No search results'}
-            description={
-              "Your search didn't match any word pairs. Try searching for something else."
-            }
-            action={searchInput}
-          />
-        )}
-        {!loading && savedWords !== null && savedWords?.length !== 0 && (
-          <Pagination
-            searchValue={searchValue}
-            currentPage={currentPage}
-            searchWords={searchWords}
-          />
-        )}
-      </div>
+    <PageRoot>
+      {savedWords !== null && (savedWords?.length !== 0 || loading) && (
+        <H3
+          className={`${loading ? 'bp3-skeleton' : ''}`}
+          css={css`
+            text-align: center;
+          `}
+        >
+          Saved words
+        </H3>
+      )}
+
+      {savedWords !== null && savedWords?.length !== 0 && !loading && (
+        <ClassNames>
+          {({ css }) => (
+            <CSSTransition
+              timeout={1250}
+              classNames={{
+                enter: css({
+                  width: '40px !important',
+                }),
+                enterActive: css({
+                  width: '300px !important',
+                  transition: 'width 700ms',
+                  transitionDelay: '550ms',
+                }),
+                exit: css({
+                  width: '300px !important',
+                }),
+                exitActive: css({
+                  width: '40px !important',
+                  transition: 'width 700ms',
+                }),
+              }}
+              in={animateInput}
+            >
+              {searchInput}
+            </CSSTransition>
+          )}
+        </ClassNames>
+      )}
+      {savedWords !== null && savedWords?.length === 0 && !loading && (
+        <NoSavedWords />
+      )}
+      {loading && (
+        <Fade timeout={500} top distance={'100px'}>
+          <SavedWordsSkeleton />
+        </Fade>
+      )}
+      {savedWords !== null && savedWords?.length !== 0 && (
+        <Fragment>
+          {savedWords?.map((wordPair) => (
+            <SavedWord
+              key={wordPair._id}
+              loading={false}
+              wordPair={wordPair}
+              editWord={handleEditWord}
+            />
+          ))}
+        </Fragment>
+      )}
+      {savedWords === null && !loading && (
+        <NonIdealState
+          icon={'search'}
+          title={'No search results'}
+          description={
+            "Your search didn't match any word pairs. Try searching for something else."
+          }
+          action={searchInput}
+        />
+      )}
+      {!loading && savedWords !== null && savedWords?.length !== 0 && (
+        <Pagination
+          searchValue={searchValue}
+          currentPage={currentPage}
+          searchWords={searchWords}
+        />
+      )}
       <EditWordModal
         isOpen={isEditModalOpen}
         closeModal={handleEditModalClose}
         wordPair={wordPairForEdit}
       />
-    </div>
+    </PageRoot>
   );
 };
 

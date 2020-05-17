@@ -1,4 +1,6 @@
-import React, {
+/** @jsx jsx */
+
+import {
   useCallback,
   useContext,
   useEffect,
@@ -6,8 +8,6 @@ import React, {
   FunctionComponent,
 } from 'react';
 import { WordsService } from '../../../../services/wordsService';
-import '../../Ricorda.css';
-import './TodayWords.css';
 import NoWords from './components/NoWords/NoWords';
 import RepeatWord from './components/RepeatWord/RepeatWord';
 import { Button, H3, NavbarDivider } from '@blueprintjs/core';
@@ -17,6 +17,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
 import { IWordPair } from '../../../../apiModels/wordPair';
+import { jsx, css, ClassNames } from '@emotion/core';
+import PageRoot from '../PageRoot/PageRoot';
 
 const TodayWords: FunctionComponent = () => {
   const { setWordsCount } = useContext(WordsCountContext);
@@ -73,53 +75,92 @@ const TodayWords: FunctionComponent = () => {
   );
 
   return (
-    <div className={'page-root'}>
-      <div className={'page-content'}>
-        {(words?.length !== 0 || loading) && (
-          <div className={'today-words-heading-block'}>
-            <H3
-              className={`today-words-heading-text ${
-                loading ? 'bp3-skeleton' : ''
-              }`}
-            >
-              Words to repeat for today
-            </H3>
-            <NavbarDivider />
-            <Button
-              icon={'repeat'}
-              className={`today-words-repeat-btn ${
-                loading ? 'bp3-skeleton' : ''
-              }`}
-              onClick={refreshWords}
-            />
-          </div>
-        )}
-        {words?.length === 0 && !loading && <NoWords />}
-        {loading && (
-          <Fade timeout={500} top distance={'100px'}>
-            <WordsSkeleton />
-          </Fade>
-        )}
-        {words?.length !== 0 && (
-          <TransitionGroup>
-            {words?.map((wordPair) => (
-              <CSSTransition
-                timeout={700}
-                key={wordPair._id}
-                classNames={'repeat-word-component'}
-              >
-                <RepeatWord
-                  loading={false}
-                  disabled={wordsDisabled}
-                  wordPair={wordPair}
-                  updateWordPair={updateWordPair}
-                />
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-        )}
-      </div>
-    </div>
+    <PageRoot>
+      {(words?.length !== 0 || loading) && (
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 75vw;
+
+            @media (min-width: 576px) {
+              width: 50vw;
+            }
+            @media (min-width: 1200px) {
+              width: 30vw;
+            }
+          `}
+        >
+          <H3
+            className={`${loading ? 'bp3-skeleton' : ''}`}
+            css={css`
+              margin: auto;
+              padding-bottom: 5px;
+              font-size: 17px !important;
+
+              @media (min-width: 576px) {
+                font-size: 22px !important;
+              }
+            `}
+          >
+            Words to repeat for today
+          </H3>
+          <NavbarDivider />
+          <Button
+            icon={'repeat'}
+            className={`${loading ? 'bp3-skeleton' : ''}`}
+            onClick={refreshWords}
+            css={css`
+              margin-right: 20px;
+            `}
+          />
+        </div>
+      )}
+      {words?.length === 0 && !loading && <NoWords />}
+      {loading && (
+        <Fade timeout={500} top distance={'100px'}>
+          <WordsSkeleton />
+        </Fade>
+      )}
+      {words?.length !== 0 && (
+        <ClassNames>
+          {({ css }) => (
+            <TransitionGroup>
+              {words?.map((wordPair) => (
+                <CSSTransition
+                  timeout={700}
+                  key={wordPair._id}
+                  classNames={{
+                    enter: css({
+                      opacity: 0,
+                    }),
+                    enterActive: css({
+                      opacity: 1,
+                      transition: 'opacity 700ms',
+                    }),
+                    exit: css({
+                      opacity: 1,
+                    }),
+                    exitActive: css({
+                      opacity: 0,
+                      transition: 'opacity 700ms',
+                    }),
+                  }}
+                >
+                  <RepeatWord
+                    loading={false}
+                    disabled={wordsDisabled}
+                    wordPair={wordPair}
+                    updateWordPair={updateWordPair}
+                  />
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
+          )}
+        </ClassNames>
+      )}
+    </PageRoot>
   );
 };
 
