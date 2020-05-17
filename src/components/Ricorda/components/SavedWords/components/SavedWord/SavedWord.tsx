@@ -64,6 +64,7 @@ const SavedWord: FunctionComponent<IProps> = ({
             overflow-wrap: break-word;
             font-size: 16px !important;
             line-height: 19px !important;
+            margin-bottom: 5px;
 
             @media (min-width: 576px) {
               max-width: 40%;
