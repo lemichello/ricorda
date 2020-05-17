@@ -1,6 +1,9 @@
+/** @jsx jsx */
+
 import { Button, ButtonGroup } from '@blueprintjs/core';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import { IPaginationPage } from '../../../../../../apiModels/paginationPage';
+import { jsx } from '@emotion/core';
 
 interface IProps {
   currentPage: IPaginationPage;

@@ -1,6 +1,8 @@
-import React, { FunctionComponent } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent } from 'react';
 import { Icon, Button } from '@blueprintjs/core';
-import './EditWordPairSentence.css';
+import { jsx, css } from '@emotion/core';
 
 interface IProps {
   sentence: string;
@@ -14,20 +16,39 @@ const EditWordPairSentence: FunctionComponent<IProps> = ({
   removeSentence,
 }) => {
   return (
-    <div className={'new-word-sentence'}>
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      `}
+    >
       <Icon
-        className={'new-word-sentence-icon'}
         icon={'citation'}
         iconSize={18}
+        css={css`
+          margin-right: 10px;
+          margin-left: 10px;
+        `}
       />
-      <p className={'new-word-sentence-text'}>{sentence}</p>
+      <p
+        css={css`
+          margin-bottom: 0;
+          margin-right: 10px;
+          white-space: pre-wrap;
+        `}
+      >
+        {sentence}
+      </p>
       <Button
-        className={'new-word-sentence-remove-btn'}
         minimal
         icon={'cross'}
         onClick={() => {
           removeSentence(sentenceId);
         }}
+        css={css`
+          margin-left: auto;
+        `}
       />
     </div>
   );

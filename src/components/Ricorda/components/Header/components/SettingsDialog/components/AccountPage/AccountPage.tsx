@@ -1,5 +1,8 @@
-import React, { FunctionComponent } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent } from 'react';
 import ChangeEmail from './components/ChangeEmail/ChangeEmail';
+import { jsx } from '@emotion/core';
 
 const AccountPage: FunctionComponent = () => {
   return (

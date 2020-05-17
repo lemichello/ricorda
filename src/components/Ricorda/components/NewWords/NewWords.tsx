@@ -1,4 +1,6 @@
-import React, {
+/** @jsx jsx */
+
+import {
   useContext,
   useState,
   FunctionComponent,
@@ -16,8 +18,6 @@ import {
   NavbarDivider,
   Collapse,
 } from '@blueprintjs/core';
-import '../../Ricorda.css';
-import './NewWords.css';
 import { WordsService } from '../../../../services/wordsService';
 import { DefaultToaster } from '../../../../helpers/DefaultToaster';
 // @ts-ignore
@@ -29,6 +29,13 @@ import UserContext from '../../contexts/userContext';
 import EditWordPairSentences from '../EditWordPairSentences/EditWordPairSentences';
 import { ISentence } from '../../../../apiModels/sentence';
 import RepeatSettings from './components/RepeatSettings/RepeatSettings';
+import { jsx, css } from '@emotion/core';
+import PageRoot from '../PageRoot/PageRoot';
+import {
+  cardMediaQueries,
+  inputStyles,
+  collapseStyles,
+} from './styles/NewWordsStyles';
 
 interface IProps {
   history: History;
@@ -139,90 +146,127 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
     },
     [sentences]
   );
+
   return (
-    <div className={'page-root'}>
-      <div className={'page-content'} onKeyDown={keyDown}>
-        <H3>New Word Pair</H3>
-        <Fade top timeout={500} distance={'100px'}>
-          <Card
-            className={`new-words-page-card ${
-              isSentencesOpen ? 'detailed' : ''
-            }`}
-            elevation={2}
+    <PageRoot>
+      <H3>New Word Pair</H3>
+      <Fade top timeout={500} distance={'100px'}>
+        <Card
+          elevation={2}
+          css={css`
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90vw;
+            transition: width 400ms;
+
+            ${cardMediaQueries}
+          `}
+          onKeyDown={keyDown}
+        >
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+
+              & > * {
+                margin-right: 20px;
+              }
+
+              & > h5:nth-of-type(2) {
+                margin-right: 0;
+              }
+            `}
           >
-            <div className={'new-words-page-inputs'}>
-              <H5 className={'new-words-page-input'}>
-                <EditableText
-                  className={'new-words-editable-text'}
-                  placeholder={'Foreign word...'}
-                  value={sourceWord}
-                  maxLength={80}
-                  onChange={(event) => setSourceWord(event)}
-                />
-              </H5>
-              <Icon icon={'chevron-right'} iconSize={23} />
-              <H5 className={'new-words-page-input'}>
-                <EditableText
-                  className={'new-words-editable-text'}
-                  placeholder={'Translation...'}
-                  value={translation}
-                  maxLength={80}
-                  onChange={(event) => setTranslation(event)}
-                />
-              </H5>
-            </div>
-            <Collapse
-              isOpen={isSentencesOpen}
-              className={'new-words-page-collapse'}
-              transitionDuration={450}
-            >
-              <EditWordPairSentences
-                sourceWord={sourceWord}
-                sentences={sentences}
-                addSentence={addNewSentence}
-                removeSentence={removeSentence}
+            <H5 css={inputStyles}>
+              <EditableText
+                placeholder={'Foreign word...'}
+                value={sourceWord}
+                maxLength={80}
+                onChange={(event) => setSourceWord(event)}
               />
-            </Collapse>
-            <Collapse
-              isOpen={isSettingsOpen}
-              className={'new-words-page-collapse'}
-            >
-              <RepeatSettings
-                maxRepetitions={maxRepetitions}
-                repetitionInterval={repetitionInterval}
-                setMaxRepetitions={setMaxRepetitions}
-                setRepetitionInterval={setRepetitionInterval}
+            </H5>
+            <Icon icon={'chevron-right'} iconSize={23} />
+            <H5 css={inputStyles}>
+              <EditableText
+                placeholder={'Translation...'}
+                value={translation}
+                maxLength={80}
+                onChange={(event) => setTranslation(event)}
               />
-            </Collapse>
-            <div className={'new-words-page-actions'}>
+            </H5>
+          </div>
+          <Collapse isOpen={isSentencesOpen} css={collapseStyles}>
+            <EditWordPairSentences
+              sourceWord={sourceWord}
+              sentences={sentences}
+              addSentence={addNewSentence}
+              removeSentence={removeSentence}
+            />
+          </Collapse>
+          <Collapse isOpen={isSettingsOpen} css={collapseStyles}>
+            <RepeatSettings
+              maxRepetitions={maxRepetitions}
+              repetitionInterval={repetitionInterval}
+              setMaxRepetitions={setMaxRepetitions}
+              setRepetitionInterval={setRepetitionInterval}
+            />
+          </Collapse>
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-top: 20px;
+              width: 100%;
+            `}
+          >
+            <Button
+              icon={'add'}
+              type={'submit'}
+              loading={loading}
+              intent={'success'}
+              disabled={!isValidWordPair()}
+              onClick={handleAddButtonClick}
+              css={css`
+                margin-left: auto;
+                border-radius: 15px;
+                text-transform: uppercase;
+                height: 30px;
+                width: 100px;
+                max-width: 25vw;
+              `}
+            />
+            <div
+              css={css`
+                display: flex;
+                align-items: center;
+                margin-left: auto;
+
+                & > .bp3-button:nth-of-type(1) {
+                  margin-right: 5px;
+                }
+              `}
+            >
+              <NavbarDivider />
               <Button
-                icon={'add'}
-                type={'submit'}
-                className={'new-words-page-add-btn'}
-                loading={loading}
-                intent={'success'}
-                disabled={!isValidWordPair()}
-                onClick={handleAddButtonClick}
+                minimal
+                icon={'citation'}
+                active={isSentencesOpen}
+                onClick={() => setSentencesOpen(!isSentencesOpen)}
               />
-              <div className={'new-words-page-actions-others'}>
-                <NavbarDivider />
-                <Button
-                  minimal
-                  icon={'citation'}
-                  active={isSentencesOpen}
-                  onClick={() => setSentencesOpen(!isSentencesOpen)}
-                />
-                <Button
-                  minimal
-                  icon={'cog'}
-                  active={isSettingsOpen}
-                  onClick={() => setSettingsOpen(!isSettingsOpen)}
-                />
-              </div>
+              <Button
+                minimal
+                icon={'cog'}
+                active={isSettingsOpen}
+                onClick={() => setSettingsOpen(!isSettingsOpen)}
+              />
             </div>
-          </Card>
-        </Fade>
-      </div>
+          </div>
+        </Card>
+      </Fade>
       <Alert
         className={`${theme.isDarkTheme ? 'bp3-dark' : ''}`}
         canEscapeKeyCancel={true}
@@ -241,7 +285,7 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
           you sure you want to add a new one?
         </p>
       </Alert>
-    </div>
+    </PageRoot>
   );
 };
 

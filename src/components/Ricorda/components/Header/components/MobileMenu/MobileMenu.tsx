@@ -1,3 +1,5 @@
+/** @jsx jsx */
+
 import {
   Classes,
   Drawer,
@@ -8,8 +10,9 @@ import {
 } from '@blueprintjs/core';
 import WordsCountContext from '../../../../contexts/wordsCountContext';
 import { Link } from 'react-router-dom';
-import React, { useContext, FunctionComponent } from 'react';
+import { useContext, FunctionComponent } from 'react';
 import ThemeContext from '../../../../contexts/themeContext';
+import { jsx, css } from '@emotion/core';
 
 interface IProps {
   isVisible: boolean;
@@ -39,7 +42,11 @@ const MobileMenu: FunctionComponent<IProps> = ({
     >
       <div className={Classes.DRAWER_BODY}>
         <div className={Classes.DIALOG_BODY}>
-          <Menu className={'side-menu'}>
+          <Menu
+            css={css`
+              padding-left: 0;
+            `}
+          >
             <Link to={'/'} className={'navigation-link'} onClick={closeMenu}>
               <MenuItem text={'Home'} icon={'home'} tagName={'span'} />
             </Link>

@@ -1,9 +1,11 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent, useEffect, useState } from 'react';
 import { NonIdealState, Button } from '@blueprintjs/core';
 import { Location } from 'history';
 import { AuthService } from '../../../../../../services/authService';
 import { DefaultToaster } from '../../../../../../helpers/DefaultToaster';
-import './VerifyEmail.css';
+import { jsx, css } from '@emotion/core';
 
 interface IProps {
   location: Location;
@@ -82,6 +84,11 @@ const VerifyEmail: FunctionComponent<IProps> = ({ location }) => {
           />
         ) : undefined
       }
+      css={css`
+        & .bp3-icon {
+          color: ${failed ? '#ff7373' : 'inherit'};
+        }
+      `}
     />
   );
 };
