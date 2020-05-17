@@ -1,5 +1,7 @@
+/** @jsx jsx */
+
 import { Button, InputGroup } from '@blueprintjs/core';
-import React, {
+import {
   useEffect,
   useState,
   FunctionComponent,
@@ -10,8 +12,9 @@ import { AuthService } from '../../../../services/authService';
 import { DefaultToaster } from '../../../../helpers/DefaultToaster';
 import { History } from 'history';
 import { Link, Switch, Route, useRouteMatch } from 'react-router-dom';
-import './SignUp.css';
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
+import PageRoot from '../PageRoot/PageRoot';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 
 interface IProps {
   history: History;
@@ -67,16 +70,40 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
     history.push('/signup/verify');
   };
 
+  const dividerStyles: SerializedStyles = css`
+    display: block;
+    border-top: 1px solid rgba(16, 22, 26, 0.15);
+    width: 80%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    .bp3-dark & {
+      border-top: 1px solid hsla(0, 0%, 100%, 0.15);
+    }
+  `;
+
+  const inputStyles: SerializedStyles = css`
+    margin-bottom: 20px;
+  `;
+
   return (
-    <div className={'page-root'}>
-      <div className={'page-content'} onKeyDown={keyDown}>
-        <Switch>
-          <Route path={`${path}/verify`} component={VerifyEmail} />
-          <Route exact path={path}>
+    <PageRoot>
+      <Switch>
+        <Route path={`${path}/verify`} component={VerifyEmail} />
+        <Route exact path={path}>
+          <div
+            onKeyDown={keyDown}
+            css={css`
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+            `}
+          >
             <h5 className={'bp3-heading'}>Sign up with your email address</h5>
-            <span className={'page-divider'} />
+            <span css={dividerStyles} />
             <InputGroup
-              className={'page-input'}
               large
               fill
               type={'email'}
@@ -85,9 +112,9 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setEmail(event.target.value)
               }
+              css={inputStyles}
             />
             <InputGroup
-              className={'page-input'}
               name={'password'}
               large
               fill
@@ -97,9 +124,9 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setPassword(event.target.value)
               }
+              css={inputStyles}
             />
             <InputGroup
-              className={'page-input'}
               name={'password-confirm'}
               large
               fill
@@ -109,24 +136,42 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setPasswordConfirm(event.target.value)
               }
+              css={inputStyles}
             />
             <Button
-              className={'page-btn login-page-sign-up-btn bp3-heading'}
+              className={'bp3-heading'}
               text={'Sign Up'}
               intent={'success'}
               onClick={signUp}
               loading={loading}
               disabled={!isValidCredentials()}
+              onKeyDownCapture={keyDown}
+              css={css`
+                display: block;
+                margin: 10px auto 0 auto;
+                width: 80% !important;
+                text-align: center;
+                border-radius: 15px;
+                height: 35px;
+                text-transform: uppercase;
+              `}
             />
-            <span className={'page-divider'} />
-
-            <p className={'sign-up-page-have-account-text'}>
+            <span css={dividerStyles} />
+            <p
+              css={css`
+                & > a:hover {
+                  text-decoration: none;
+                  color: #2b95d6;
+                  transition: color 0.2s;
+                }
+              `}
+            >
               Already have an account? <Link to={'/login'}>Log in</Link>
             </p>
-          </Route>
-        </Switch>
-      </div>
-    </div>
+          </div>
+        </Route>
+      </Switch>
+    </PageRoot>
   );
 };
 

@@ -1,8 +1,10 @@
-import React, { FunctionComponent, useState, ChangeEvent } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent, useState, ChangeEvent } from 'react';
 import EditWordPairSentence from './components/EditWordSentence/EditWordPairSentence';
-import './EditWordPairSentences.css';
 import { Card, ControlGroup, Button, TextArea } from '@blueprintjs/core';
 import { ISentence } from '../../../../apiModels/sentence';
+import { jsx, css } from '@emotion/core';
 
 interface IProps {
   sourceWord: string;
@@ -29,7 +31,12 @@ const EditWordPairSentences: FunctionComponent<IProps> = ({
   };
 
   return (
-    <Card className={'new-word-sentences'}>
+    <Card
+      css={css`
+        width: 100%;
+        margin-top: 25px;
+      `}
+    >
       <p>
         <span className={'bp3-text-muted'}>Examples of</span>{' '}
         {sourceWord.trim() || 'Foreign word'}
@@ -42,15 +49,27 @@ const EditWordPairSentences: FunctionComponent<IProps> = ({
           removeSentence={removeSentence}
         />
       ))}
-      <ControlGroup className={'new-word-sentences-actions'}>
+      <ControlGroup
+        css={css`
+          margin-top: 20px;
+          justify-content: flex-start;
+        `}
+      >
         <TextArea
           placeholder={'New example sentence'}
-          className={'new-word-sentences-input'}
           value={sentenceText}
           maxLength={200}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             setSentenceText(e.target.value)
           }
+          css={css`
+            width: 90% !important;
+            min-height: 40px;
+
+            @media (min-width: 1200px) {
+              width: 60% !important;
+            }
+          `}
         />
         <Button
           icon={'plus'}

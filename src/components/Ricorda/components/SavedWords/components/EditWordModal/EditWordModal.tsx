@@ -1,3 +1,5 @@
+/** @jsx jsx */
+
 import {
   Button,
   Classes,
@@ -5,7 +7,7 @@ import {
   FormGroup,
   InputGroup,
 } from '@blueprintjs/core';
-import React, {
+import {
   useContext,
   useState,
   FunctionComponent,
@@ -18,6 +20,7 @@ import { DefaultToaster } from '../../../../../../helpers/DefaultToaster';
 import { IWordPair } from '../../../../../../apiModels/wordPair';
 import { ISentence } from '../../../../../../apiModels/sentence';
 import EditWordPairSentences from '../../../EditWordPairSentences/EditWordPairSentences';
+import { jsx } from '@emotion/core';
 
 interface IProps {
   isOpen: boolean;
@@ -83,7 +86,7 @@ const EditWordModal: FunctionComponent<IProps> = ({
       return;
     }
 
-    let currentCounter = sentenceIdCounter;
+    let currentCounter: number = sentenceIdCounter;
 
     setSourceWord(wordPair.sourceWord);
     setTranslation(wordPair.translation);

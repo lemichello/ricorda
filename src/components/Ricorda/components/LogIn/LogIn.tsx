@@ -1,4 +1,6 @@
-import React, {
+/** @jsx jsx */
+
+import {
   useContext,
   useEffect,
   useState,
@@ -9,13 +11,13 @@ import React, {
 import { Button, InputGroup, Tooltip, Checkbox } from '@blueprintjs/core';
 import UserContext from '../../contexts/userContext';
 import { AuthService } from '../../../../services/authService';
-import '../../Ricorda.css';
-import './LogIn.css';
 import { Link } from 'react-router-dom';
 import { DefaultToaster } from '../../../../helpers/DefaultToaster';
 import { History, Location } from 'history';
 import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
 import config from '../../../../config';
+import PageRoot from '../PageRoot/PageRoot';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 
 interface IProps {
   history: History;
@@ -125,27 +127,90 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
     </Tooltip>
   );
 
+  const dividerStyles: SerializedStyles = css`
+    display: block;
+    border-top: 1px solid rgba(16, 22, 26, 0.15);
+    width: 80%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    .bp3-dark & {
+      border-top: 1px solid hsla(0, 0%, 100%, 0.15);
+    }
+  `;
+
+  const inputStyles: SerializedStyles = css`
+    margin-bottom: 20px;
+  `;
+
+  const buttonStyles: SerializedStyles = css`
+    border-radius: 15px;
+    height: 35px;
+    width: 120px;
+    text-transform: uppercase;
+  `;
+
   return (
-    <div className={'page-root'}>
-      <div className={'page-content'} onKeyDown={keyDown}>
+    <PageRoot>
+      <div
+        onKeyDown={keyDown}
+        css={css`
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+        `}
+      >
         <h5 className={'bp3-heading'}>To continue, log in to Ricorda.</h5>
         <GoogleLogin
           clientId={config.googleClientId}
           buttonText={'Continue with Google'}
-          className={'google-sign-in-btn'}
           onSuccess={(response) => {
             logInWithGoogle(response as GoogleLoginResponse);
           }}
           onFailure={() => {}}
           onAutoLoadFinished={() => {}}
+          css={css`
+            width: 80%;
+            border-radius: 22px !important;
+            display: flex;
+            justify-content: center;
+
+            & > div {
+              background: transparent !important;
+              margin-right: 0 !important;
+            }
+
+            & > span {
+              font-weight: bold !important;
+            }
+          `}
         />
-        <div className={'log-in-page-text-divider'}>
-          <span className={'page-divider'} />
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+            width: 80%;
+            margin-top: 5px;
+            margin-bottom: 5px;
+
+            & > span {
+              width: 50%;
+            }
+
+            & > p {
+              margin-left: 10px;
+              margin-right: 10px;
+              margin-bottom: 0;
+            }
+          `}
+        >
+          <span css={dividerStyles} />
           <p className={'bp3-heading'}>OR</p>
-          <span className={'page-divider'} />
+          <span css={dividerStyles} />
         </div>
         <InputGroup
-          className={'page-input'}
           large={true}
           fill={true}
           type={'email'}
@@ -154,9 +219,9 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setEmail(event.target.value)
           }
+          css={inputStyles}
         />
         <InputGroup
-          className={'page-input'}
           name={'password'}
           large={true}
           fill={true}
@@ -167,8 +232,16 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setPassword(event.target.value)
           }
+          css={inputStyles}
         />
-        <div className={'page-actions'}>
+        <div
+          css={css`
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+          `}
+        >
           <Checkbox
             label={'Remember me'}
             checked={rememberMe}
@@ -177,7 +250,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
             }}
           />
           <Button
-            className={'page-btn'}
+            css={buttonStyles}
             intent={'success'}
             loading={loading}
             text={'Log In'}
@@ -185,21 +258,25 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
             disabled={!isValidCredentials()}
           />
         </div>
-        <span className={'page-divider'} />
+        <span css={dividerStyles} />
         <h5 className={'bp3-heading'}>Don't have an account?</h5>
-        <Link
-          to={'/signup'}
-          style={{ width: '100%' }}
-          className={'navigation-link'}
-        >
+        <Link to={'/signup'} className={'navigation-link'}>
           <Button
-            className={'page-btn login-page-sign-up-btn bp3-heading'}
+            className={'bp3-heading'}
             outlined
             text={'Sign Up For Ricorda'}
+            css={css`
+              ${buttonStyles}
+
+              display: block;
+              margin: 10px auto 0 auto;
+              width: 80% !important;
+              text-align: center;
+            `}
           />
         </Link>
       </div>
-    </div>
+    </PageRoot>
   );
 };
 

@@ -1,3 +1,5 @@
+/** @jsx jsx */
+
 import {
   Alert,
   Alignment,
@@ -14,7 +16,7 @@ import {
   MenuDivider,
   Spinner,
 } from '@blueprintjs/core';
-import React, {
+import {
   useCallback,
   useContext,
   useEffect,
@@ -25,17 +27,15 @@ import React, {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
-import '../../Ricorda.css';
-import './Header.css';
 import UserContext from '../../contexts/userContext';
 import { useMediaQuery } from 'react-responsive';
 import MobileMenu from './components/MobileMenu/MobileMenu';
 import TabletMenu from './components/TabletMenu/TabletMenu';
 import ThemeContext from '../../contexts/themeContext';
-import { History } from 'history';
 import { ThemeService } from '../../../../services/themeService';
 import AccountSettingsContext from '../../contexts/accountSettingsContext';
 import { IAccountSettingsState } from '../../contexts/states/accountSettingsState';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 
 const SettingsDialog = lazy(() =>
   import('./components/SettingsDialog/SettingsDialog')
@@ -43,21 +43,23 @@ const SettingsDialog = lazy(() =>
 
 interface IProps {
   logout: () => void;
-  history: History;
 }
 
-const Header: FunctionComponent<IProps> = ({ logout, history }) => {
+const Header: FunctionComponent<IProps> = ({ logout }) => {
   const { user } = useContext(UserContext);
   const { theme, setTheme } = useContext(ThemeContext);
+
   const isTablet: boolean = useMediaQuery({ query: '(min-width: 576px)' });
   const isDesktop: boolean = useMediaQuery({ query: '(min-width: 992px)' });
   const isMobile: boolean = !isTablet;
+
   const [isAlertOpen, setAlertOpen] = useState(false);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [settingsDialogRendered, setSettingsDialogRendered] = useState(false);
+
   const [accountSettings, setAccountSettings] = useState<IAccountSettingsState>(
     { isDialogOpen: false }
   );
-  const [settingsDialogRendered, setSettingsDialogRendered] = useState(false);
-  const [isMenuOpen, setMenuOpen] = useState(false);
 
   const [accountBtnText, setAccountBtnText] = useState<string | undefined>(
     undefined
@@ -122,6 +124,13 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
     </Menu>
   );
 
+  const animatedBtnStyles: SerializedStyles = css`
+    width: 30px;
+    transition: width 200ms;
+    white-space: nowrap;
+    overflow: hidden;
+  `;
+
   return (
     <div>
       <Navbar>
@@ -148,14 +157,20 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
               {isDesktop && (
                 <Link
                   to={'/login'}
-                  className={'navigation-link header-log-in-btn'}
+                  className={'navigation-link'}
+                  css={css`
+                    margin-right: 10px;
+                  `}
                 >
                   <Button minimal>Log in</Button>
                 </Link>
               )}
               <Link
                 to={'/signup'}
-                className={'navigation-link header-sign-up-btn'}
+                className={'navigation-link'}
+                css={css`
+                  width: auto;
+                `}
               >
                 <Button minimal outlined>
                   Sign up
@@ -168,9 +183,7 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
           {user.token && (
             <Popover content={userMenu} position={Position.BOTTOM}>
               <Button
-                className={`${Classes.MINIMAL} account-btn ${
-                  isDesktop ? 'animated-text-btn' : ''
-                }`}
+                className={Classes.MINIMAL}
                 icon={'user'}
                 text={isDesktop ? accountBtnText : undefined}
                 onMouseEnter={
@@ -179,13 +192,18 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
                 onMouseLeave={
                   isDesktop ? () => setAccountBtnText(undefined) : undefined
                 }
+                css={css`
+                  ${animatedBtnStyles}
+
+                  &:hover {
+                    width: ${isDesktop ? '95px' : 'inherit'};
+                  }
+                `}
               />
             </Popover>
           )}
           <Button
-            className={`${Classes.MINIMAL} dark-mode-btn ${
-              isDesktop ? 'animated-text-btn' : ''
-            }`}
+            className={Classes.MINIMAL}
             icon={theme.isDarkTheme ? 'flash' : 'moon'}
             text={isDesktop ? darkModeBtnText : undefined}
             onClick={handleDarkThemeChange}
@@ -200,6 +218,13 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
             onMouseLeave={
               isDesktop ? () => setDarkModeBtnText(undefined) : undefined
             }
+            css={css`
+              ${animatedBtnStyles}
+
+              &:hover {
+                width: ${isDesktop ? '112px' : 'inherit'};
+              }
+            `}
           />
         </NavbarGroup>
       </Navbar>
@@ -221,7 +246,7 @@ const Header: FunctionComponent<IProps> = ({ logout, history }) => {
       <AccountSettingsContext.Provider
         value={{ accountSettings, setAccountSettings }}
       >
-        <Suspense fallback={<Spinner className={'spinner'} />}>
+        <Suspense fallback={<Spinner className={'loading-spinner'} />}>
           {settingsDialogRendered && <SettingsDialog />}
         </Suspense>
       </AccountSettingsContext.Provider>

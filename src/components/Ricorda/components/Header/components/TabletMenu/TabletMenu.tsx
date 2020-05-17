@@ -1,7 +1,10 @@
+/** @jsx jsx */
+
 import { Link } from 'react-router-dom';
 import WordsCountContext from '../../../../contexts/wordsCountContext';
 import { Button, Classes, NavbarGroup, Tag } from '@blueprintjs/core';
-import React, { FunctionComponent, useContext } from 'react';
+import { FunctionComponent, useContext } from 'react';
+import { jsx } from '@emotion/core';
 
 const TabletMenu: FunctionComponent = () => {
   const { wordsCount } = useContext(WordsCountContext);

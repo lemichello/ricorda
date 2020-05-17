@@ -1,5 +1,8 @@
-import React, { FunctionComponent } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent } from 'react';
 import SavedWord from '../SavedWord/SavedWord';
+import { jsx } from '@emotion/core';
 
 const SavedWordsSkeleton: FunctionComponent = () => {
   return (

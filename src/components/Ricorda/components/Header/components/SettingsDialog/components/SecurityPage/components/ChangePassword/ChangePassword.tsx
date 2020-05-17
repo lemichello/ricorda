@@ -1,24 +1,16 @@
-import React, {
-  FunctionComponent,
-  useState,
-  ChangeEvent,
-  useContext,
-} from 'react';
-import {
-  FormGroup,
-  MenuDivider,
-  H4,
-  InputGroup,
-  Button,
-  Icon,
-} from '@blueprintjs/core';
-import './ChangePassword.css';
+/** @jsx jsx */
+
+import { FunctionComponent, useState, ChangeEvent, useContext } from 'react';
+import { FormGroup, InputGroup, Button } from '@blueprintjs/core';
 import { AccountService } from '../../../../../../../../../../services/accountService';
 import { DefaultToaster } from '../../../../../../../../../../helpers/DefaultToaster';
 import { useMediaQuery } from 'react-responsive';
 import AccountSettingsContext from '../../../../../../../../contexts/accountSettingsContext';
 import { useHistory } from 'react-router-dom';
 import UserContext from '../../../../../../../../contexts/userContext';
+import { History } from 'history';
+import SectionHeader from '../../../SectionHeader/SectionHeader';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 
 const ChangePassword: FunctionComponent = () => {
   const { setAccountSettings } = useContext(AccountSettingsContext);
@@ -30,7 +22,7 @@ const ChangePassword: FunctionComponent = () => {
   const [loading, setLoading] = useState(false);
 
   const isMobile: boolean = useMediaQuery({ query: '(max-width: 576px)' });
-  const history = useHistory();
+  const history: History = useHistory();
 
   const isValidState: () => boolean = () => {
     return (
@@ -68,44 +60,44 @@ const ChangePassword: FunctionComponent = () => {
     });
   };
 
+  const inputStyles: SerializedStyles = css`
+    width: 230px;
+  `;
+
   return (
     <div>
-      <div className={'section-header'}>
-        <Icon icon={'key'} />
-        <H4 className={'section-header-text'}>Change password</H4>
-      </div>
-      <MenuDivider className={'section-divider'} />
+      <SectionHeader text={'Change password'} icon={'key'} />
       <FormGroup label={'Old password'}>
         <InputGroup
-          className={'section-page-input'}
           type={'password'}
           small={isMobile}
           value={oldPassword}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setOldPassword(e.target.value)
           }
+          css={inputStyles}
         />
       </FormGroup>
       <FormGroup label={'New password'}>
         <InputGroup
-          className={'section-page-input'}
           type={'password'}
           small={isMobile}
           value={newPassword}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setNewPassword(e.target.value)
           }
+          css={inputStyles}
         />
       </FormGroup>
       <FormGroup label={'Confirm new password'}>
         <InputGroup
           type={'password'}
-          className={'section-page-input'}
           small={isMobile}
           value={newPasswordRepeat}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setNewPasswordRepeat(e.target.value)
           }
+          css={inputStyles}
         />
       </FormGroup>
       <Button

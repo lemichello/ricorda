@@ -1,17 +1,24 @@
+/** @jsx jsx */
+
 // @ts-ignore
 import Fade from 'react-reveal/Fade';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import { Button, NonIdealState } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
-import './NoSavedWords.css';
+import { jsx, css } from '@emotion/core';
 
 const NoSavedWords: FunctionComponent = () => {
   const newWordsPageBtn: JSX.Element = (
     <Link to={'/'} className={'navigation-link'}>
       <Button
-        className={'page-btn add-new-words-btn'}
         outlined
         text={'Add new words'}
+        css={css`
+          border-radius: 15px;
+          height: 35px;
+          width: 55%;
+          text-transform: uppercase;
+        `}
       />
     </Link>
   );

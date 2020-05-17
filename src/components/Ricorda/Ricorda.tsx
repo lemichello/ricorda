@@ -1,3 +1,5 @@
+/** @jsx jsx */
+
 import { Router, Route } from 'react-router-dom';
 import { history } from '../../helpers/history';
 import Header from './components/Header/Header';
@@ -6,7 +8,7 @@ import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
 import TodayWords from './components/TodayWords/TodayWords';
 import LogIn from './components/LogIn/LogIn';
 import UserContext from './contexts/userContext';
-import React, {
+import {
   useCallback,
   useEffect,
   useState,
@@ -24,6 +26,7 @@ import { IWordsCountState } from './contexts/states/wordsCountState';
 import { Spinner } from '@blueprintjs/core';
 import { IRefreshTokenResponse } from '../../services/types/auth/refreshToken/refreshTokenResponse';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import { jsx } from '@emotion/core';
 
 export const Ricorda: FunctionComponent = () => {
   const { user, setUser } = useContext(UserContext);
@@ -135,9 +138,9 @@ export const Ricorda: FunctionComponent = () => {
   return (
     <WordsCountContext.Provider value={{ wordsCount, setWordsCount }}>
       <Router history={history}>
-        {loading && <Spinner className={'spinner'} />}
+        {loading && <Spinner className={'loading-spinner'} />}
         <div>
-          <Header history={history} logout={logout} />
+          <Header logout={logout} />
           <Route exact path={'/'} component={NewWords} />
           <PrivateRoute exact path={'/today-words'} component={TodayWords} />
           <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
