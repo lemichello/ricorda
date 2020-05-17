@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+/** @jsx jsx */
+
+import { useState, useEffect } from 'react';
 import { Ricorda } from './Ricorda/Ricorda';
 import axios from 'axios';
 import ThemeContext from './Ricorda/contexts/themeContext';
 import { ThemeService } from '../services/themeService';
-import './App.css';
 import config from '../config';
 import { AuthService } from '../services/authService';
 import { Spinner } from '@blueprintjs/core';
 import { IUser } from '../apiModels/user';
-
 import { IRefreshTokenResponse } from '../services/types/auth/refreshToken/refreshTokenResponse';
 import UserContext from './Ricorda/contexts/userContext';
+import { jsx, css, Global } from '@emotion/core';
 
 function App() {
   const [theme, setTheme] = useState({
@@ -45,7 +46,38 @@ function App() {
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <UserContext.Provider value={{ user, setUser }}>
-        <div className={`app-root ${theme.isDarkTheme ? 'bp3-dark' : ''}`}>
+        <Global
+          styles={css`
+            * {
+              box-sizing: border-box;
+            }
+
+            body > #root > div {
+              min-height: 100vh;
+            }
+
+            .navigation-link {
+              text-decoration: none !important;
+              color: inherit !important;
+              width: 100%;
+              white-space: nowrap;
+            }
+
+            .loading-spinner {
+              position: fixed;
+              top: 50%;
+              left: 50%;
+            }
+          `}
+        />
+        <div
+          className={`${theme.isDarkTheme ? 'bp3-dark' : ''}`}
+          css={css`
+            &.bp3-dark {
+              background-color: #30404d;
+            }
+          `}
+        >
           {loading && <Spinner className={'loading-spinner'} />}
           {!loading && <Ricorda />}
         </div>

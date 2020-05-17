@@ -1,8 +1,10 @@
-import React from 'react';
+/** @jsx jsx */
+
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+import { jsx } from '@emotion/core';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

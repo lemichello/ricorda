@@ -1,6 +1,9 @@
-import React, { FunctionComponent } from 'react';
+/** @jsx jsx */
+
+import { FunctionComponent } from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import UserContext from '../Ricorda/contexts/userContext';
+import { jsx } from '@emotion/core';
 
 interface IProps extends RouteProps {
   component: any;
