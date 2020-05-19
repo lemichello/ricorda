@@ -7,6 +7,7 @@ import { IWordsCountResponse } from './types/words/wordsCountResponse';
 import { IWordPairExistsResponse } from './types/words/wordPairExistsResponse';
 import { IWordPairExistsRequest } from './types/words/wordPairExistsRequest';
 import dayjs from 'dayjs';
+import { pick } from 'lodash';
 
 export class WordsService {
   static async createWordPair(
@@ -61,8 +62,16 @@ export class WordsService {
   }
 
   static async updateWordPair(wordPair: IWordPair): Promise<void> {
+    let wordPairRequest: object = pick(wordPair, [
+      'sourceWord',
+      'translation',
+      'nextRepetitionDate',
+      'repetitions',
+      'sentences',
+    ]);
+
     try {
-      await axios.put(`/api/words/${wordPair._id}`, wordPair);
+      await axios.put(`/api/words/${wordPair._id}`, wordPairRequest);
     } catch (e) {
       return Promise.reject(e);
     }

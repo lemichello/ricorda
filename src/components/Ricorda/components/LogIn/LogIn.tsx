@@ -170,7 +170,6 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
             logInWithGoogle(response as GoogleLoginResponse);
           }}
           onFailure={() => {}}
-          onAutoLoadFinished={() => {}}
           css={css`
             width: 80%;
             border-radius: 22px !important;
