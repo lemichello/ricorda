@@ -147,7 +147,6 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
               disabled={!isValidCredentials()}
               onKeyDownCapture={keyDown}
               css={css`
-                display: block;
                 margin: 10px auto 0 auto;
                 width: 80% !important;
                 text-align: center;
