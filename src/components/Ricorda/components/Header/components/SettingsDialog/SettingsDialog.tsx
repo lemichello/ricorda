@@ -3,7 +3,7 @@
 import { FunctionComponent, useContext, useReducer } from 'react';
 import { Dialog, Classes, MenuItem } from '@blueprintjs/core';
 import ThemeContext from '../../../../contexts/themeContext';
-import { mapValues } from 'lodash';
+import mapValues from 'lodash/mapValues';
 import { useMediaQuery } from 'react-responsive';
 import SecurityPage from './components/SecurityPage/SecurityPage';
 import AccountPage from './components/AccountPage/AccountPage';

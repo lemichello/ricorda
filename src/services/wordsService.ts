@@ -7,7 +7,7 @@ import { IWordsCountResponse } from './types/words/wordsCountResponse';
 import { IWordPairExistsResponse } from './types/words/wordPairExistsResponse';
 import { IWordPairExistsRequest } from './types/words/wordPairExistsRequest';
 import dayjs from 'dayjs';
-import { pick } from 'lodash';
+import pick from 'lodash/pick';
 
 export class WordsService {
   static async createWordPair(
