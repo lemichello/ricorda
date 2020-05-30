@@ -1,6 +1,10 @@
-import { IWordsResponse } from './wordsResponse';
+import { IWordPair } from '../../../apiModels/wordPair';
 
-export interface ISavedWordsResponse extends IWordsResponse {
+export interface ISavedWordsResponse {
+  data: {
+    words: IWordPair[];
+    count: number;
+  };
   page: number;
   next: boolean;
 }
