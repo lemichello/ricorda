@@ -8,7 +8,7 @@ import {
   ChangeEvent,
   Fragment,
 } from 'react';
-import { H3, InputGroup, NonIdealState } from '@blueprintjs/core';
+import { H3, InputGroup, NonIdealState, Tag } from '@blueprintjs/core';
 import { WordsService } from '../../../../services/wordsService';
 import SavedWord from './components/SavedWord/SavedWord';
 import { CSSTransition } from 'react-transition-group';
@@ -31,9 +31,10 @@ import { jsx, css, ClassNames } from '@emotion/core';
 import PageRoot from '../PageRoot/PageRoot';
 
 const SavedWords: FunctionComponent = () => {
-  const [savedWords, setSavedWords] = useState<IWordPair[] | undefined | null>(
-    undefined
-  );
+  const [savedWords, setSavedWords] = useState<
+    { words: IWordPair[]; count: number } | undefined | null
+  >(undefined);
+
   const [currentPage, setCurrentPage] = useState({ page: 1, next: false });
   const [isEditModalOpen, setEditModelOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -48,7 +49,7 @@ const SavedWords: FunctionComponent = () => {
       debounceTime(300),
       distinctUntilChanged(),
       tap(() => setLoading(true)),
-      tap(() => setSavedWords([])),
+      tap(() => setSavedWords({ words: [], count: 0 })),
       switchMap((term: string) => WordsService.getSavedWords(1, term)),
       tap(() => setLoading(false))
     )
@@ -57,7 +58,7 @@ const SavedWords: FunctionComponent = () => {
   const searchWords: (page: number, term: string) => void = useCallback(
     async (page, term) => {
       setLoading(true);
-      setSavedWords([]);
+      setSavedWords({ words: [], count: 0 });
 
       try {
         let res: ISavedWordsResponse = await WordsService.getSavedWords(
@@ -76,7 +77,7 @@ const SavedWords: FunctionComponent = () => {
 
   useEffect(() => {
     const subscription: Subscription = onSearch$$.subscribe((x) => {
-      if (x.data.length === 0) {
+      if (x.data.words.length === 0) {
         setSavedWords(null);
       } else {
         setSavedWords(x.data);
@@ -137,18 +138,31 @@ const SavedWords: FunctionComponent = () => {
 
   return (
     <PageRoot>
-      {savedWords !== null && (savedWords?.length !== 0 || loading) && (
-        <H3
-          className={`${loading ? 'bp3-skeleton' : ''}`}
+      {savedWords !== null && (savedWords?.words.length !== 0 || loading) && (
+        <div
           css={css`
-            text-align: center;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
           `}
         >
-          Saved words
-        </H3>
+          <H3
+            className={`${loading ? 'bp3-skeleton' : ''}`}
+            css={css`
+              text-align: center;
+              margin-right: 10px;
+              margin-bottom: 0;
+            `}
+          >
+            Saved words
+          </H3>
+          <Tag className={`${loading ? 'bp3-skeleton' : ''}`}>
+            {savedWords?.count}
+          </Tag>
+        </div>
       )}
 
-      {savedWords !== null && savedWords?.length !== 0 && !loading && (
+      {savedWords !== null && savedWords?.words.length !== 0 && !loading && (
         <ClassNames>
           {({ css }) => (
             <CSSTransition
@@ -177,7 +191,7 @@ const SavedWords: FunctionComponent = () => {
           )}
         </ClassNames>
       )}
-      {savedWords !== null && savedWords?.length === 0 && !loading && (
+      {savedWords !== null && savedWords?.words.length === 0 && !loading && (
         <NoSavedWords />
       )}
       {loading && (
@@ -185,9 +199,9 @@ const SavedWords: FunctionComponent = () => {
           <SavedWordsSkeleton />
         </Fade>
       )}
-      {savedWords !== null && savedWords?.length !== 0 && (
+      {savedWords !== null && savedWords?.words.length !== 0 && (
         <Fragment>
-          {savedWords?.map((wordPair) => (
+          {savedWords?.words.map((wordPair) => (
             <SavedWord
               key={wordPair._id}
               loading={false}
@@ -207,7 +221,7 @@ const SavedWords: FunctionComponent = () => {
           action={searchInput}
         />
       )}
-      {!loading && savedWords !== null && savedWords?.length !== 0 && (
+      {!loading && savedWords !== null && savedWords?.words.length !== 0 && (
         <Pagination
           searchValue={searchValue}
           currentPage={currentPage}
