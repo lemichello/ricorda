@@ -9,7 +9,7 @@ interface IContextFields {
 const UserContext: Context<IContextFields> = React.createContext<
   IContextFields
 >({
-  user: { token: null },
+  user: { token: null, registrationType: null },
   setUser: () => {},
 });
 
