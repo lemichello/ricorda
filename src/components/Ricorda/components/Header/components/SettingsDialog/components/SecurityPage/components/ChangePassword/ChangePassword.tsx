@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import { FunctionComponent, useState, ChangeEvent, useContext } from 'react';
-import { FormGroup, InputGroup, Button } from '@blueprintjs/core';
+import { FormGroup, InputGroup, Button, Callout } from '@blueprintjs/core';
 import { AccountService } from '../../../../../../../../../../services/accountService';
 import { DefaultToaster } from '../../../../../../../../../../helpers/DefaultToaster';
 import { useMediaQuery } from 'react-responsive';
@@ -11,10 +11,11 @@ import UserContext from '../../../../../../../../contexts/userContext';
 import { History } from 'history';
 import SectionHeader from '../../../SectionHeader/SectionHeader';
 import { jsx, css, SerializedStyles } from '@emotion/core';
+import { Fragment } from 'react';
 
 const ChangePassword: FunctionComponent = () => {
   const { setAccountSettings } = useContext(AccountSettingsContext);
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -49,7 +50,7 @@ const ChangePassword: FunctionComponent = () => {
     setNewPasswordRepeat('');
 
     setAccountSettings({ isDialogOpen: false });
-    setUser({ token: null });
+    setUser({ token: null, registrationType: null });
 
     history.push('/login');
 
@@ -67,46 +68,62 @@ const ChangePassword: FunctionComponent = () => {
   return (
     <div>
       <SectionHeader text={'Change password'} icon={'key'} />
-      <FormGroup label={'Old password'}>
-        <InputGroup
-          type={'password'}
-          small={isMobile}
-          value={oldPassword}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setOldPassword(e.target.value)
-          }
-          css={inputStyles}
-        />
-      </FormGroup>
-      <FormGroup label={'New password'}>
-        <InputGroup
-          type={'password'}
-          small={isMobile}
-          value={newPassword}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setNewPassword(e.target.value)
-          }
-          css={inputStyles}
-        />
-      </FormGroup>
-      <FormGroup label={'Confirm new password'}>
-        <InputGroup
-          type={'password'}
-          small={isMobile}
-          value={newPasswordRepeat}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setNewPasswordRepeat(e.target.value)
-          }
-          css={inputStyles}
-        />
-      </FormGroup>
-      <Button
-        small={isMobile}
-        text={'Update password'}
-        disabled={!isValidState()}
-        loading={loading}
-        onClick={updatePassword}
-      />
+      {user.registrationType !== 'email' && (
+        <Callout
+          title={'Not allowed'}
+          icon={'warning-sign'}
+          intent={'warning'}
+          css={css`
+            margin-top: 10px;
+          `}
+        >
+          {`You can't change your password, because you've signed up with ${user.registrationType}.`}
+        </Callout>
+      )}
+      {user.registrationType === 'email' && (
+        <Fragment>
+          <FormGroup label={'Old password'}>
+            <InputGroup
+              type={'password'}
+              small={isMobile}
+              value={oldPassword}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setOldPassword(e.target.value)
+              }
+              css={inputStyles}
+            />
+          </FormGroup>
+          <FormGroup label={'New password'}>
+            <InputGroup
+              type={'password'}
+              small={isMobile}
+              value={newPassword}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setNewPassword(e.target.value)
+              }
+              css={inputStyles}
+            />
+          </FormGroup>
+          <FormGroup label={'Confirm new password'}>
+            <InputGroup
+              type={'password'}
+              small={isMobile}
+              value={newPasswordRepeat}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setNewPasswordRepeat(e.target.value)
+              }
+              css={inputStyles}
+            />
+          </FormGroup>
+          <Button
+            small={isMobile}
+            text={'Update password'}
+            disabled={!isValidState()}
+            loading={loading}
+            onClick={updatePassword}
+          />
+        </Fragment>
+      )}
     </div>
   );
 };

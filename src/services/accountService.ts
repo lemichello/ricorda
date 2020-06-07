@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { IUpdatePasswordRequest } from './types/account/updatePasswordRequest';
 import { IUpdateEmailRequest } from './types/account/updateEmailRequest';
 
@@ -38,6 +38,21 @@ export class AccountService {
         {},
         { withCredentials: true }
       );
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  static async getRegistrationType(): Promise<string> {
+    try {
+      const resp: AxiosResponse<{ data: string }> = await axios.get(
+        '/api/account/registration-type',
+        {
+          withCredentials: true,
+        }
+      );
+
+      return resp.data.data;
     } catch (e) {
       return Promise.reject(e);
     }

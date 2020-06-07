@@ -47,7 +47,7 @@ const ChangeEmail: FunctionComponent = () => {
       intent: 'success',
     });
 
-    setUser({ token: null });
+    setUser({ token: null, registrationType: null });
     setAccountSettings({ isDialogOpen: false });
 
     history.push('/signup/verify');

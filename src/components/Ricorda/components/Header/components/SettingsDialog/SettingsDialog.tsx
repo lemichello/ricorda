@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import { FunctionComponent, useContext, useReducer } from 'react';
+import { FunctionComponent, useContext, useReducer, useEffect } from 'react';
 import { Dialog, Classes, MenuItem } from '@blueprintjs/core';
 import ThemeContext from '../../../../contexts/themeContext';
 import mapValues from 'lodash/mapValues';
@@ -9,6 +9,8 @@ import SecurityPage from './components/SecurityPage/SecurityPage';
 import AccountPage from './components/AccountPage/AccountPage';
 import AccountSettingsContext from '../../../../contexts/accountSettingsContext';
 import { jsx, css, SerializedStyles } from '@emotion/core';
+import UserContext from '../../../../contexts/userContext';
+import { AccountService } from '../../../../../../services/accountService';
 
 type State = {
   securityPageActive: boolean;
@@ -48,6 +50,8 @@ const SettingsDialog: FunctionComponent = () => {
   const { accountSettings, setAccountSettings } = useContext(
     AccountSettingsContext
   );
+  const { user, setUser } = useContext(UserContext);
+
   const [{ securityPageActive, accountPageActive }, dispatch] = useReducer(
     activePageReducer,
     initialState
@@ -63,6 +67,18 @@ const SettingsDialog: FunctionComponent = () => {
       display: none;
     }
   `;
+
+  useEffect(() => {
+    async function setRegistrationType(): Promise<void> {
+      if (!user.registrationType) {
+        const registrationType: string = await AccountService.getRegistrationType();
+
+        setUser({ token: user.token, registrationType: registrationType });
+      }
+    }
+
+    setRegistrationType();
+  }, []);
 
   return (
     <Dialog
