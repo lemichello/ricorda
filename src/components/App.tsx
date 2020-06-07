@@ -19,6 +19,7 @@ function App() {
   });
   const [user, setUser] = useState<IUser>({
     token: '',
+    registrationType: null,
   });
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +37,7 @@ function App() {
         'Authorization'
       ] = `Bearer ${resp.accessToken}`;
 
-      setUser({ token: resp.accessToken });
+      setUser({ token: resp.accessToken, registrationType: null });
       setLoading(false);
     }
 

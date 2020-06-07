@@ -42,7 +42,10 @@ export const Ricorda: FunctionComponent = () => {
         .post('/auth/refresh_token', {}, { withCredentials: true })
         .then(async (refreshToken: AxiosResponse<IRefreshTokenResponse>) => {
           if (refreshToken.data.ok) {
-            setUser({ token: refreshToken.data.accessToken });
+            setUser({
+              token: refreshToken.data.accessToken,
+              registrationType: user.registrationType,
+            });
 
             failedRequest.response.config.headers[
               'Authorization'
@@ -74,7 +77,7 @@ export const Ricorda: FunctionComponent = () => {
     await AuthService.logOut();
 
     setLoading(false);
-    setUser({ token: null });
+    setUser({ token: null, registrationType: null });
 
     history.push('/login');
   }, [setUser]);
