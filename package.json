@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@blueprintjs/core": "^3.28.1",
+    "@blueprintjs/core": "^3.29.0",
     "@emotion/core": "^10.0.28",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "axios-auth-refresh": "^2.2.7",
-    "dayjs": "^1.8.28",
-    "dompurify": "^2.0.11",
+    "dayjs": "^1.8.29",
+    "dompurify": "^2.0.12",
     "history": "^4.10.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-google-login": "^5.1.20",
@@ -22,7 +22,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
     "react-transition-group": "^4.4.1",
-    "rxjs": "^6.5.5"
+    "rxjs": "^6.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -48,13 +48,13 @@
   },
   "devDependencies": {
     "@types/dompurify": "^2.0.2",
-    "@types/lodash": "^4.14.155",
-    "@types/react": "^16.9.35",
+    "@types/lodash": "^4.14.157",
+    "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "@types/react-responsive": "^8.0.2",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-transition-group": "^4.4.0",
     "tslint": "^6.1.2",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.6"
   }
 }
