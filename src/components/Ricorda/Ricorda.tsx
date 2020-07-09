@@ -37,7 +37,9 @@ export const Ricorda: FunctionComponent = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const refreshAuthLogic = (failedRequest: any) =>
+    const refreshAuthLogic: (failedRequest: any) => Promise<void> = (
+      failedRequest: any
+    ) =>
       axios
         .post('/auth/refresh_token', {}, { withCredentials: true })
         .then(async (refreshToken: AxiosResponse<IRefreshTokenResponse>) => {
@@ -49,7 +51,7 @@ export const Ricorda: FunctionComponent = () => {
 
             failedRequest.response.config.headers[
               'Authorization'
-            ] = `Bearer ${refreshToken.data.accessToken}`;
+            ] = `Bearer ${refreshToken.data.accessToken}` ;
 
             return Promise.resolve();
           } else {
@@ -144,7 +146,7 @@ export const Ricorda: FunctionComponent = () => {
         {loading && <Spinner className={'loading-spinner'} />}
         <div>
           <Header logout={logout} />
-          <Route exact path={'/'} component={NewWords} />
+          <PrivateRoute exact path={'/'} component={NewWords} />
           <PrivateRoute exact path={'/today-words'} component={TodayWords} />
           <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
           <Route

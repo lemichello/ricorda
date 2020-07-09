@@ -25,7 +25,6 @@ import Fade from 'react-reveal/Fade';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
-import UserContext from '../../contexts/userContext';
 import EditWordPairSentences from '../EditWordPairSentences/EditWordPairSentences';
 import { ISentence } from '../../../../apiModels/sentence';
 import RepeatSettings from './components/RepeatSettings/RepeatSettings';
@@ -43,7 +42,6 @@ interface IProps {
 
 const NewWords: FunctionComponent<IProps> = ({ history }) => {
   const { theme } = useContext(ThemeContext);
-  const { user } = useContext(UserContext);
 
   const [isSentencesOpen, setSentencesOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
@@ -74,11 +72,6 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
   };
 
   const handleAddButtonClick: () => void = async () => {
-    if (!user.token) {
-      history.push('/login');
-      return;
-    }
-
     try {
       setLoading(true);
       if (await WordsService.wordPairExists(sourceWord)) {
