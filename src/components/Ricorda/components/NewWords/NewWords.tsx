@@ -6,6 +6,7 @@ import {
   FunctionComponent,
   KeyboardEvent,
   useCallback,
+  useEffect,
 } from 'react';
 import {
   Alert,
@@ -25,7 +26,6 @@ import Fade from 'react-reveal/Fade';
 import { Intent } from '@blueprintjs/core/lib/cjs/common/intent';
 import ThemeContext from '../../contexts/themeContext';
 import { History } from 'history';
-import UserContext from '../../contexts/userContext';
 import EditWordPairSentences from '../EditWordPairSentences/EditWordPairSentences';
 import { ISentence } from '../../../../apiModels/sentence';
 import RepeatSettings from './components/RepeatSettings/RepeatSettings';
@@ -36,6 +36,11 @@ import {
   inputStyles,
   collapseStyles,
 } from './styles/NewWordsStyles';
+import HelpModal from './components/HelpModal/HelpModal';
+import UserContext from '../../contexts/userContext';
+import { TranslateService } from '../../../../services/translateService';
+import TranslationLanguagesContext from '../../contexts/translationLanguagesContext';
+import { AccountService } from '../../../../services/accountService';
 
 interface IProps {
   history: History;
@@ -43,10 +48,14 @@ interface IProps {
 
 const NewWords: FunctionComponent<IProps> = ({ history }) => {
   const { theme } = useContext(ThemeContext);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const { translationLanguages } = useContext(TranslationLanguagesContext);
 
+  const [isTranslationLoading, setTranslationLoading] = useState(false);
   const [isSentencesOpen, setSentencesOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [isHelpModalOpen, setHelpModalOpen] = useState(false);
+  const [isValidTranslationLanguage, setTranslationValidation] = useState(true);
 
   const [sentences, setSentences] = useState([] as ISentence[]);
   const [maxRepetitions, setMaxRepetitions] = useState(5);
@@ -54,9 +63,23 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
 
   const [sourceWord, setSourceWord] = useState('');
   const [translation, setTranslation] = useState('');
+  const [translationLanguage, setTranslationLanguage] = useState('');
   const [sentenceIdCounter, setSentenceIdCounter] = useState(1);
   const [loading, setLoading] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isValidTranslationLanguage) {
+      setTranslationValidation(true);
+    }
+
+    if (user.translationLanguage) {
+      AccountService.updateTranslationLanguage(user.translationLanguage!);
+      setTranslationLanguage('');
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.translationLanguage]);
 
   const isValidWordPair: () => boolean = () => {
     return (
@@ -74,11 +97,6 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
   };
 
   const handleAddButtonClick: () => void = async () => {
-    if (!user.token) {
-      history.push('/login');
-      return;
-    }
-
     try {
       setLoading(true);
       if (await WordsService.wordPairExists(sourceWord)) {
@@ -147,6 +165,44 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
     [sentences]
   );
 
+  const closeHelpModal: () => void = useCallback(() => {
+    setHelpModalOpen(false);
+  }, []);
+
+  const translateForeignWord: () => void = async () => {
+    if (!sourceWord || !isValidTranslationLanguage) {
+      return;
+    }
+
+    setTranslationLoading(true);
+
+    const translationResult: string = await TranslateService.translate(
+      sourceWord,
+      translationLanguage ? translationLanguage : user.translationLanguage!
+    );
+
+    setTranslation(translationResult);
+    setTranslationLoading(false);
+  };
+
+  const checkTranslationLanguage: () => void = () => {
+    if (
+      !translationLanguage ||
+      translationLanguages.languages.some((x) => x.code === translationLanguage)
+    ) {
+      setTranslationValidation(true);
+      if (translationLanguage) {
+        setUser({
+          token: user.token,
+          registrationType: user.registrationType,
+          translationLanguage: translationLanguage,
+        });
+      }
+    } else {
+      setTranslationValidation(false);
+    }
+  };
+
   return (
     <PageRoot>
       <H3>New Word Pair</H3>
@@ -186,11 +242,13 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
                 value={sourceWord}
                 maxLength={80}
                 onChange={(event) => setSourceWord(event)}
+                onConfirm={translateForeignWord}
               />
             </H5>
             <Icon icon={'chevron-right'} iconSize={23} />
             <H5 css={inputStyles}>
               <EditableText
+                className={isTranslationLoading ? 'bp3-skeleton' : ''}
                 placeholder={'Translation...'}
                 value={translation}
                 maxLength={80}
@@ -223,6 +281,18 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
               width: 100%;
             `}
           >
+            <div
+              css={css`
+                display: flex;
+                align-items: center;
+              `}
+            >
+              <Button
+                minimal
+                icon={'help'}
+                onClick={() => setHelpModalOpen(!isHelpModalOpen)}
+              />
+            </div>
             <Button
               icon={'add'}
               type={'submit'}
@@ -250,6 +320,28 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
                 }
               `}
             >
+              <H5 css={inputStyles}>
+                <EditableText
+                  placeholder={user.translationLanguage ?? 'EN'}
+                  value={translationLanguage}
+                  maxLength={5}
+                  onChange={(event) => setTranslationLanguage(event)}
+                  onConfirm={checkTranslationLanguage}
+                  intent={isValidTranslationLanguage ? 'none' : 'danger'}
+                  css={css`
+                    text-align: center;
+                    font-size: 15px;
+                    width: 50px;
+                    & input {
+                      text-align: center;
+                    }
+
+                    & > span {
+                      min-width: 0 !important;
+                    }
+                  `}
+                />
+              </H5>
               <NavbarDivider />
               <Button
                 minimal
@@ -285,6 +377,7 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
           you sure you want to add a new one?
         </p>
       </Alert>
+      <HelpModal isOpen={isHelpModalOpen} close={closeHelpModal} />
     </PageRoot>
   );
 };

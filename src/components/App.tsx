@@ -12,6 +12,7 @@ import { IUser } from '../apiModels/user';
 import { IRefreshTokenResponse } from '../services/types/auth/refreshToken/refreshTokenResponse';
 import UserContext from './Ricorda/contexts/userContext';
 import { jsx, css, Global } from '@emotion/core';
+import { AccountService } from '../services/accountService';
 
 function App() {
   const [theme, setTheme] = useState({
@@ -20,6 +21,7 @@ function App() {
   const [user, setUser] = useState<IUser>({
     token: '',
     registrationType: null,
+    translationLanguage: null,
   });
   const [loading, setLoading] = useState(true);
 
@@ -31,13 +33,31 @@ function App() {
 
       if (!resp.ok) {
         await AuthService.logOut();
+
+        setUser({
+          token: null,
+          registrationType: null,
+          translationLanguage: null,
+        });
+        setLoading(false);
+
+        return;
       }
 
       axios.defaults.headers.common[
         'Authorization'
       ] = `Bearer ${resp.accessToken}`;
 
-      setUser({ token: resp.accessToken, registrationType: null });
+      const userInfo: Pick<
+        IUser,
+        'registrationType' | 'translationLanguage'
+      > = await AccountService.getUserInfo();
+
+      setUser({
+        token: resp.accessToken,
+        registrationType: userInfo.registrationType,
+        translationLanguage: userInfo.translationLanguage,
+      });
       setLoading(false);
     }
 
