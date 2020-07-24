@@ -88,7 +88,11 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
       setLoading(true);
       let token: string = await AuthService.login(email, password, rememberMe);
 
-      setUser({ token: token, registrationType: 'email' });
+      setUser({
+        token: token,
+        registrationType: 'email',
+        translationLanguage: null,
+      });
     } catch (e) {
       return;
     } finally {
@@ -105,7 +109,11 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
       setLoading(true);
       let token: string = await AuthService.loginWithGoogle(user.tokenId);
 
-      setUser({ token: token, registrationType: 'Google' });
+      setUser({
+        token: token,
+        registrationType: 'Google',
+        translationLanguage: null,
+      });
     } catch (e) {
       return;
     } finally {

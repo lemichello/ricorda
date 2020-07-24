@@ -27,6 +27,12 @@ import { Spinner } from '@blueprintjs/core';
 import { IRefreshTokenResponse } from '../../services/types/auth/refreshToken/refreshTokenResponse';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import { jsx } from '@emotion/core';
+import { AccountService } from '../../services/accountService';
+import { IUser } from '../../apiModels/user';
+import { ITranslationLanguagesState } from './contexts/states/translationLanguagesState';
+import { TranslateService } from '../../services/translateService';
+import { ITranslationLanguage } from '../../apiModels/ITranslationLanguage';
+import TranslationLanguagesContext from './contexts/translationLanguagesContext';
 
 export const Ricorda: FunctionComponent = () => {
   const { user, setUser } = useContext(UserContext);
@@ -34,10 +40,15 @@ export const Ricorda: FunctionComponent = () => {
     count: null,
     loading: false,
   });
+  const [translationLanguages, setTranslationLanguages] = useState<
+    ITranslationLanguagesState
+  >({ languages: [] });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const refreshAuthLogic = (failedRequest: any) =>
+    const refreshAuthLogic: (failedRequest: any) => Promise<void> = (
+      failedRequest: any
+    ) =>
       axios
         .post('/auth/refresh_token', {}, { withCredentials: true })
         .then(async (refreshToken: AxiosResponse<IRefreshTokenResponse>) => {
@@ -45,6 +56,7 @@ export const Ricorda: FunctionComponent = () => {
             setUser({
               token: refreshToken.data.accessToken,
               registrationType: user.registrationType,
+              translationLanguage: user.translationLanguage,
             });
 
             failedRequest.response.config.headers[
@@ -77,7 +89,7 @@ export const Ricorda: FunctionComponent = () => {
     await AuthService.logOut();
 
     setLoading(false);
-    setUser({ token: null, registrationType: null });
+    setUser({ token: null, registrationType: null, translationLanguage: null });
 
     history.push('/login');
   }, [setUser]);
@@ -129,7 +141,20 @@ export const Ricorda: FunctionComponent = () => {
       try {
         setWordsCount({ count: null, loading: true });
         let count: number = await WordsService.getWordsCount();
+        const translationLanguages: ITranslationLanguage[] = await TranslateService.getTranslationLanguages();
         setWordsCount({ count: count, loading: false });
+        setTranslationLanguages({ languages: translationLanguages });
+
+        const userInfo: Pick<
+          IUser,
+          'registrationType' | 'translationLanguage'
+        > = await AccountService.getUserInfo();
+
+        setUser({
+          token: user.token,
+          translationLanguage: userInfo.translationLanguage,
+          registrationType: userInfo.registrationType,
+        });
       } catch (e) {
         setWordsCount({ count: null, loading: false });
       }
@@ -144,7 +169,11 @@ export const Ricorda: FunctionComponent = () => {
         {loading && <Spinner className={'loading-spinner'} />}
         <div>
           <Header logout={logout} />
-          <Route exact path={'/'} component={NewWords} />
+          <TranslationLanguagesContext.Provider
+            value={{ translationLanguages, setTranslationLanguages }}
+          >
+            <PrivateRoute exact path={'/'} component={NewWords} />
+          </TranslationLanguagesContext.Provider>
           <PrivateRoute exact path={'/today-words'} component={TodayWords} />
           <PrivateRoute exact path={'/saved-words'} component={SavedWords} />
           <Route
