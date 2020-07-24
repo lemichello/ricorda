@@ -50,7 +50,7 @@ const ChangePassword: FunctionComponent = () => {
     setNewPasswordRepeat('');
 
     setAccountSettings({ isDialogOpen: false });
-    setUser({ token: null, registrationType: null });
+    setUser({ token: null, registrationType: null, translationLanguage: null });
 
     history.push('/login');
 
