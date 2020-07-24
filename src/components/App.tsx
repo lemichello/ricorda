@@ -33,6 +33,15 @@ function App() {
 
       if (!resp.ok) {
         await AuthService.logOut();
+
+        setUser({
+          token: null,
+          registrationType: null,
+          translationLanguage: null,
+        });
+        setLoading(false);
+
+        return;
       }
 
       axios.defaults.headers.common[

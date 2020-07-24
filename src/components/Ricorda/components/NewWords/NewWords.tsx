@@ -73,8 +73,10 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
       setTranslationValidation(true);
     }
 
-    AccountService.updateTranslationLanguage(user.translationLanguage!);
-    setTranslationLanguage('');
+    if (user.translationLanguage) {
+      AccountService.updateTranslationLanguage(user.translationLanguage!);
+      setTranslationLanguage('');
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.translationLanguage]);
