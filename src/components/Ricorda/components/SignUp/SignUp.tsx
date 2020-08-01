@@ -7,6 +7,9 @@ import {
   FunctionComponent,
   KeyboardEvent,
   ChangeEvent,
+  useRef,
+  MutableRefObject,
+  RefObject,
 } from 'react';
 import { AuthService } from '../../../../services/authService';
 import { DefaultToaster } from '../../../../helpers/DefaultToaster';
@@ -15,6 +18,8 @@ import { Link, Switch, Route, useRouteMatch } from 'react-router-dom';
 import VerifyEmail from './components/VerifyEmail/VerifyEmail';
 import PageRoot from '../PageRoot/PageRoot';
 import { jsx, css, SerializedStyles } from '@emotion/core';
+import ReCAPTCHA from 'react-google-recaptcha';
+import config from '../../../../config';
 
 interface IProps {
   history: History;
@@ -24,8 +29,13 @@ interface IProps {
 const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
   const { path } = useRouteMatch();
 
+  const recaptchaRef: MutableRefObject<ReCAPTCHA | undefined> = useRef<
+    ReCAPTCHA
+  >();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -48,14 +58,26 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
   };
 
   const isValidCredentials: () => boolean = () => {
-    return emailRegex.test(email) && !!password && password === passwordConfirm;
+    return (
+      emailRegex.test(email) &&
+      !!password &&
+      password === passwordConfirm &&
+      captchaToken !== null
+    );
   };
 
   const signUp: () => void = async () => {
     try {
+      if (captchaToken === null) {
+        return;
+      }
+
       setLoading(true);
-      await AuthService.signUp(email, password);
+      await AuthService.signUp(email, password, captchaToken);
     } catch (e) {
+      recaptchaRef!.current!.reset();
+      setCaptchaToken(null);
+
       return;
     } finally {
       setLoading(false);
@@ -137,6 +159,14 @@ const SignUp: FunctionComponent<IProps> = ({ history, userToken }) => {
                 setPasswordConfirm(event.target.value)
               }
               css={inputStyles}
+            />
+            <ReCAPTCHA
+              sitekey={config.googleRecaptchaKey}
+              onChange={(token) => setCaptchaToken(token)}
+              ref={recaptchaRef as RefObject<ReCAPTCHA>}
+              css={css`
+                margin-bottom: 10px;
+              `}
             />
             <Button
               className={'bp3-heading'}

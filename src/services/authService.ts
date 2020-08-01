@@ -8,12 +8,14 @@ export class AuthService {
   static async login(
     email: string,
     password: string,
+    recaptchaToken: string,
     rememberMe: boolean
   ): Promise<string> {
     let resp: AxiosResponse<ILogInResponse>;
     let requestBody: ILogInRequest = {
       email: email,
-      password: password,
+      password,
+      recaptchaToken,
       rememberMe,
     };
 
@@ -53,10 +55,15 @@ export class AuthService {
     await axios.post('/auth/logout', {}, { withCredentials: true });
   }
 
-  static async signUp(email: string, password: string): Promise<void> {
+  static async signUp(
+    email: string,
+    password: string,
+    recaptchaToken: string
+  ): Promise<void> {
     let requestBody: ISignUpRequest = {
-      email: email,
-      password: password,
+      email,
+      password,
+      recaptchaToken,
     };
 
     try {
