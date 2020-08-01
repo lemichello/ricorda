@@ -7,6 +7,9 @@ import {
   FunctionComponent,
   KeyboardEvent,
   ChangeEvent,
+  useRef,
+  RefObject,
+  MutableRefObject,
 } from 'react';
 import { Button, InputGroup, Tooltip, Checkbox } from '@blueprintjs/core';
 import UserContext from '../../contexts/userContext';
@@ -18,6 +21,7 @@ import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
 import config from '../../../../config';
 import PageRoot from '../PageRoot/PageRoot';
 import { jsx, css, SerializedStyles } from '@emotion/core';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface IProps {
   history: History;
@@ -27,11 +31,17 @@ interface IProps {
 
 const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
   const { setUser } = useContext(UserContext);
+
+  const recaptchaRef: MutableRefObject<ReCAPTCHA | undefined> = useRef<
+    ReCAPTCHA
+  >();
+
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const emailRegex: RegExp = RegExp(
     /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
@@ -62,7 +72,7 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
   }, []);
 
   const isValidCredentials: () => boolean = () => {
-    return emailRegex.test(email) && !!password;
+    return emailRegex.test(email) && !!password && captchaToken !== null;
   };
 
   const keyDown: (event: KeyboardEvent) => void = (event: KeyboardEvent) => {
@@ -85,8 +95,17 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
 
   const logIn: () => void = async () => {
     try {
+      if (captchaToken === null) {
+        return;
+      }
+
       setLoading(true);
-      let token: string = await AuthService.login(email, password, rememberMe);
+      let token: string = await AuthService.login(
+        email,
+        password,
+        captchaToken,
+        rememberMe
+      );
 
       setUser({
         token: token,
@@ -94,6 +113,9 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
         translationLanguage: null,
       });
     } catch (e) {
+      recaptchaRef!.current!.reset();
+      setCaptchaToken(null);
+
       return;
     } finally {
       setLoading(false);
@@ -240,6 +262,14 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
             setPassword(event.target.value)
           }
           css={inputStyles}
+        />
+        <ReCAPTCHA
+          sitekey={config.googleRecaptchaKey}
+          onChange={(token) => setCaptchaToken(token)}
+          ref={recaptchaRef as RefObject<ReCAPTCHA>}
+          css={css`
+            margin-bottom: 20px;
+          `}
         />
         <div
           css={css`
