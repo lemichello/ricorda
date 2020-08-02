@@ -62,6 +62,7 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
   const [repetitionInterval, setRepetitionInterval] = useState(24);
 
   const [sourceWord, setSourceWord] = useState('');
+  const [previousSourceWord, setPreviousSourceWord] = useState('');
   const [translation, setTranslation] = useState('');
   const [translationLanguage, setTranslationLanguage] = useState('');
   const [sentenceIdCounter, setSentenceIdCounter] = useState(1);
@@ -170,11 +171,16 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
   }, []);
 
   const translateForeignWord: () => void = async () => {
-    if (!sourceWord || !isValidTranslationLanguage) {
+    if (
+      !sourceWord ||
+      !isValidTranslationLanguage ||
+      previousSourceWord === sourceWord
+    ) {
       return;
     }
 
     setTranslationLoading(true);
+    setPreviousSourceWord(sourceWord);
 
     const translationResult: string = await TranslateService.translate(
       sourceWord,
