@@ -252,6 +252,7 @@ const NewWords: FunctionComponent<IProps> = ({ history }) => {
                 placeholder={'Translation...'}
                 value={translation}
                 maxLength={80}
+                disabled={isTranslationLoading}
                 onChange={(event) => setTranslation(event)}
               />
             </H5>
