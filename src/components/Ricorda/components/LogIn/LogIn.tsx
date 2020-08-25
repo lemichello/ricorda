@@ -113,7 +113,10 @@ const LogIn: FunctionComponent<IProps> = ({ history, location, userToken }) => {
         translationLanguage: null,
       });
     } catch (e) {
-      recaptchaRef!.current!.reset();
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
+
       setCaptchaToken(null);
 
       return;
